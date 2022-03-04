@@ -2,6 +2,9 @@
 $envPath = ".\.venv"
 $activateFilePath = "$envPath\Scripts\Activate.ps1"
 
+# Back
+Set-Location ".."
+
 # Verify Environment
 if (-not(Test-Path -Path $envPath -PathType Container)) {
     Write-Host "Environment not installed. Please, execute run_setup.ps1."

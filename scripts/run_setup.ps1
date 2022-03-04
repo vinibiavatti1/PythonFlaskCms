@@ -3,6 +3,9 @@ $envPath = ".\.venv"
 $activateFilePath = "$envPath\Scripts\Activate.ps1"
 $updatePip = $true
 
+# Back
+Set-Location ".."
+
 # Create Environment
 if (-not(Test-Path -Path $envPath -PathType Container)) {
     Write-Host "Installing environment..."
