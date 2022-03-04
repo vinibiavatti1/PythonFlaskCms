@@ -1,0 +1,10 @@
+.sidenav-button:hover {
+    background-color: rgba(var(--bs-secondary-rgb), .2);
+}
+.white-anchor {
+    color: white;
+}
+.white-anchor:hover {
+    color: white;
+    opacity: .75;
+}

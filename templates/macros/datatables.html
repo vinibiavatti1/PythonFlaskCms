@@ -1,0 +1,10 @@
+{% macro datatables_script(selector = '.datatable') %}
+    <script>
+        $("{{selector}}").dataTable({
+            'order': [[0, 'asc']],
+            'language': {
+                'searchPlaceholder': "Search records"
+            }
+        });
+    </script>
+{% endmacro %}
