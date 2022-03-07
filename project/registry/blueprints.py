@@ -1,3 +1,8 @@
+"""
+Blueprints registry.
+
+The blueprints set here will be available into the app.
+"""
 from flask import Flask
 from project.processors import blueprint as processors
 from project.handlers import blueprint as handlers
@@ -15,10 +20,16 @@ from project.controllers.admin import (
     list_ctrl,
     form_ctrl,
     calendar_ctrl,
+    pages_ctrl,
+    idioms_ctrl,
 )
 
 
-# Blueprints
+###############################################################################
+# Registry
+###############################################################################
+
+
 blueprints = [
     processors,
     handlers,
@@ -33,6 +44,8 @@ blueprints = [
     cookie_policy_ctrl.blueprint,
     calendar_ctrl.blueprint,
     search_ctrl.blueprint,
+    pages_ctrl.blueprint,
+    idioms_ctrl.blueprint,
 ]
 
 

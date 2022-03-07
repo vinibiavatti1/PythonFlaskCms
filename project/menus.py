@@ -45,6 +45,53 @@ def build_admin_manu() -> list[dict]:
     """
     return [
         {
+            'header': 'Website',
+        },
+        {
+            'title': 'Pages',
+            'link': '/admin/pages',
+            'icon': 'bi-filetype-html',
+        },
+        {
+            'title': 'Menus',
+            'link': '/',
+            'icon': 'bi-list',
+        },
+        {
+            'header': 'Blog',
+        },
+        {
+            'title': 'Posts',
+            'link': '/admin/posts',
+            'icon': 'bi-newspaper',
+        },
+        {
+            'title': 'Tags',
+            'link': '/admin/posts',
+            'icon': 'bi-tags',
+        },
+        {
+            'header': 'Configuration',
+        },
+        {
+            'title': 'Properties',
+            'link': '/',
+            'icon': 'bi-gear',
+        },
+        {
+            'header': 'Administration',
+        },
+        {
+            'title': 'Adm. Users',
+            'link': '/',
+            'icon': 'bi-people',
+        },
+        {
+            'title': 'Adm. User Roles',
+            'link': '/',
+            'icon': 'bi-person-check',
+        },
+        {
             'header': t('menus.headers.menu'),
         },
         {

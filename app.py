@@ -1,6 +1,6 @@
 from flask import Flask
 from project.config import config
-from project.blueprints import register_blueprints
+from project.registry.blueprints import register_blueprints
 
 
 # Init Flask application

@@ -9,6 +9,10 @@
     "python.linting.pydocstyleEnabled": true,
     "python.linting.mypyEnabled": true,
 
+    // Validators
+    "html.validate.scripts": false,
+    "html.validate.styles": false,
+
     // Editor
     "editor.rulers": [79],
 

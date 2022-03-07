@@ -1,0 +1,202 @@
+{% from 'macros/alerts.html' import flash_alerts with context %}
+{% from"macros/breadcrumb.html" import breadcrumb with context %}
+{% from"macros/fields.html" import
+    text_field,
+    numeric_field,
+    textarea_field,
+    date_field,
+    datetime_field,
+    select_field,
+    file_field with context %}
+{% extends 'layout.html' %}
+{% block title %}Page{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', 'Pages', '1']) }}
+            <div class="fs-3 text-white">Page Detail</div>
+            <div class="card">
+                <div class="card-body">
+                    <form
+                        id="example-form"
+                        action="/backoffice/form/save"
+                        method="POST"
+                        class="needs-validation"
+                        novalidate
+                    >
+                        {{ flash_alerts() }}
+                        <div class="mb-2">
+                            <a class="btn btn-secondary" href="/admin/list">{{ i18n.actions.cancel }}</a>
+                            <button id="btn-submit" type="submit" class="btn btn-primary">{{ i18n.actions.save }}</button>
+                        </div>
+                        <ul class="nav nav-tabs mb-2" id="landing-page-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#detail">Detail</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#seo">SEO</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#sitemap">Sitemap</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#properties">Properties</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#template">Template</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link disabled" href="#" data-bs-toggle="tab" data-bs-target="#blocks">Blocks</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link disabled" href="#" data-bs-toggle="tab" data-bs-target="#history">History</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link disabled" href="#" data-bs-toggle="tab" data-bs-target="#info">Info</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="detail" role="tabpanel">
+                                <div class="mb-2">
+                                    <label>Name <span class="text-danger">*</span></label>
+                                    <input name="name" placeholder="The name of the Landing Page" type="text" class="form-control" required/>
+                                    <small>Allowed only low case characters separated by "_". Ex: my_page</small>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Idiom <span class="text-danger">*</span></label>
+                                    <select name="idiom" class="form-select" required>
+                                        <option value="en">English</option>
+                                        <option value="pt">Português</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Layout <span class="text-danger">*</span></label>
+                                    <select name="layout" class="form-select" required>
+                                        <option value="l1">layout.html</option>
+                                        <option value="l2">other_layout.html</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Active <span class="text-danger">*</span></label>
+                                    <select name="active" class="form-select" required>
+                                        <option value="1" selected>True</option>
+                                        <option value="0">False</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="seo" role="tabpanel">
+                                <div class="mb-2">
+                                    <label>Title <span class="text-danger">*</span></label>
+                                    <input name="title" placeholder="The title of the Landing Page" type="text" class="form-control" required/>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Author</label>
+                                    <input name="author" placeholder="The author of the Landing Page" type="text" class="form-control"/>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Description</label>
+                                    <textarea name="description" rows="3" placeholder="Description of the Landing Page" type="text" class="form-control"></textarea>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Keywords</label>
+                                    <textarea name="keywords" rows="3" placeholder="Keywords of the Landing Page" type="text" class="form-control"></textarea>
+                                    <small>Use comma (,) or break line (↵) to separate</small>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Canonical URLs</label>
+                                    <textarea name="keywords" rows="3" placeholder="Canonical URLs of the Landing Page" type="text" class="form-control"></textarea>
+                                    <small>Use comma (,) or break line (↵) to separate</small>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="sitemap" role="tabpanel">
+                                <div class="mb-2">
+                                    <label>Active <span class="text-danger">*</span></label>
+                                    <select name="sitemap_active" class="form-select" required>
+                                        <option value="1" selected>True</option>
+                                        <option value="0">False</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Priority <span class="text-danger">*</span></label>
+                                    <select name="sitemap_priority" class="form-select" required>
+                                        {% for i in range(0, 11) %}
+                                            {% set selected = 'selected' if i == 5 else '' %}
+                                            <option value="{{i / 10}}" {{selected}}>{{i / 10}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Change Frequently <span class="text-danger">*</span></label>
+                                    <select name="sitemap_change_frequently" class="form-select" required>
+                                        {% for i in ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'] %}
+                                            {% set selected = 'selected' if i == 'always' else '' %}
+                                            <option value="{{i}}" {{selected}}>{{i}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="template" role="tabpanel">
+                                <div class="mb-2">
+                                    <label>Template <span class="text-danger">*</span></label>
+                                    <select id="template_selector" name="template" class="form-select" required>
+                                        <option value="page_template" selected>page_template.html</option>
+                                        <option value="custom">Custom Template...</option>
+                                    </select>
+                                </div>
+                                <div id="custom_input" class="mb-2 d-none">
+                                    <label>HTML Content</label>
+                                    <textarea name="html" rows="15" placeholder="Keywords of the Landing Page" type="text" class="form-control font-monospace"></textarea>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="properties" role="tabpanel">
+                                Nothing yet...
+                            </div>
+                            <div class="tab-pane fade" id="blocks" role="tabpanel">
+
+                            </div>
+                            <div class="tab-pane fade" id="history" role="tabpanel">
+
+                            </div>
+                            <div class="tab-pane fade" id="info" role="tabpanel">
+                                <div class="mb-2">
+                                    <label>URL</label>
+                                    <input type="text" class="form-control" disabled value="https://www.website.com/page/<idiom>/<name>"/>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Created by</label>
+                                    <input type="text" class="form-control" disabled value="Vini"/>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Updated by</label>
+                                    <input type="text" class="form-control" disabled value="Vini"/>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Created On</label>
+                                    <input type="text" class="form-control" disabled value="2020-01-01 10:50:00 am"/>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Updated On</label>
+                                    <input type="text" class="form-control" disabled value="2020-01-01 10:50:00 am"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(function() {
+        $('#template_selector').change(function() {
+            let val = $(this).val();
+            if(val == 'custom') {
+                $("#custom_input").removeClass('d-none');
+            } else {
+                $("#custom_input").addClass('d-none');
+            }
+        });
+    });
+</script>
+{% endblock %}

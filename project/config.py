@@ -1,4 +1,5 @@
 import os
+from typing import Any
 from project.enums import env_enum
 from project.configs.config_dev import config as dev_config
 from project.configs.config_prod import config as prod_config
@@ -6,7 +7,7 @@ from project.configs.config_test import config as test_config
 
 
 # Set config by FLASK_ENV variable
-config = None
+config: dict[str, Any] = {}
 env = os.environ.get('FLASK_ENV')
 if env == env_enum.TESTING:
     config = test_config

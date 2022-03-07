@@ -4,6 +4,6 @@
         "editorconfig.editorconfig",
         "ms-vscode.powershell",
         "alexcvzz.vscode-sqlite",
-        "aaron-bond.better-comments",
+        "humao.rest-client",
     ]
 }

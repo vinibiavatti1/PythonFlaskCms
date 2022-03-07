@@ -24,6 +24,7 @@ config = {
     'date_time_format': '%Y-%m-%d %H:%M:%S',
 
     # Database
+    'db_name': 'database.db',
     'db_host': 'localhost',
     'db_port': 3306,
     'db_user': 'root',

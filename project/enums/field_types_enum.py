@@ -1,0 +1,6 @@
+STRING = 'string'
+TEXT = 'text'
+INTEGER = 'integer'
+REAL = 'real'
+DATE = 'date'
+DATETIME = 'datetime'
