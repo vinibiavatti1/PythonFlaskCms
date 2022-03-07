@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS pages (
     `idiom` TEXT NOT NULL,
     `name` TEXT NOT NULL,
     `layout` TEXT NOT NULL,
+    `template` TEXT NOT NULL,
     `active` INTEGER NOT NULL DEFAULT 1,
     `created_by` INTEGER NOT NULL,
     `updated_by` INTEGER NULL,

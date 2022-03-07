@@ -1,14 +1,6 @@
 {% from 'macros/alerts.html' import flash_alerts with context %}
 {% from"macros/breadcrumb.html" import breadcrumb with context %}
-{% from"macros/fields.html" import
-    text_field,
-    numeric_field,
-    textarea_field,
-    date_field,
-    datetime_field,
-    select_field,
-    file_field with context %}
-{% extends 'layout.html' %}
+{% extends 'layouts/admin_layout.html' %}
 {% block title %}Page{% endblock %}
 {% block content %}
 <div class="container my-3">
@@ -44,7 +36,7 @@
                                 <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#properties">Properties</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#template">Template</button>
+                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#html">HTML</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button type="button" class="nav-link disabled" href="#" data-bs-toggle="tab" data-bs-target="#blocks">Blocks</button>
@@ -66,15 +58,26 @@
                                 <div class="mb-2">
                                     <label>Idiom <span class="text-danger">*</span></label>
                                     <select name="idiom" class="form-select" required>
-                                        <option value="en">English</option>
-                                        <option value="pt">Português</option>
+                                        {% for idiom in idioms %}
+                                            {% set selected = 'selected' if idiom.default else '' %}
+                                            <option value="{{idiom.code}}" {{selected}}>{{idiom.name}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                                 <div class="mb-2">
                                     <label>Layout <span class="text-danger">*</span></label>
                                     <select name="layout" class="form-select" required>
-                                        <option value="l1">layout.html</option>
-                                        <option value="l2">other_layout.html</option>
+                                        {% for layout in layouts %}
+                                            <option value="{{layout}}">{{layout}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Template <span class="text-danger">*</span></label>
+                                    <select name="template" class="form-select" required>
+                                        {% for template in templates %}
+                                            <option value="{{template}}">{{template}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                                 <div class="mb-2">
@@ -87,8 +90,8 @@
                             </div>
                             <div class="tab-pane fade" id="seo" role="tabpanel">
                                 <div class="mb-2">
-                                    <label>Title <span class="text-danger">*</span></label>
-                                    <input name="title" placeholder="The title of the Landing Page" type="text" class="form-control" required/>
+                                    <label>Title</label>
+                                    <input name="title" placeholder="The title of the Landing Page" type="text" class="form-control"/>
                                 </div>
                                 <div class="mb-2">
                                     <label>Author</label>
@@ -136,21 +139,14 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="template" role="tabpanel">
-                                <div class="mb-2">
-                                    <label>Template <span class="text-danger">*</span></label>
-                                    <select id="template_selector" name="template" class="form-select" required>
-                                        <option value="page_template" selected>page_template.html</option>
-                                        <option value="custom">Custom Template...</option>
-                                    </select>
-                                </div>
-                                <div id="custom_input" class="mb-2 d-none">
-                                    <label>HTML Content</label>
-                                    <textarea name="html" rows="15" placeholder="Keywords of the Landing Page" type="text" class="form-control font-monospace"></textarea>
-                                </div>
-                            </div>
                             <div class="tab-pane fade" id="properties" role="tabpanel">
-                                Nothing yet...
+                                Nothjing yet.
+                            </div>
+                            <div class="tab-pane fade" id="html" role="tabpanel">
+                                <div class="mb-2">
+                                    <label>HTML Content</label>
+                                    <textarea name="html" rows="15" placeholder="Static HTML" type="text" class="form-control font-monospace"></textarea>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="blocks" role="tabpanel">
 
@@ -187,16 +183,4 @@
         </div>
     </div>
 </div>
-<script>
-    jQuery(function() {
-        $('#template_selector').change(function() {
-            let val = $(this).val();
-            if(val == 'custom') {
-                $("#custom_input").removeClass('d-none');
-            } else {
-                $("#custom_input").addClass('d-none');
-            }
-        });
-    });
-</script>
 {% endblock %}

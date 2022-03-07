@@ -1,8 +1,8 @@
 """
-Idioms registry.
+Page templates list.
 """
 from typing import Any
-from project.models.idiom_model import IdiomModel
+from project.enums import field_types_enum as field
 
 
 ###############################################################################
@@ -10,9 +10,8 @@ from project.models.idiom_model import IdiomModel
 ###############################################################################
 
 
-idioms: list[IdiomModel] = [
-    IdiomModel('en', 'English', True),
-    IdiomModel('pt', 'Portuguese', False),
-    IdiomModel('es', 'Spanish', False),
+page_templates: list[str] = [
+    'landing_page.html',
+    'static_page.html',
     # Add more...
 ]

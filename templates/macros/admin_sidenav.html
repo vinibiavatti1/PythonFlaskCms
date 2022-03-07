@@ -1,0 +1,34 @@
+{% macro admin_sidenav() %}
+<div id="sidenav" class="offcanvas offcanvas-start text-white bg-dark" tabindex="-1" id="offcanvas" style="width: 300px;">
+    <div class="offcanvas-header">
+        <div class="offcanvas-title fs-4" id="offcanvasExampleLabel">Admin</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="text-center">
+            <div>{{session['user_name']}}</div>
+            <div>{{session['user_email']}}</div>
+        </div>
+        <ul class="nav nav-pills flex-column">
+            {% for item in menu %}
+                {% if item.header %}
+                <li class="nav-item mt-3">
+                    <h6>{{ item.title }}</h6>
+                    <hr class="my-1">
+                </li>
+                {% else %}
+                <li class="nav-item sidenav-button rounded">
+                    <a
+                        class="nav-link text-white"
+                        href="{{item.link}}"
+                    >
+                        <i class="bi {{item.icon}} me-2"></i>
+                        {{ item.title }}
+                    </a>
+                </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endmacro %}

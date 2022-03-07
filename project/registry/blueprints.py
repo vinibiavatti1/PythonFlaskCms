@@ -22,6 +22,7 @@ from project.controllers.admin import (
     calendar_ctrl,
     pages_ctrl,
     idioms_ctrl,
+    properties_ctrl,
 )
 
 
@@ -46,6 +47,7 @@ blueprints = [
     search_ctrl.blueprint,
     pages_ctrl.blueprint,
     idioms_ctrl.blueprint,
+    properties_ctrl.blueprint,
 ]
 
 

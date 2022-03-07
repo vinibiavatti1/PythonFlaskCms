@@ -1,0 +1,86 @@
+{% from 'macros/alerts.html' import flash_alerts with context %}
+{% from"macros/breadcrumb.html" import breadcrumb with context %}
+{% from"macros/property_field.html" import property_field with context %}
+{% extends 'layouts/admin_layout.html' %}
+{% block title %}Properties{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', 'Properties']) }}
+            <div class="fs-3 text-white">Properties</div>
+            <div class="card">
+                <div class="card-body">
+                    <form
+                        id="example-form"
+                        action="/backoffice/form/save"
+                        method="POST"
+                        class="needs-validation"
+                        novalidate
+                    >
+                        {{ flash_alerts() }}
+                        <div class="mb-2">
+                            <a class="btn btn-secondary" href="/admin/list">{{ i18n.actions.cancel }}</a>
+                            <button id="btn-submit" type="submit" class="btn btn-primary">{{ i18n.actions.save }}</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Default Value</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% set vars = {'header': ''} %}
+                                    {% for prop in properties %}
+                                        {% if prop.header %}
+                                            {% if vars.update({'header': prop.title}) %} {% endif %}
+                                            <tr class="bg-prop collapse_btn" role="button" data-header-name="{{prop.title}}">
+                                                <td colspan="4"><b class="text-decoration-underline">{{prop.title}}</b></td>
+                                            </tr>
+                                        {% else %}
+                                            <tr class="d-none" data-header="{{vars.header}}">
+                                                <td style="width: 10%;">
+                                                    <b>{{prop.name}}</b>
+                                                </td>
+                                                <td style="width: 30%;">
+                                                    {{prop.description}}
+                                                </td>
+                                                <td style="width: 30%;">
+                                                    {{property_field(prop, true)}}
+                                                </td>
+                                                <td style="width: 30%;">
+                                                    {{property_field(prop, false)}}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(function() {
+        $(".collapse_btn").click(function() {
+            const header = $(this).data('header-name');
+            const rows = $(`tr[data-header='${header}']`);
+            console.log(header, rows);
+            if(rows.is(':visible')) {
+                rows.addClass('d-none');
+            } else {
+                rows.removeClass('d-none');
+            }
+        });
+    });
+</script>
+{% endblock %}

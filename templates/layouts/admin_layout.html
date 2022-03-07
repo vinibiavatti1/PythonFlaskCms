@@ -1,7 +1,7 @@
-{% from "macros/navbar.html" import navbar with context %}
-{% from "macros/sidenav.html" import sidenav with context %}
+{% from "macros/admin_navbar.html" import admin_navbar with context %}
+{% from "macros/admin_sidenav.html" import admin_sidenav with context %}
+{% from "macros/admin_footer.html" import admin_footer with context %}
 {% from "macros/datatables.html" import datatables_script with context %}
-{% from "macros/footer.html" import footer with context %}
 {% from "macros/headers.html" import metas, links, scripts with context %}
 {% from "macros/cookie_policy.html" import cookie_policy_modal with context %}
 {% from "macros/search.html" import search_modal with context %}
@@ -22,20 +22,15 @@
         {{ noscript() }}
     </noscript>
     <header>
-        {{ navbar() }}
-        {{ sidenav() }}
+        {{ admin_navbar() }}
+        {{ admin_sidenav() }}
     </header>
     <main class="flex-shrink-0">
         {% block content %}{% endblock %}
     </main>
     <footer class="mt-auto">
-        {{ footer() }}
+        {{ admin_footer() }}
     </footer>
-    <div class="modal-container">
-        {{ cookie_policy_modal() }}
-        {{ search_modal() }}
-        {% block modals %}{% endblock %}
-    </div>
     <div class="toast-container position-absolute p-3 top-0 end-0">
         {% block toasts %}{% endblock %}
     </div>

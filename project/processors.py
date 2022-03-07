@@ -6,6 +6,10 @@ from project.utils.translation_utils import get_translations, get_locales
 from project.i18n import translations_dict
 from project import menus
 from project.enums import permission_enum
+from project.registry.admin_menu import admin_menu
+from project.registry.page_templates import page_templates
+from project.registry.layouts import layouts
+from project.registry.idioms import idioms
 
 
 # Blueprint
@@ -41,6 +45,18 @@ def inject_dictionary():
 
 
 @blueprint.app_context_processor
+def inject_registries():
+    """
+    Inject registries.
+    """
+    return dict(
+        templates=page_templates,
+        layouts=layouts,
+        idioms=idioms
+    )
+
+
+@blueprint.app_context_processor
 def inject_resources():
     """
     Inject common resources to be used in Jinja templates
@@ -62,7 +78,7 @@ def inject_menu():
     """
     menu = None
     if has_permission(permission_enum.ADMIN):
-        menu = menus.build_admin_manu()
+        menu = admin_menu
     elif has_permission(permission_enum.MEMBER):
         menu = menus.build_private_menu()
     else:
