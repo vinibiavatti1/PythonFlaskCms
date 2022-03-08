@@ -1,10 +1,10 @@
-from typing import Optional
+from typing import Any, Optional
 
 
 class PropertyModel:
     def __init__(self, name: str, description: str, field_type: str,
                  required: bool = False, values: list[str] = [],
-                 default: Optional[str] = '') -> None:
+                 default: Optional[Any] = '') -> None:
         self.name = name
         self.description = description
         self.field_type = field_type

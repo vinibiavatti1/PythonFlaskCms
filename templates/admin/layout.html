@@ -23,7 +23,9 @@
     </noscript>
     <header>
         {{ admin_navbar() }}
-        {{ admin_sidenav() }}
+        {% if is_authenticated() %}
+            {{ admin_sidenav() }}
+        {% endif %}
     </header>
     <main class="flex-shrink-0">
         {% block content %}{% endblock %}
@@ -34,6 +36,7 @@
     <div class="toast-container position-absolute p-3 top-0 end-0">
         {% block toasts %}{% endblock %}
     </div>
+    {% block scripts %}{% endblock %}
 </body>
 
 <!-- Plugins Configurations -->

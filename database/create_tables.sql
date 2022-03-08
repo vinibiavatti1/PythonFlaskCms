@@ -1,39 +1,19 @@
--- Admin user roles table
-CREATE TABLE IF NOT EXISTS admin_user_roles (
-    `id` INTEGER PRIMARY KEY,
-    `name` TEXT NOT NULL,
-    `login` TEXT NOT NULL,
-    `password` TEXT NOT NULL,
-    `created_by` INTEGER NOT NULL,
-    `updated_by` INTEGER NULL,
-    `created_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `active` INTEGER NOT NULL DEFAULT 1
-);
-
 -- Admin user table
-CREATE TABLE IF NOT EXISTS admin_users (
+CREATE TABLE IF NOT EXISTS users (
     `id` INTEGER PRIMARY KEY,
     `name` TEXT NOT NULL,
-    `login` TEXT NOT NULL,
+    `email` TEXT NOT NULL,
     `password` TEXT NOT NULL,
-    `created_by` INTEGER NOT NULL,
-    `updated_by` INTEGER NULL,
+    `permission` TEXT NOT NULL,
     `created_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `active` INTEGER NOT NULL DEFAULT 1
+    `last_login` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `active` INTEGER NOT NULL DEFAULT 1,
+    `deleted` INTEGET NOT NULL DEFAULT 0
 );
 
--- Idioms
-CREATE TABLE IF NOT EXISTS idioms (
-    `id` TEXT PRIMARY KEY,
-    `name` TEXT NOT NULL,
-    `active` INTEGER NOT NULL DEFAULT 1,
-    `created_by` INTEGER NOT NULL,
-    `updated_by` INTEGER NULL,
-    `created_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-);
+-- Insert default admin users
+INSERT INTO users (name, email, password, permission) VALUES ('Admin', 'admin@admin.com', 'admin', 'administrator');
 
 -- Pages
 CREATE TABLE IF NOT EXISTS pages (
@@ -55,9 +35,10 @@ CREATE TABLE IF NOT EXISTS pages (
     `sitemap_active` INTEGER NOT NULL DEFAULT 1,
     `sitemap_priority` TEXT NULL DEFAULT '0.5',
     `sitemap_change_frequently` TEXT NULL DEFAULT 'always',
-    `template` TEXT NOT NULL,
     `html` TEXT NULL,
-    `properties` TEXT NULL
+    `properties` TEXT NULL,
+    `json` TEXT NULL,
+    `deleted` INTEGET NOT NULL DEFAULT 0
 );
 
 -- History
@@ -68,5 +49,12 @@ CREATE TABLE IF NOT EXISTS history (
     `title` TEXT NOT NULL,
     `description` TEXT NOT NULL,
     `created_by` INTEGER NOT NULL,
-    `created_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    `created_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `deleted` INTEGET NOT NULL DEFAULT 0
+);
+
+-- Properties
+CREATE TABLE IF NOT EXISTS properties (
+    `name` TEXT PRIMARY KEY,
+    `value` TEXT NULL
 );

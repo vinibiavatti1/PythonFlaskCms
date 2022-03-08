@@ -23,6 +23,7 @@ from project.controllers.admin import (
     pages_ctrl,
     idioms_ctrl,
     properties_ctrl,
+    admin_auth_ctrl,
 )
 
 
@@ -48,6 +49,7 @@ blueprints = [
     pages_ctrl.blueprint,
     idioms_ctrl.blueprint,
     properties_ctrl.blueprint,
+    admin_auth_ctrl.blueprint,
 ]
 
 

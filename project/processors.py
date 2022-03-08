@@ -67,7 +67,8 @@ def inject_resources():
         enumerate=enumerate,
         len=len,
         is_authenticated=is_authenticated,
-        cookie_policy_consent=cookie_policy_consent()
+        cookie_policy_consent=cookie_policy_consent(),
+        str=str
     )
 
 
@@ -76,11 +77,4 @@ def inject_menu():
     """
     Inject the sidenav menus by user authentication
     """
-    menu = None
-    if has_permission(permission_enum.ADMIN):
-        menu = admin_menu
-    elif has_permission(permission_enum.MEMBER):
-        menu = menus.build_private_menu()
-    else:
-        menu = menus.build_public_menu()
-    return dict(menu=menu)
+    return dict(menu=admin_menu)

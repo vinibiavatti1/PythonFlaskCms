@@ -3,7 +3,7 @@ Database module.
 """
 from project.config import config
 from project.errors import AppError
-from typing import Any
+from typing import Any, Optional, Union
 import sqlite3
 import sys
 import os
@@ -22,14 +22,36 @@ def connect() -> sqlite3.Connection:
     connection = sqlite3.connect(db_path)
     if not connection:
         raise AppError('Could not connect to database')
+    connection.row_factory = sqlite3.Row
     return connection
 
 
-def execute(sql: str) -> list[Any]:
+def execute_query(sql: str, data: Optional[Any] = None, *,
+                  single: bool = False) -> Union[list[Any], Any]:
     """
-    Execute SQLite query in database and return the resultset.
+    Execute SQLite DQL statement in database and return the resultset.
     """
     connection = connect()
     cursor = connection.cursor()
-    cursor.execute(sql)
-    return cursor.fetchall()
+    if data:
+        cursor.execute(sql, data)
+    else:
+        cursor.execute(sql)
+    if single:
+        return cursor.fetchone()
+    else:
+        return cursor.fetchall()
+
+
+def execute_update(sql: str, data: Optional[Any] = None) -> Any:
+    """
+    Execute SQLite DDL statement in database and return the last inserted id.
+    """
+    connection = connect()
+    cursor = connection.cursor()
+    if data:
+        cursor.execute(sql, data)
+    else:
+        cursor.execute(sql)
+    connection.commit()
+    return cursor.lastrowid

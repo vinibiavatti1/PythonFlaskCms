@@ -1,18 +1,23 @@
 {% from 'macros/alerts.html' import flash_alerts with context %}
 {% from"macros/breadcrumb.html" import breadcrumb with context %}
-{% extends 'layouts/admin_layout.html' %}
+{% from"macros/clipboard.html" import copy_clipboard with context %}
+{% extends 'admin/layout.html' %}
 {% block title %}Page{% endblock %}
 {% block content %}
 <div class="container my-3">
     <div class="row">
         <div class="col">
-            {{ breadcrumb(['Admin', 'Pages', '1']) }}
+            {{ breadcrumb(['Admin', 'Pages', page_id]) }}
             <div class="fs-3 text-white">Page Detail</div>
             <div class="card">
                 <div class="card-body">
                     <form
-                        id="example-form"
-                        action="/backoffice/form/save"
+                        id="page-form"
+                        {% if edit %}
+                            action="/admin/pages/update/{{page_id}}"
+                        {% else %}
+                            action="/admin/pages/insert"
+                        {% endif %}
                         method="POST"
                         class="needs-validation"
                         novalidate
@@ -24,7 +29,7 @@
                         </div>
                         <ul class="nav nav-tabs mb-2" id="landing-page-tab" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#detail">Detail</button>
+                                <button id="tab_detail" type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#detail">Detail</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#seo">SEO</button>
@@ -39,27 +44,34 @@
                                 <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#html">HTML</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link disabled" href="#" data-bs-toggle="tab" data-bs-target="#blocks">Blocks</button>
+                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#advanced">Advanced</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link disabled" href="#" data-bs-toggle="tab" data-bs-target="#history">History</button>
+                                <button type="button" class="nav-link {{ 'disabled' if not edit else '' }}" href="#" data-bs-toggle="tab" data-bs-target="#blocks">Blocks</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link disabled" href="#" data-bs-toggle="tab" data-bs-target="#info">Info</button>
+                                <button type="button" class="nav-link {{ 'disabled' if not edit else '' }}" href="#" data-bs-toggle="tab" data-bs-target="#history">History</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link {{ 'disabled' if not edit else '' }}" href="#" data-bs-toggle="tab" data-bs-target="#info">Info</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="detail" role="tabpanel">
                                 <div class="mb-2">
                                     <label>Name <span class="text-danger">*</span></label>
-                                    <input name="name" placeholder="The name of the Landing Page" type="text" class="form-control" required/>
+                                    <input id="page_name" name="name" placeholder="The name of the Landing Page" type="text" class="form-control" required value="{{ data.name if edit else '' }}" pattern="[a-z_]+"/>
                                     <small>Allowed only low case characters separated by "_". Ex: my_page</small>
                                 </div>
                                 <div class="mb-2">
                                     <label>Idiom <span class="text-danger">*</span></label>
                                     <select name="idiom" class="form-select" required>
                                         {% for idiom in idioms %}
-                                            {% set selected = 'selected' if idiom.default else '' %}
+                                            {% if edit %}
+                                                {% set selected = 'selected' if data.idiom == idiom.code else '' %}
+                                            {% else %}
+                                                {% set selected = 'selected' if idiom.default else '' %}
+                                            {% endif %}
                                             <option value="{{idiom.code}}" {{selected}}>{{idiom.name}}</option>
                                         {% endfor %}
                                     </select>
@@ -68,7 +80,7 @@
                                     <label>Layout <span class="text-danger">*</span></label>
                                     <select name="layout" class="form-select" required>
                                         {% for layout in layouts %}
-                                            <option value="{{layout}}">{{layout}}</option>
+                                            <option value="{{layout}}" {{'selected' if edit and layout == data.layout else ''}}>{{layout}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -76,39 +88,39 @@
                                     <label>Template <span class="text-danger">*</span></label>
                                     <select name="template" class="form-select" required>
                                         {% for template in templates %}
-                                            <option value="{{template}}">{{template}}</option>
+                                            <option value="{{template}}" {{'selected' if edit and template == data.template else ''}}>{{template}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                                 <div class="mb-2">
                                     <label>Active <span class="text-danger">*</span></label>
                                     <select name="active" class="form-select" required>
-                                        <option value="1" selected>True</option>
-                                        <option value="0">False</option>
+                                        <option value="1" {{'selected' if edit and data.active else ''}}>True</option>
+                                        <option value="0" {{'selected' if edit and not data.active else ''}}>False</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="seo" role="tabpanel">
                                 <div class="mb-2">
                                     <label>Title</label>
-                                    <input name="title" placeholder="The title of the Landing Page" type="text" class="form-control"/>
+                                    <input name="title" placeholder="The title of the Landing Page" type="text" class="form-control" value="{{ data.title if edit else '' }}"/>
                                 </div>
                                 <div class="mb-2">
                                     <label>Author</label>
-                                    <input name="author" placeholder="The author of the Landing Page" type="text" class="form-control"/>
+                                    <input name="author" placeholder="The author of the Landing Page" type="text" class="form-control" value="{{ data.author if edit else '' }}"/>
                                 </div>
                                 <div class="mb-2">
                                     <label>Description</label>
-                                    <textarea name="description" rows="3" placeholder="Description of the Landing Page" type="text" class="form-control"></textarea>
+                                    <textarea name="description" rows="3" placeholder="Description of the Landing Page" type="text" class="form-control" value="{{ data.description if edit else '' }}"></textarea>
                                 </div>
                                 <div class="mb-2">
                                     <label>Keywords</label>
-                                    <textarea name="keywords" rows="3" placeholder="Keywords of the Landing Page" type="text" class="form-control"></textarea>
+                                    <textarea name="keywords" rows="3" placeholder="Keywords of the Landing Page" type="text" class="form-control" value="{{ data.keywords if edit else '' }}"></textarea>
                                     <small>Use comma (,) or break line (↵) to separate</small>
                                 </div>
                                 <div class="mb-2">
                                     <label>Canonical URLs</label>
-                                    <textarea name="keywords" rows="3" placeholder="Canonical URLs of the Landing Page" type="text" class="form-control"></textarea>
+                                    <textarea name="canonical_urls" rows="3" placeholder="Canonical URLs of the Landing Page" type="text" class="form-control" value="{{ data.canonical_urls if edit else '' }}"></textarea>
                                     <small>Use comma (,) or break line (↵) to separate</small>
                                 </div>
                             </div>
@@ -116,16 +128,21 @@
                                 <div class="mb-2">
                                     <label>Active <span class="text-danger">*</span></label>
                                     <select name="sitemap_active" class="form-select" required>
-                                        <option value="1" selected>True</option>
-                                        <option value="0">False</option>
+                                        <option value="1" {{'selected' if edit and data.sitemap_active else ''}}>True</option>
+                                        <option value="0" {{'selected' if edit and not data.sitemap_active else ''}}>False</option>
                                     </select>
                                 </div>
                                 <div class="mb-2">
                                     <label>Priority <span class="text-danger">*</span></label>
                                     <select name="sitemap_priority" class="form-select" required>
                                         {% for i in range(0, 11) %}
-                                            {% set selected = 'selected' if i == 5 else '' %}
-                                            <option value="{{i / 10}}" {{selected}}>{{i / 10}}</option>
+                                            {% set priority = i / 10 %}
+                                            {% if edit %}
+                                                {% set selected = 'selected' if str(priority) == data.sitemap_priority else '' %}
+                                            {% else %}
+                                                {% set selected = 'selected' if i == 5 else '' %}
+                                            {% endif %}
+                                            <option value="{{priority}}" {{selected}}>{{priority}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -133,19 +150,25 @@
                                     <label>Change Frequently <span class="text-danger">*</span></label>
                                     <select name="sitemap_change_frequently" class="form-select" required>
                                         {% for i in ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'] %}
-                                            {% set selected = 'selected' if i == 'always' else '' %}
+                                            {% set selected = 'selected' if edit and i == data.sitemap_change_frequently else '' %}
                                             <option value="{{i}}" {{selected}}>{{i}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="properties" role="tabpanel">
-                                Nothjing yet.
+                                Nothing to show :D.
                             </div>
                             <div class="tab-pane fade" id="html" role="tabpanel">
                                 <div class="mb-2">
                                     <label>HTML Content</label>
-                                    <textarea name="html" rows="15" placeholder="Static HTML" type="text" class="form-control font-monospace"></textarea>
+                                    <textarea name="html" rows="15" placeholder="Static HTML" type="text" class="form-control font-monospace">{{data.html if edit else ''}}</textarea>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="advanced" role="tabpanel">
+                                <div class="mb-2">
+                                    <label>JSON Content</label>
+                                    <textarea name="json" rows="15" placeholder="Aditional JSON data that will be injected to the page" type="text" class="form-control font-monospace">{{data.json if edit else ''}}</textarea>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="blocks" role="tabpanel">
@@ -155,25 +178,26 @@
 
                             </div>
                             <div class="tab-pane fade" id="info" role="tabpanel">
-                                <div class="mb-2">
-                                    <label>URL</label>
-                                    <input type="text" class="form-control" disabled value="https://www.website.com/page/<idiom>/<name>"/>
+                                <label>URL</label>
+                                <div class="input-group mb-2">
+                                    <input id="page_url_input" type="text" class="form-control" readonly value="{{ data.page_url if edit else '' }}"/>
+                                    <button class="btn btn-primary" type="button" id="copy_url_btn">Copy</button>
                                 </div>
                                 <div class="mb-2">
                                     <label>Created by</label>
-                                    <input type="text" class="form-control" disabled value="Vini"/>
+                                    <input type="text" class="form-control" disabled value="{{ data.created_by_name if edit else '' }}"/>
                                 </div>
                                 <div class="mb-2">
                                     <label>Updated by</label>
-                                    <input type="text" class="form-control" disabled value="Vini"/>
+                                    <input type="text" class="form-control" disabled value="{{ data.updated_by_name if edit else '' }}"/>
                                 </div>
                                 <div class="mb-2">
                                     <label>Created On</label>
-                                    <input type="text" class="form-control" disabled value="2020-01-01 10:50:00 am"/>
+                                    <input type="text" class="form-control" disabled value="{{ data.created_on if edit else '' }}"/>
                                 </div>
                                 <div class="mb-2">
                                     <label>Updated On</label>
-                                    <input type="text" class="form-control" disabled value="2020-01-01 10:50:00 am"/>
+                                    <input type="text" class="form-control" disabled value="{{ data.updated_on if edit else '' }}"/>
                                 </div>
                             </div>
                         </div>
@@ -183,4 +207,7 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+{{ copy_clipboard('#copy_url_btn', '#page_url_input') }}
 {% endblock %}

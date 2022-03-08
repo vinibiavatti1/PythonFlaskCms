@@ -1,14 +1,22 @@
 {% macro admin_navbar() %}
 <nav class="navbar navbar-dark bg-dark p-3">
     <div class="container justify-content-start">
+        {% if is_authenticated() %}
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidenav">
             <span class="navbar-toggler-icon"></span>
         </button>
+        {% endif %}
         <a class="navbar-brand ms-3" href="/">Admin</a>
         <div class="me-auto"></div>
+        {% if is_authenticated() %}
         <div>
             <a class="btn btn-outline-light ms-2 d-none d-sm-block" href="/logout">Logout</a>
         </div>
+        {% else %}
+        <div>
+            <a class="btn btn-outline-light ms-2 d-none d-sm-block" href="/">Website</a>
+        </div>
+        {% endif %}
     </div>
 </nav>
 {% endmacro %}

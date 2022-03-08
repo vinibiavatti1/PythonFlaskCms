@@ -29,7 +29,6 @@ config = {
     'db_port': 3306,
     'db_user': 'root',
     'db_pass': '',
-    'db_name': 'database',
 
     # Hashes
     'salt': '73ef930e2b797a5b5daa73cf3a3025ce853d1bb8',

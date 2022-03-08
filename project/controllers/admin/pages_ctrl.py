@@ -1,21 +1,24 @@
-from flask import Blueprint, render_template, flash, request
-from json import dumps
+"""
+Page Controller.
+
+This module provide the routes for page.
+"""
+from typing import Any
+from flask import Blueprint, redirect, render_template, flash, request, url_for
 from project.utils.security_utils import login_required
-from project.errors import ValidationError
-from project.validators import page_validator
-from project.repositories import page_repository
+from project.services import page_service
 
 
 # Blueprint
 blueprint = Blueprint(
-    'pages',
+    'pages_ctrl',
     __name__,
     url_prefix='/admin/pages'
 )
 
 
 ###############################################################################
-# Routes
+# View Routes
 ###############################################################################
 
 
@@ -35,55 +38,117 @@ def index() -> str:
         'Updated On',
         'Actions',
     ]
-    data = [
-        (
-            1,
-            'homepage',
-            'True',
-            'Vini',
-            '-',
-            '2021-01-01 02:37:21 am',
-            '-',
-            f'<a href="/admin/pages/detail/{1}">Details</a>'
-        ),
-    ]
+    pages = page_service.select_all()
+    data = []
+    for page in pages:
+        page_id = page['id']
+        data.append(
+            (
+                page_id,
+                page['name'],
+                'True' if page['active'] == 1 else 'False',
+                page['created_by_name'],
+                page['updated_by_name'],
+                page['created_on'],
+                page['updated_on'],
+                f'<a href="/admin/pages/detail/{page_id}">Details</a>',
+            )
+        )
     return render_template(
         '/admin/pages.html',
         headers=headers,
-        data=data
+        data=data,
     )
 
-
-@blueprint.route('/detail/<_id>')
+@blueprint.route('/create')
 @login_required()
-def detail(_id: int) -> str:
+def create() -> str:
     """
-    Landing page detail route.
+    Page create route.
     """
     return render_template(
         '/admin/page_detail.html',
+        edit=False,
+        data=dict()
+    )
+
+
+@blueprint.route('/detail/<page_id>')
+@login_required()
+def detail(page_id: int) -> Any:
+    """
+    Page detail route.
+    """
+    data = page_service.select_by_id(page_id)
+    if data is None:
+        flash('Page not found', category='danger')
+        return redirect(url_for(index))
+    page_url = page_service.generate_page_url(
+        request.url_root,
+        data['idiom'],
+        data['name'],
+    )
+    return render_template(
+        '/admin/page_detail.html',
+        edit=True,
+        page_id=page_id,
         data={
-            'id': _id,
+            **data,
+            'page_url': page_url
         }
     )
 
 
-@blueprint.route('/save/<_id>')
+###############################################################################
+# Action Routes
+###############################################################################
+
+
+@blueprint.route('/insert', methods=['POST'])
 @login_required()
-def save(_id: int) -> str:
+def insert() -> str:
     """
-    Save page data.
+    Insert page route.
     """
     try:
-        data = request.form
-        page_validator.validate_save_data(data)
-        page_repository.save(_id, data)
-        flash('Page saved successfully', category='success')
+        page_id = page_service.insert(request.form.to_dict())
+        flash('Page created successfully!', category='success')
+        return render_template(
+            '/admin/page_detail.html',
+            edit=True,
+            page_id=page_id,
+            data=dict()
+        )
     except Exception as err:
         flash(str(err), category='danger')
-    return render_template(
-        '/admin/page_detail.html',
-        data={
-            'id': _id,
-        }
-    )
+        return render_template(
+            '/admin/page_detail.html',
+            edit=False,
+            page_id=None,
+            data={}
+        )
+
+
+@blueprint.route('/update/<page_id>', methods=['POST'])
+@login_required()
+def update(page_id: int) -> str:
+    """
+    Update page route.
+    """
+    try:
+        page_service.update(page_id, request.form.to_dict())
+        flash('Page updated successfully!', category='success')
+        return render_template(
+            '/admin/page_detail.html',
+            edit=True,
+            page_id=page_id,
+            data=dict()
+        )
+    except Exception as err:
+        flash(str(err), category='danger')
+        return render_template(
+            '/admin/page_detail.html',
+            edit=True,
+            page_id=page_id,
+            data=dict()
+        )

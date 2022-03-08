@@ -45,6 +45,19 @@ admin_menu: list[Union[MenuModel, HeaderModel]] = [
     ),
 
     ###########################################################################
+    # Media
+    ###########################################################################
+
+    HeaderModel(
+        'Media'
+    ),
+    MenuModel(
+        title='Medias',
+        link='/admin/posts',
+        icon='bi-image',
+    ),
+
+    ###########################################################################
     # Configuration
     ###########################################################################
 
@@ -65,14 +78,9 @@ admin_menu: list[Union[MenuModel, HeaderModel]] = [
         'Administration'
     ),
     MenuModel(
-        title='Adm. Users',
+        title='Users',
         link='/admin/posts',
         icon='bi-people',
-    ),
-    MenuModel(
-        title='Adm. User Roles',
-        link='/admin/posts',
-        icon='bi-person-check',
     ),
     # Add more ...
 ]

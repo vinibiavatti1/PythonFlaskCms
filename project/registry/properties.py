@@ -1,7 +1,7 @@
 """
 Properties list.
 """
-from typing import Any, Union
+from typing import Union
 from project.models.header_model import HeaderModel
 from project.models.property_model import PropertyModel
 from project.enums import field_types_enum as field
@@ -89,5 +89,46 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
         name='body_script',
         description='Javascript script that will be inserted into <body> tag.',
         field_type=field.CODE,
+    ),
+
+    ###########################################################################
+    # reCaptcha
+    ###########################################################################
+
+    HeaderModel('reCaptcha'),
+    PropertyModel(
+        name='recaptcha_enabled',
+        description='Enables the Google reCaptcha v3 in the website.',
+        field_type=field.BOOL,
+        default=False,
+    ),
+    PropertyModel(
+        name='recaptcha_site_key',
+        description='reCaptcha site key.',
+        field_type=field.TEXT,
+        default='6LfoMNgdAAAAAFC-FumFY8ga7QGAhBlPaOb0xBdH',
+    ),
+    PropertyModel(
+        name='recaptcha_secret_key',
+        description='reCaptcha secret key.',
+        field_type=field.TEXT,
+        default='6LfoMNgdAAAAAEu51riSXQK5Pkcda8wf3gp5mNRk',
+    ),
+    PropertyModel(
+        name='recaptcha_threshold',
+        description='reCaptcha threshold 0.0 to 1.0.',
+        field_type=field.REAL,
+        default=0.5
+    ),
+
+    ###########################################################################
+    # Google
+    ###########################################################################
+
+    HeaderModel('Google'),
+    PropertyModel(
+        name='google_api_key',
+        description='API Key for Google resources.',
+        field_type=field.TEXT,
     ),
 ]
