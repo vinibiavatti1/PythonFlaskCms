@@ -40,6 +40,20 @@ CREATE TABLE IF NOT EXISTS pages (
     `css` TEXT NULL,
     `script` TEXT NULL,
     `json` TEXT NULL,
+    `deleted` INTEGER NOT NULL DEFAULT 0,
+    `id_menu` INTEGER NULL
+);
+
+-- Menus
+CREATE TABLE IF NOT EXISTS menus (
+    `id` INTEGER PRIMARY KEY,
+    `name` TEXT NOT NULL,
+    `active` INTEGER NOT NULL DEFAULT 1,
+    `created_by` INTEGER NOT NULL,
+    `updated_by` INTEGER NULL,
+    `created_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `json` TEXT NOT NULL,
     `deleted` INTEGET NOT NULL DEFAULT 0
 );
 

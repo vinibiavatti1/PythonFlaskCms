@@ -51,8 +51,8 @@ def select_by_id(page_id: int) -> Optional[dict[str, Any]]:
     return page_repository.select(page_id)
 
 
-def generate_page_url(url_root: str, idiom: str, page_name: str) -> str:
+def generate_page_url(idiom: str, page_name: str) -> str:
     """
     Generate the page URL.
     """
-    return f'{url_root}page/{idiom}/{page_name}'
+    return f'/page/{idiom}/{page_name}'

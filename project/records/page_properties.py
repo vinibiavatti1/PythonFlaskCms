@@ -1,5 +1,5 @@
 """
-Page properties list.
+Page records module.
 """
 from typing import Union
 from project.models.header_model import HeaderModel

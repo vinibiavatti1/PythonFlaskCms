@@ -1,5 +1,5 @@
 """
-Page templates list.
+Page layouts records module.
 """
 from project.models.label_value_model import LabelValueModel
 
@@ -9,14 +9,14 @@ from project.models.label_value_model import LabelValueModel
 ###############################################################################
 
 
-page_templates: list[LabelValueModel] = [
+layouts: list[LabelValueModel] = [
     LabelValueModel(
-        label='Landing Page Template (Page with Blocks)',
-        value='landing_page_template.html',
+        label='Default Layout',
+        value='default_layout.html'
     ),
     LabelValueModel(
-        label='Default Template (Custom HTML, CSS and JS)',
-        value='default_template.html',
+        label='Empty Layout (Without navbar, footers, etc.)',
+        value='empty_layout.html'
     ),
     # Add more...
 ]

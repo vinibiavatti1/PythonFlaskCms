@@ -13,6 +13,7 @@ def select_all(active: Optional[bool] = None) -> list[Any]:
         SELECT
             page.id,
             page.name,
+            page.idiom,
             user.name as created_by_name,
             user2.name as updated_by_name,
             page.created_on,
@@ -60,6 +61,7 @@ def select(page_id: int) -> Optional[Any]:
             page.css,
             page.script,
             page.json,
+            page.id_menu,
             user.name as created_by_name,
             user2.name as updated_by_name
         FROM pages page
@@ -96,7 +98,8 @@ def insert(data: dict[str, Any]) -> int:
             css,
             script,
             json,
-            properties)
+            properties,
+            id_menu)
         VALUES
             (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     '''
@@ -122,6 +125,7 @@ def insert(data: dict[str, Any]) -> int:
             data['script'],
             data['json'],
             data['properties'],
+            data['id_menu'],
         )
     )
     return int(page_id)
@@ -133,9 +137,9 @@ def update(page_id: int, data: dict[str, Any]) -> None:
     """
     sql = '''
         UPDATE pages SET
+            name = ?,
             idiom = ?,
             layout = ?,
-            created_by = ?,
             updated_by = ?,
             updated_on = CURRENT_TIMESTAMP,
             title = ?,
@@ -152,16 +156,17 @@ def update(page_id: int, data: dict[str, Any]) -> None:
             script = ?,
             json = ?,
             properties = ?,
-            active = ?
+            active = ?,
+            id_menu = ?
         WHERE
             id = ?
     '''
     database_utils.execute_update(
         sql,
         (
+            data['name'],
             data['idiom'],
             data['layout'],
-            data['created_by'],
             data['updated_by'],
             data['title'],
             data['author'],
@@ -178,6 +183,7 @@ def update(page_id: int, data: dict[str, Any]) -> None:
             data['json'],
             data['properties'],
             data['active'],
+            data['id_menu'],
             page_id
         )
     )

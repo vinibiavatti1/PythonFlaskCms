@@ -6,7 +6,7 @@ This module provide the routes for page.
 from typing import Any
 from flask import Blueprint, redirect, render_template, flash, request, url_for
 from project.utils.security_utils import login_required
-from project.services import page_service
+from project.services import menu_service, page_service
 
 
 # Blueprint
@@ -31,6 +31,7 @@ def index() -> str:
     headers = [
         '#',
         'Name',
+        'Idiom',
         'Active',
         'Created By',
         'Updated By',
@@ -46,6 +47,7 @@ def index() -> str:
             (
                 page_id,
                 page['name'],
+                page['idiom'],
                 'True' if page['active'] == 1 else 'False',
                 page['created_by_name'],
                 page['updated_by_name'],
@@ -66,10 +68,17 @@ def create() -> str:
     """
     Page create route.
     """
+    menus_db = menu_service.select_all()
+    menus = []
+    for menu in menus_db:
+        menus.append({
+            'label': menu['name'],
+            'value': menu['id'],
+        })
     return render_template(
         '/admin/page_detail.html',
         edit=False,
-        data=dict()
+        data=dict(menus=menus)
     )
 
 
@@ -82,19 +91,26 @@ def detail(page_id: int) -> Any:
     data = page_service.select_by_id(page_id)
     if data is None:
         flash('Page not found', category='danger')
-        return redirect(url_for('.index'))
+        return redirect('/admin/pages')
     page_url = page_service.generate_page_url(
-        request.url_root,
         data['idiom'],
         data['name'],
     )
+    menus_db = menu_service.select_all()
+    menus = []
+    for menu in menus_db:
+        menus.append({
+            'label': menu['name'],
+            'value': menu['id'],
+        })
     return render_template(
         '/admin/page_detail.html',
         edit=True,
         page_id=page_id,
         data={
             **data,
-            'page_url': page_url
+            'page_url': page_url,
+            'menus': menus
         }
     )
 
@@ -106,49 +122,28 @@ def detail(page_id: int) -> Any:
 
 @blueprint.route('/insert', methods=['POST'])
 @login_required()
-def insert() -> str:
+def insert() -> Any:
     """
     Insert page route.
     """
     try:
         page_id = page_service.insert(request.form.to_dict())
         flash('Page created successfully!', category='success')
-        return render_template(
-            '/admin/page_detail.html',
-            edit=True,
-            page_id=page_id,
-            data=dict()
-        )
+        return redirect(f'/admin/pages/detail/{page_id}')
     except Exception as err:
         flash(str(err), category='danger')
-        return render_template(
-            '/admin/page_detail.html',
-            edit=False,
-            page_id=None,
-            data={}
-        )
+        return redirect('/admin/pages/create')
 
 
 @blueprint.route('/update/<page_id>', methods=['POST'])
 @login_required()
-def update(page_id: int) -> str:
+def update(page_id: int) -> Any:
     """
     Update page route.
     """
     try:
         page_service.update(page_id, request.form.to_dict())
         flash('Page updated successfully!', category='success')
-        return render_template(
-            '/admin/page_detail.html',
-            edit=True,
-            page_id=page_id,
-            data=dict()
-        )
     except Exception as err:
         flash(str(err), category='danger')
-        return render_template(
-            '/admin/page_detail.html',
-            edit=True,
-            page_id=page_id,
-            data=dict()
-        )
+    return redirect(f'/admin/pages/detail/{page_id}')

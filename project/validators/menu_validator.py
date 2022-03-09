@@ -1,7 +1,7 @@
 """
-Page Validator.
+Menu Validator.
 
-This module provides validator for page data.
+This module provides validator for menu data.
 """
 from typing import Any
 from project.errors import ValidationError
@@ -16,25 +16,9 @@ def validate_insert_data(form_data: dict[str, Any]) -> None:
     validate_form_data_fields(
         form_data,
         'name',
-        'idiom',
-        'layout',
         'created_by',
         'updated_by',
-        'title',
-        'author',
-        'description',
-        'keywords',
-        'canonical_urls',
-        'sitemap_active',
-        'sitemap_priority',
-        'sitemap_change_frequently',
-        'template',
-        'html',
-        'css',
-        'script',
         'json',
-        'properties',
-        'id_menu',
     )
     if not re.match(r'^[a-z_]+$', str(form_data.get('name'))):
         raise ValidationError(
@@ -49,25 +33,9 @@ def validate_update_data(form_data: dict[str, Any]) -> None:
     validate_form_data_fields(
         form_data,
         'name',
-        'idiom',
-        'layout',
         'updated_on',
         'updated_by',
-        'title',
-        'author',
-        'description',
-        'keywords',
-        'canonical_urls',
-        'sitemap_active',
-        'sitemap_priority',
-        'sitemap_change_frequently',
-        'template',
-        'html',
-        'css',
-        'script',
         'json',
-        'properties',
-        'id_menu',
     )
     if not re.match(r'^[a-z_]+$', str(form_data.get('name'))):
         raise ValidationError(

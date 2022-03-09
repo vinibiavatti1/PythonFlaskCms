@@ -1,0 +1,194 @@
+{% from 'macros/utils/alerts.html' import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% from "macros/utils/clipboard.html" import copy_clipboard with context %}
+{% extends 'admin/layout.html' %}
+{% block title %}Menu Detail{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', 'Menus', menu_id]) }}
+            <div class="fs-3 text-white">Menu Detail</div>
+            <div class="card">
+                <div class="card-body">
+                    <form
+                        id="menu-form"
+                        {% if edit %}
+                            action="/admin/menus/update/{{menus_id}}"
+                        {% else %}
+                            action="/admin/menus/insert"
+                        {% endif %}
+                        method="POST"
+                        class="needs-validation"
+                        novalidate
+                    >
+                        {{ flash_alerts() }}
+                        <div class="mb-2">
+                            <button id="btn-submit" type="button" class="btn btn-primary">Save</button>
+                            <button id="btn-duplicate" type="button" class="btn btn-light" href="/admin/list">Duplicate...</button>
+                            <a class="btn btn-light" href="/admin/menus">Cancel</a>
+                        </div>
+                        <input id="json" name="json" type="hidden" value="">
+                        <div class="mb-2">
+                            <label>Name</label>
+                            <input id="name_input" class="form-control" name="name" type="text" placeholder="Enter the menu name" value="{{ data.name if edit else '' }}" required>
+                            <small>Allowed only low case characters separated by "_". Ex: my_page</small>
+                        </div>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>URL</th>
+                                    <th>Level</th>
+                                    <th>New tab?</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="menus"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<template id="menu_template">
+    <tr class="menu_row">
+        <td style="width: 20%;">
+            <input name="name" class="form-control" type="text" placeholder="Enter the Name">
+        </td>
+        <td style="width: 40%;">
+            <input name="url" class="form-control" type="text" placeholder="Enter the URL">
+        </td>
+        <td style="width: 10%;">
+            <select name="level" class="form-select" id="">
+                <option value="1">1 (Root)</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </td>
+        <td style="width: 10%;">
+            <select name="new_tab" class="form-select" id="">
+                <option value="0">False</option>
+                <option value="1">True</option>
+            </select>
+        </td>
+        <td style="width: 20%;">
+            <button type="button" class="btn btn-light btn_up" title="Send to up">
+                <i class="bi bi-arrow-up"></i>
+            </button>
+            <button type="button" class="btn btn-light btn_down" title="Send to down">
+                <i class="bi bi-arrow-down"></i>
+            </button>
+            <button type="button" class="btn btn-light btn_new" title="Add new menu">
+                <i class="bi bi-plus-circle text-primary"></i>
+            </button>
+            <button type="button" class="btn btn-light btn_delete" title="Delete menu">
+                <i class="bi bi-trash text-danger"></i>
+            </button>
+        </td>
+    </tr>
+</template>
+{% endblock %}
+{% block script %}
+<script>
+    jQuery(function() {
+        let edit = '{{ 1 if edit else 0 }}'
+        if(edit == 0) {
+            addMenu();
+        } else {
+            let json = '{{data.json | safe}}';
+            json = JSON.parse(json);
+            json.forEach(function(item) {
+                addMenu();
+                setDataInLast(item);
+            });
+        }
+
+        function addMenu() {
+            const template = $('#menu_template').html();
+            $('#menus').append(template);
+            processButtons();
+        }
+
+        function setDataInLast(item) {
+            const menu_rows = $('.menu_row');
+            const last = menu_rows.last();
+            $('input[name="name"]', last).val(item.name);
+            $('input[name="url"]', last).val(item.url);
+            $('select[name="level"]', last).val(item.level);
+            $('select[name="new_tab"]', last).val(item.new_tab);
+        }
+
+        $(document).delegate('.btn_new', 'click', function() {
+            const template = $('#menu_template').html();
+            $(this).closest('tr').after(template);
+            processButtons();
+        });
+
+        $(document).delegate('.btn_delete', 'click', function() {
+            if(!confirm('Do you really want to delete the item?')) {
+                return;
+            }
+            $(this).closest('tr').remove();
+            processButtons();
+        });
+
+        $(document).delegate('.btn_up', 'click', function() {
+            const current_row = $(this).closest('tr');
+            current_row.insertBefore(current_row.prev());
+            processButtons();
+        });
+
+        $(document).delegate('.btn_down', 'click', function() {
+            const current_row = $(this).closest('tr');
+            current_row.next().insertBefore(current_row);
+            processButtons();
+        });
+
+        function processButtons() {
+            $('.btn_up').attr('disabled', false);
+            $('.btn_down').attr('disabled', false);
+            $('.btn_delete').attr('disabled', false);
+            const menu_rows = $('.menu_row');
+            const first = menu_rows.first();
+            const last = menu_rows.last();
+            $('.btn_up', first).attr('disabled', true);
+            $('.btn_down', last).attr('disabled', true);
+            if(menu_rows.length == 1) {
+                $('.btn_delete').attr('disabled', true);
+            }
+        }
+
+        $('#btn-submit').on('click', function(event) {
+            let name = $('#name_input').val();
+            if(!name) {
+                alert('The "name" is required.');
+                $('#name_input').focus();
+                return;
+            }
+            if(!/^[a-z_]+$/g.test(name)) {
+                alert('The "name" supports low characters and "_" as separator only.');
+                $('#name_input').focus();
+                return;
+            }
+            let json = [];
+            $('.menu_row').each(function() {
+                let context = $(this);
+                json.push({
+                    name: $('input[name="name"]', context).val(),
+                    url: $('input[name="url"]', context).val(),
+                    level: $('select[name="level"]', context).val(),
+                    new_tab: $('select[name="new_tab"]', context).val(),
+                });
+            });
+            $('#json').val(JSON.stringify(json));
+            $('form').submit();
+        });
+    });
+</script>
+{% endblock %}

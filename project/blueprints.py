@@ -1,7 +1,7 @@
 """
 Blueprints registry module.
 """
-from flask import Blueprint, Flask
+from flask import Blueprint
 from project.processors import blueprint as processors
 from project.handlers import blueprint as handlers
 from project.controllers.public import (
@@ -20,6 +20,7 @@ from project.controllers.admin import (
     pages_ctrl,
     properties_ctrl,
     seo_ctrl,
+    menus_ctrl,
 )
 
 
@@ -44,4 +45,5 @@ blueprints: list[Blueprint] = [
     pages_ctrl.blueprint,
     properties_ctrl.blueprint,
     auth_ctrl.blueprint,
+    menus_ctrl.blueprint,
 ]

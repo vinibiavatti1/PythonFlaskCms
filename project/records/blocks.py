@@ -1,5 +1,5 @@
 """
-Block configuration module.
+Block records module.
 """
 from typing import Any
 from project.enums import property_types_enum as prop_type

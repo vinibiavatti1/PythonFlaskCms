@@ -1,18 +1,18 @@
 {% from "macros/utils/alerts.html" import flash_alerts with context %}
 {% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
 {% extends 'admin/layout.html' %}
-{% block title %}Pages{% endblock %}
+{% block title %}Menus{% endblock %}
 {% block content %}
 <div class="container my-3">
     <div class="row">
         <div class="col">
-            {{ breadcrumb(['Admin', 'Pages']) }}
-            <div class="fs-3 text-white">Pages</div>
+            {{ breadcrumb(['Admin', 'Menus']) }}
+            <div class="fs-3 text-white">Menus</div>
             <div class="card">
                 <div class="card-body">
                     {{ flash_alerts() }}
                     <div class="mb-2">
-                        <a href="/admin/pages/create" class="btn btn-primary">New Page</a>
+                        <a href="/admin/menus/create" class="btn btn-primary">New Menu</a>
                     </div>
                     <div class="table-responsive">
                         <table class="datatable table table-striped w-100">

@@ -35,7 +35,7 @@
                                 </thead>
                                 <tbody>
                                     {% set vars = {'header': ''} %}
-                                    {% for prop in properties %}
+                                    {% for prop in data.properties %}
                                         {% if prop.header %}
                                             {% if vars.update({'header': prop.title}) %} {% endif %}
                                             <tr class="bg-prop collapse_btn" role="button" data-header-name="{{prop.title}}">

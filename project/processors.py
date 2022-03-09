@@ -5,10 +5,10 @@ from typing import Any
 from project.utils.security_utils import is_authenticated, has_permission
 from project.utils.cookie_utils import cookie_policy_consent
 from flask import Blueprint
-from project.registry.menu import menu
-from project.registry.page_templates import page_templates
-from project.registry.page_layouts import layouts
-from project.registry.idioms import idioms
+from project.records.menu import menu
+from project.records.page_templates import page_templates
+from project.records.page_layouts import layouts
+from project.records.idioms import idioms
 from project.services import property_service
 from project.utils import datetime_utils
 from project.utils import page_utils
@@ -24,14 +24,14 @@ blueprint = Blueprint('processors', __name__)
 
 
 @blueprint.app_context_processor
-def inject_registries() -> dict[str, Any]:
+def inject_records() -> dict[str, Any]:
     """
-    Inject registries.
+    Inject records.
     """
     return dict(
         templates=page_templates,
         layouts=layouts,
-        idioms=idioms
+        idioms=idioms,
     )
 
 

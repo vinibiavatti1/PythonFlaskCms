@@ -1,7 +1,6 @@
 """
-Idioms registry.
+Idioms records module.
 """
-from typing import Any
 from project.models.idiom_model import IdiomModel
 
 

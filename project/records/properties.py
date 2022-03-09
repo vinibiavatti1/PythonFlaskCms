@@ -1,5 +1,5 @@
 """
-Properties list.
+Properties records module.
 """
 from typing import Union
 from project.models.header_model import HeaderModel
@@ -43,7 +43,7 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
         default='/static/medias/favicon-32x32.png',
     ),
     PropertyModel(
-        name='chartset',
+        name='charset',
         description='Charset used in website',
         field_type=prop_type.STRING,
         required=True,

@@ -1,5 +1,5 @@
 """
-Admin menu registry.
+Admin menu records module.
 """
 from typing import Union
 from project.models.header_model import HeaderModel
@@ -22,26 +22,18 @@ menu: list[Union[MenuModel, HeaderModel]] = [
     ),
     MenuModel(
         title='Menus',
-        link='/admin/pages',
+        link='/admin/menus',
         icon='bi-list',
     ),
-
-    ###########################################################################
-    # Blog
-    ###########################################################################
-
-    HeaderModel(
-        'Blog'
-    ),
     MenuModel(
-        title='Posts',
+        title='Blog Posts',
         link='/admin/posts',
         icon='bi-newspaper',
     ),
     MenuModel(
-        title='Tags',
+        title='FAQs',
         link='/admin/posts',
-        icon='bi-tags',
+        icon='bi-question-circle',
     ),
 
     ###########################################################################

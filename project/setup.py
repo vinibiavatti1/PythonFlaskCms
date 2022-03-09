@@ -4,8 +4,8 @@ Setup app functions.
 from flask import Flask
 from project.models.property_model import PropertyModel
 from project.services import property_service
-from project.registry.properties import properties
-from project.registry.blueprints import blueprints
+from project.records.properties import properties
+from project.blueprints import blueprints
 from project.enums.security_enum import SECRET
 
 

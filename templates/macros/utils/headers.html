@@ -1,18 +1,18 @@
 {# Metatags #}
 {% macro metas() %}
-    <meta charset="{{config.charset}}">
+    <meta charset="{{properties.charset}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="{{config.description}}">
-    <meta name="keywords" content="{{config.keywords}}">
-    <meta name="author" content="{{config.author}}">
-    {% if config.responsive %}
+    <meta name="description" content="{{properties.description}}">
+    <meta name="keywords" content="{{properties.keywords}}">
+    <meta name="author" content="{{properties.author}}">
+    {% if properties.responsive == '1' %}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% endif %}
 {% endmacro %}
 
 {# Links #}
 {% macro links() %}
-    <link rel="icon" type="image/png" sizes="32x32" href="{{config.favicon}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{properties.favicon_url}}">
     <link rel="stylesheet" href="/static/plugins/datatables-1.11.3/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="/static/plugins/bootstrap-5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">

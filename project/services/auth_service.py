@@ -10,6 +10,7 @@ from project.services import property_service
 from project.utils import security_utils
 from markupsafe import escape
 from project.errors import AuthError
+from project.enums import string_types_enum
 import requests
 
 
@@ -83,7 +84,7 @@ def process_login(login_data: dict[str, Any]) -> None:
     Process login authentication.
     """
     recaptcha_enabled = property_service.get_property('recaptcha_enabled')
-    if recaptcha_enabled == '1':
+    if recaptcha_enabled == string_types_enum.TRUE:
         __validate_recaptcha(str(login_data.get('recaptcha-token')))
     email = escape(login_data.get('email'))
     password = str(login_data.get('password'))
