@@ -26,10 +26,9 @@ def connect() -> sqlite3.Connection:
     return connection
 
 
-def execute_query(sql: str, data: Optional[Any] = None, *,
-                  single: bool = False) -> Union[list[Any], Any]:
+def execute_query(sql: str, data: Optional[Any] = None) -> list[Any]:
     """
-    Execute SQLite DQL statement in database and return the resultset.
+    Execute DQL statement in database and return the resultset as list.
     """
     connection = connect()
     cursor = connection.cursor()
@@ -37,10 +36,21 @@ def execute_query(sql: str, data: Optional[Any] = None, *,
         cursor.execute(sql, data)
     else:
         cursor.execute(sql)
-    if single:
-        return cursor.fetchone()
+    return cursor.fetchall()
+
+
+def execute_single_query(sql: str,
+                         data: Optional[Any] = None) -> Optional[Any]:
+    """
+    Execute DQL statement in database and return the first result as dict.
+    """
+    connection = connect()
+    cursor = connection.cursor()
+    if data:
+        cursor.execute(sql, data)
     else:
-        return cursor.fetchall()
+        cursor.execute(sql)
+    return cursor.fetchone()
 
 
 def execute_update(sql: str, data: Optional[Any] = None) -> Any:

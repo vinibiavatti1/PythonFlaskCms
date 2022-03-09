@@ -30,7 +30,7 @@ def select_all(active: Optional[bool] = None) -> list[Any]:
     return database_utils.execute_query(sql)
 
 
-def select(page_id: int) -> Optional[dict[str, Any]]:
+def select(page_id: int) -> Optional[Any]:
     """
     List pages.
     """
@@ -55,8 +55,10 @@ def select(page_id: int) -> Optional[dict[str, Any]]:
             page.sitemap_priority,
             page.sitemap_change_frequently,
             page.template,
-            page.html,
             page.properties,
+            page.html,
+            page.css,
+            page.script,
             page.json,
             user.name as created_by_name,
             user2.name as updated_by_name
@@ -67,7 +69,7 @@ def select(page_id: int) -> Optional[dict[str, Any]]:
         ON (page.updated_by = user2.id)
         WHERE page.id = ? AND page.deleted = 0
     '''
-    return database_utils.execute_query(sql, page_id, single=True)
+    return database_utils.execute_single_query(sql, page_id)
 
 
 def insert(data: dict[str, Any]) -> int:
@@ -91,10 +93,12 @@ def insert(data: dict[str, Any]) -> int:
             sitemap_change_frequently,
             template,
             html,
-            properties,
-            json)
+            css,
+            script,
+            json,
+            properties)
         VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     '''
     page_id = database_utils.execute_update(
         sql,
@@ -114,8 +118,10 @@ def insert(data: dict[str, Any]) -> int:
             data['sitemap_change_frequently'],
             data['template'],
             data['html'],
-            data['properties'],
+            data['css'],
+            data['script'],
             data['json'],
+            data['properties'],
         )
     )
     return int(page_id)
@@ -142,8 +148,10 @@ def update(page_id: int, data: dict[str, Any]) -> None:
             sitemap_change_frequently = ?,
             template = ?,
             html = ?,
-            properties = ?,
+            css = ?,
+            script = ?,
             json = ?,
+            properties = ?,
             active = ?
         WHERE
             id = ?
@@ -165,8 +173,10 @@ def update(page_id: int, data: dict[str, Any]) -> None:
             data['sitemap_change_frequently'],
             data['template'],
             data['html'],
-            data['properties'],
+            data['css'],
+            data['script'],
             data['json'],
+            data['properties'],
             data['active'],
             page_id
         )

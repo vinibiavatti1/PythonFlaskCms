@@ -76,10 +76,9 @@ def has_permission(*permissions: int) -> bool:
     return user_permission in permissions
 
 
-def generate_hash(data: tuple[str]) -> str:
+def generate_hash(data: str) -> str:
     """
-    Generate hash by data using config salt and SHA256
+    Generate hash by data using config salt and SHA256.
     """
-    result = ''.join(data)
-    result += config['salt']
+    result: str = data + config['salt']
     return sha256(result.encode()).hexdigest()

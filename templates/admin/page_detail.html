@@ -24,8 +24,9 @@
                     >
                         {{ flash_alerts() }}
                         <div class="mb-2">
-                            <a class="btn btn-secondary" href="/admin/list">{{ i18n.actions.cancel }}</a>
-                            <button id="btn-submit" type="submit" class="btn btn-primary">{{ i18n.actions.save }}</button>
+                            <button id="btn-submit" type="submit" class="btn btn-primary">Save</button>
+                            <button id="btn-duplicate" type="button" class="btn btn-light" href="/admin/list">Duplicate...</button>
+                            <a class="btn btn-light" href="/admin/list">Cancel</a>
                         </div>
                         <ul class="nav nav-tabs mb-2" id="landing-page-tab" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -41,10 +42,7 @@
                                 <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#properties">Properties</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#html">HTML</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#advanced">Advanced</button>
+                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#content">Content</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button type="button" class="nav-link {{ 'disabled' if not edit else '' }}" href="#" data-bs-toggle="tab" data-bs-target="#blocks">Blocks</button>
@@ -159,16 +157,22 @@
                             <div class="tab-pane fade" id="properties" role="tabpanel">
                                 Nothing to show :D.
                             </div>
-                            <div class="tab-pane fade" id="html" role="tabpanel">
+                            <div class="tab-pane fade" id="content" role="tabpanel">
                                 <div class="mb-2">
-                                    <label>HTML Content</label>
-                                    <textarea name="html" rows="15" placeholder="Static HTML" type="text" class="form-control font-monospace">{{data.html if edit else ''}}</textarea>
+                                    <label>HTML</label>
+                                    <textarea name="html" rows="10" placeholder="HTML code that will be render in the page" type="text" class="form-control font-monospace">{{data.html if edit else ''}}</textarea>
                                 </div>
-                            </div>
-                            <div class="tab-pane fade" id="advanced" role="tabpanel">
                                 <div class="mb-2">
-                                    <label>JSON Content</label>
-                                    <textarea name="json" rows="15" placeholder="Aditional JSON data that will be injected to the page" type="text" class="form-control font-monospace">{{data.json if edit else ''}}</textarea>
+                                    <label>CSS</label>
+                                    <textarea name="css" rows="10" placeholder="CSS styles that will be render in the page" type="text" class="form-control font-monospace">{{data.css if edit else ''}}</textarea>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Script</label>
+                                    <textarea name="script" rows="10" placeholder="JavaScript code that will be render in the page" type="text" class="form-control font-monospace">{{data.script if edit else ''}}</textarea>
+                                </div>
+                                <div class="mb-2">
+                                    <label>JSON</label>
+                                    <textarea name="json" rows="10" placeholder="Aditional JSON data that will be injected to the page" type="text" class="form-control font-monospace">{{data.json if edit else ''}}</textarea>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="blocks" role="tabpanel">

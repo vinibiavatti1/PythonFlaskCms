@@ -82,7 +82,7 @@ def detail(page_id: int) -> Any:
     data = page_service.select_by_id(page_id)
     if data is None:
         flash('Page not found', category='danger')
-        return redirect(url_for(index))
+        return redirect(url_for('.index'))
     page_url = page_service.generate_page_url(
         request.url_root,
         data['idiom'],

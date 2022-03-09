@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Insert default admin users
-INSERT INTO users (name, email, password, permission) VALUES ('Admin', 'admin@admin.com', 'admin', 'administrator');
+INSERT INTO users (name, email, password, permission) VALUES ('Admin', 'admin@admin.com', '0410424fb170091dabc47fae4c19173574061b575c35434971e4e3ad4534eabb', 'administrator');
 
 -- Pages
 CREATE TABLE IF NOT EXISTS pages (
@@ -35,8 +35,10 @@ CREATE TABLE IF NOT EXISTS pages (
     `sitemap_active` INTEGER NOT NULL DEFAULT 1,
     `sitemap_priority` TEXT NULL DEFAULT '0.5',
     `sitemap_change_frequently` TEXT NULL DEFAULT 'always',
-    `html` TEXT NULL,
     `properties` TEXT NULL,
+    `html` TEXT NULL,
+    `css` TEXT NULL,
+    `script` TEXT NULL,
     `json` TEXT NULL,
     `deleted` INTEGET NOT NULL DEFAULT 0
 );
