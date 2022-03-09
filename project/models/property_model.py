@@ -2,6 +2,7 @@
 Property model module.
 """
 from typing import Any, Optional
+import re
 
 
 class PropertyModel:
@@ -14,7 +15,11 @@ class PropertyModel:
                  default: Optional[Any] = '') -> None:
         """
         Create property model.
+
+        The name must be unique, and follow the /[a-z_]+/ pattern.
         """
+        if not re.match(r'[a-z_]+', name):
+            raise ValueError(f'Property name is invalid: "{name}"')
         self.name = name
         self.description = description
         self.field_type = field_type

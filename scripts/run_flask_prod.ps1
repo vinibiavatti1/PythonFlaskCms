@@ -24,4 +24,7 @@ $env:FLASK_ENV = "production"
 # Run application
 Write-Host "Running application..."
 Invoke-Expression "flask run"
+
+# Exit
+Set-Location ".\scripts"
 Read-Host -Prompt "Press Enter to exit"

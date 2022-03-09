@@ -1,6 +1,6 @@
-{% from 'macros/alerts.html' import flash_alerts with context %}
-{% from"macros/breadcrumb.html" import breadcrumb with context %}
-{% from"macros/clipboard.html" import copy_clipboard with context %}
+{% from 'macros/utils/alerts.html' import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% from "macros/utils/clipboard.html" import copy_clipboard with context %}
 {% extends 'admin/layout.html' %}
 {% block title %}Page{% endblock %}
 {% block content %}
@@ -78,7 +78,7 @@
                                     <label>Layout <span class="text-danger">*</span></label>
                                     <select name="layout" class="form-select" required>
                                         {% for layout in layouts %}
-                                            <option value="{{layout}}" {{'selected' if edit and layout == data.layout else ''}}>{{layout}}</option>
+                                            <option value="{{layout.value}}" {{'selected' if edit and layout.value == data.layout else ''}}>{{layout.label}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -86,7 +86,7 @@
                                     <label>Template <span class="text-danger">*</span></label>
                                     <select name="template" class="form-select" required>
                                         {% for template in templates %}
-                                            <option value="{{template}}" {{'selected' if edit and template == data.template else ''}}>{{template}}</option>
+                                            <option value="{{template.value}}" {{'selected' if edit and template.value == data.template else ''}}>{{template.label}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -212,6 +212,6 @@
     </div>
 </div>
 {% endblock %}
-{% block scripts %}
+{% block script %}
 {{ copy_clipboard('#copy_url_btn', '#page_url_input') }}
 {% endblock %}

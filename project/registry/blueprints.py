@@ -1,29 +1,25 @@
 """
-Blueprints registry.
-
-The blueprints set here will be available into the app.
+Blueprints registry module.
 """
-from flask import Flask
+from flask import Blueprint, Flask
 from project.processors import blueprint as processors
 from project.handlers import blueprint as handlers
 from project.controllers.public import (
-    seo_ctrl,
-    auth_ctrl,
     homepage_ctrl,
     locale_ctrl,
-    cookie_policy_ctrl,
     search_ctrl,
 )
 from project.controllers.admin import (
+    auth_ctrl,
+    cookie_policy_ctrl,
     map_ctrl,
     chart_ctrl,
     list_ctrl,
     form_ctrl,
     calendar_ctrl,
     pages_ctrl,
-    idioms_ctrl,
     properties_ctrl,
-    admin_auth_ctrl,
+    seo_ctrl,
 )
 
 
@@ -32,12 +28,11 @@ from project.controllers.admin import (
 ###############################################################################
 
 
-blueprints = [
+blueprints: list[Blueprint] = [
     processors,
     handlers,
     seo_ctrl.blueprint,
     homepage_ctrl.blueprint,
-    auth_ctrl.blueprint,
     locale_ctrl.blueprint,
     map_ctrl.blueprint,
     chart_ctrl.blueprint,
@@ -47,20 +42,6 @@ blueprints = [
     calendar_ctrl.blueprint,
     search_ctrl.blueprint,
     pages_ctrl.blueprint,
-    idioms_ctrl.blueprint,
     properties_ctrl.blueprint,
-    admin_auth_ctrl.blueprint,
+    auth_ctrl.blueprint,
 ]
-
-
-###############################################################################
-# Functions
-###############################################################################
-
-
-def register_blueprints(app: Flask) -> None:
-    """
-    Register blueprints into flask application.
-    """
-    for blueprint in blueprints:
-        app.register_blueprint(blueprint)

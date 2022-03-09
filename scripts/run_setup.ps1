@@ -34,4 +34,5 @@ Write-Host "Dependencies installed!"
 
 # Done
 Write-Host "Project setup successfully!"
+Set-Location ".\scripts"
 Read-Host -Prompt "Press Enter to exit"

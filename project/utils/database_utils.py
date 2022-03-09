@@ -1,9 +1,9 @@
 """
 Database module.
 """
-from project.config import config
 from project.errors import AppError
 from typing import Any, Optional, Union
+from project.enums import env_enum
 import sqlite3
 import sys
 import os
@@ -18,7 +18,9 @@ def connect() -> sqlite3.Connection:
 
     The connection data will be get from app configuration.
     """
-    db_path = os.path.join(CURRENT_DIR, 'database', config['db_name'])
+    env = os.environ.get('FLASK_ENV')
+    db_name = 'database_' + str(env) + '.db'
+    db_path = os.path.join(CURRENT_DIR, 'database', db_name)
     connection = sqlite3.connect(db_path)
     if not connection:
         raise AppError('Could not connect to database')

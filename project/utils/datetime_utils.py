@@ -1,6 +1,9 @@
-from typing import Union, Any
+"""
+Date and Datetime utils module.
+"""
+from typing import Optional
 from datetime import date, datetime
-from project.config import config
+from project.services import property_service
 
 
 ###############################################################################
@@ -9,9 +12,7 @@ from project.config import config
 
 
 HTML_DATE_FORMAT = '%Y-%m-%d'
-HTML_DATETIME_FORMAT = '%Y-%m-%dT%H:%M'
-CONFIG_DATE_FORMAT = config['date_format']
-CONFIG_DATETIME_FORMAT = config['datetime_format']
+HTML_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
 
 ###############################################################################
@@ -19,29 +20,49 @@ CONFIG_DATETIME_FORMAT = config['datetime_format']
 ###############################################################################
 
 
-def format_date_to_str(date: Union[date, datetime], format: str) -> str:
+def format_date_to_str(date_: date, *,
+                       html_format: bool = False,
+                       config_format: bool = False,
+                       custom_format: Optional[str] = None) -> str:
     """
-    Format date or datetime to string by given format. Use module constants to
-    specific formats.
+    Format date to string.
+
+    Args:
+        date: date object
+        **html_format: Use the HTML date format
+        **config_format: Use the admin configuration date format
+        **custom_format: Use a custom format
     """
-    return date.strftime(format)
+    if html_format:
+        return date_.strftime(HTML_DATE_FORMAT)
+    elif config_format:
+        date_format = property_service.get_property('date_format')
+        return date_.strftime(date_format)
+    elif custom_format:
+        return date_.strftime(custom_format)
+    else:
+        raise ValueError('A format must be selected to format the date')
 
 
-def format_list_dates_to_str(lst: list[Any], format: str) -> str:
+def format_datetime_to_str(datetime_: datetime, *,
+                           html_format: bool = False,
+                           config_format: bool = False,
+                           custom_format: Optional[str] = None) -> str:
     """
-    Format all dates or datetimes inside the list to string by given format.
-    """
-    for item in lst:
-        if isinstance(item, (date, datetime)):
-            item = format_date_to_str(item, format)
-    return lst
+    Format datetime to string.
 
-
-def format_dict_dates_to_str(dct: dict[Any], format: str) -> str:
+    Args:
+        datetime: datetime object
+        **html_format: Use the HTML datetime format
+        **config_format: Use the admin configuration datetime format
+        **custom_format: Use a custom format
     """
-    Format all dates and datetimes inside the dict to string by given format.
-    """
-    for key, val in dct.items():
-        if isinstance(val, (date, datetime)):
-            dct[key] = format_date_to_str(val, format)
-    return dct
+    if html_format:
+        return datetime_.strftime(HTML_DATETIME_FORMAT)
+    elif config_format:
+        date_format = property_service.get_property('datetime_format')
+        return datetime_.strftime(date_format)
+    elif custom_format:
+        return datetime_.strftime(custom_format)
+    else:
+        raise ValueError('A format must be selected to format the date')

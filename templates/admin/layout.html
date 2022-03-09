@@ -1,13 +1,12 @@
-{% from "macros/admin_navbar.html" import admin_navbar with context %}
-{% from "macros/admin_sidenav.html" import admin_sidenav with context %}
-{% from "macros/admin_footer.html" import admin_footer with context %}
-{% from "macros/datatables.html" import datatables_script with context %}
-{% from "macros/headers.html" import metas, links, scripts with context %}
-{% from "macros/cookie_policy.html" import cookie_policy_modal with context %}
-{% from "macros/search.html" import search_modal with context %}
-{% from "macros/toast.html" import toasts_script with context %}
-{% from "macros/noscript.html" import noscript with context %}
-{% from "macros/form_validation.html" import form_validation_script with context %}
+{% from "macros/admin/navbar.html" import admin_navbar with context %}
+{% from "macros/admin/sidenav.html" import admin_sidenav with context %}
+{% from "macros/admin/footer.html" import admin_footer with context %}
+{% from "macros/utils/datatables.html" import datatables_script with context %}
+{% from "macros/utils/headers.html" import metas, links, scripts with context %}
+{% from "macros/utils/cookie_policy.html" import cookie_policy_modal with context %}
+{% from "macros/utils/toast.html" import toasts_script with context %}
+{% from "macros/utils/noscript.html" import noscript with context %}
+{% from "macros/utils/form_validation.html" import form_validation_script with context %}
 
 <!DOCTYPE html>
 <html lang="{{config.lang}}" class="bg-dark h-100">
@@ -16,6 +15,7 @@
     {{ metas() }}
     {{ links() }}
     {{ scripts() }}
+    {% block style %}{% endblock %}
 </head>
 <body class="d-flex flex-column bg-dark h-100">
     <noscript>
@@ -36,7 +36,9 @@
     <div class="toast-container position-absolute p-3 top-0 end-0">
         {% block toasts %}{% endblock %}
     </div>
-    {% block scripts %}{% endblock %}
+    <div id="script">
+        {% block script %}{% endblock %}
+    </div>
 </body>
 
 <!-- Plugins Configurations -->

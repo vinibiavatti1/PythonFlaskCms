@@ -25,4 +25,7 @@ $env:FLASK_DEBUG = "True"
 # Run application
 Write-Host "Running application..."
 Invoke-Expression "flask run"
+
+# Exit
+Set-Location ".\scripts"
 Read-Host -Prompt "Press Enter to exit"

@@ -12,10 +12,11 @@
 <!DOCTYPE html>
 <html lang="{{config.lang}}" class="bg-dark h-100">
 <head>
-    <title>{{config.title}} | {% block title %}{% endblock %}</title>
+    <title>{{ generate_title(data.title) }}</title>
     {{ metas() }}
     {{ links() }}
     {{ scripts() }}
+    {% block style %}{% endblock %}
 </head>
 <body class="d-flex flex-column bg-dark h-100">
     <noscript>
@@ -38,6 +39,9 @@
     </div>
     <div class="toast-container position-absolute p-3 top-0 end-0">
         {% block toasts %}{% endblock %}
+    </div>
+    <div id="script">
+        {% block script %}{% endblock %}
     </div>
 </body>
 

@@ -14,4 +14,3 @@ class HeaderModel:
         """
         self.title = title
         self.header = True
-

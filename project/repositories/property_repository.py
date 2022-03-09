@@ -13,7 +13,7 @@ def delete_property(name: str) -> None:
     database_utils.execute_update(sql, (name,))
 
 
-def select_all() -> list[dict[str, Any]]:
+def select_all() -> list[dict[str, str]]:
     """
     Get all properties.
     """
@@ -30,7 +30,7 @@ def set_property(name: str, value: str) -> None:
     database_utils.execute_update(sql, (name, value))
 
 
-def get_property(name: str) -> Optional[Any]:
+def get_property(name: str) -> Optional[str]:
     """
     Get property value by name.
     """

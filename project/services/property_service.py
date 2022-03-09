@@ -1,7 +1,7 @@
 """
 Property functions module.
 """
-from typing import Any
+from typing import Any, Optional
 from project.repositories import property_repository
 from project.registry.properties import properties
 
@@ -29,14 +29,17 @@ def property_exists(name: str) -> bool:
     return property_value is not None
 
 
-def get_property(name: str) -> Any:
+def get_property(name: str) -> str:
     """
     Get property value from database.
     """
-    return property_repository.get_property(name)
+    value = property_repository.get_property(name)
+    if value is None:
+        return ''
+    return value
 
 
-def select_all() -> dict[str, Any]:
+def select_all() -> dict[str, str]:
     """
     Get all properties from database.
     """

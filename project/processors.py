@@ -1,15 +1,17 @@
+"""
+Context processors module.
+"""
+from typing import Any
 from project.utils.security_utils import is_authenticated, has_permission
 from project.utils.cookie_utils import cookie_policy_consent
 from flask import Blueprint
-from project.config import config
-from project.utils.translation_utils import get_translations, get_locales
-from project.i18n import translations_dict
-from project import menus
-from project.enums import permission_enum
-from project.registry.admin_menu import admin_menu
+from project.registry.menu import menu
 from project.registry.page_templates import page_templates
-from project.registry.layouts import layouts
+from project.registry.page_layouts import layouts
 from project.registry.idioms import idioms
+from project.services import property_service
+from project.utils import datetime_utils
+from project.utils import page_utils
 
 
 # Blueprint
@@ -22,30 +24,7 @@ blueprint = Blueprint('processors', __name__)
 
 
 @blueprint.app_context_processor
-def inject_configuration():
-    """
-    Inject the environment configuration to Jinja template data
-    """
-    return dict(config=config)
-
-
-@blueprint.app_context_processor
-def inject_dictionary():
-    """
-    Inject the dictionary by the defined locale in cookies
-    If no locale was defined, the default dictionary will be used. If the flag
-    "i18n" in config is defined to False, the dictionary will not be injected
-    """
-    if not config['i18n']:
-        return
-    return dict(
-        i18n=get_translations(),
-        locales=get_locales(),
-    )
-
-
-@blueprint.app_context_processor
-def inject_registries():
+def inject_registries() -> dict[str, Any]:
     """
     Inject registries.
     """
@@ -57,24 +36,54 @@ def inject_registries():
 
 
 @blueprint.app_context_processor
-def inject_resources():
+def inject_python_resources() -> dict[str, Any]:
     """
-    Inject common resources to be used in Jinja templates
+    Inject common resources to be used in Jinja templates.
     """
     return dict(
         isinstance=isinstance,
         zip=zip,
         enumerate=enumerate,
         len=len,
-        is_authenticated=is_authenticated,
-        cookie_policy_consent=cookie_policy_consent(),
         str=str
     )
 
 
 @blueprint.app_context_processor
-def inject_menu():
+def inject_security_resources() -> dict[str, Any]:
     """
-    Inject the sidenav menus by user authentication
+    Inject security resources to Jinja templates.
     """
-    return dict(menu=admin_menu)
+    return dict(
+        is_authenticated=is_authenticated,
+        has_permission=has_permission,
+        cookie_policy_consent=cookie_policy_consent(),
+    )
+
+
+@blueprint.app_context_processor
+def inject_menu() -> dict[str, Any]:
+    """
+    Inject the sidenav menus by user authentication.
+    """
+    return dict(menu=menu)
+
+
+@blueprint.app_context_processor
+def inject_utilities() -> dict[str, Any]:
+    """
+    Inject utilities.
+    """
+    return dict(
+        generate_title=page_utils.generate_title,
+        format_date_to_str=datetime_utils.format_date_to_str,
+        format_datetime_to_str=datetime_utils.format_datetime_to_str,
+    )
+
+
+@blueprint.app_context_processor
+def inject_properties() -> dict[str, Any]:
+    """
+    Inject the global properties.
+    """
+    return dict(properties=property_service.select_all())

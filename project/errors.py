@@ -1,19 +1,27 @@
+"""
+App exceptions.
+"""
+
+
 class AppError(Exception):
     """
-    Base application error
+    Base application error.
     """
-    pass
 
 
 class ValidationError(AppError):
     """
-    Application validation error
+    Application validation error.
     """
-    pass
 
 
 class TranslationError(AppError):
     """
-    Translation errors
+    Translation errors.
     """
-    pass
+
+
+class AuthError(AppError):
+    """
+    Authentication errors.
+    """

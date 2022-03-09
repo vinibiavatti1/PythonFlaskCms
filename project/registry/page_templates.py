@@ -1,8 +1,7 @@
 """
 Page templates list.
 """
-from typing import Any
-from project.enums import field_types_enum as field
+from project.models.label_value_model import LabelValueModel
 
 
 ###############################################################################
@@ -10,8 +9,14 @@ from project.enums import field_types_enum as field
 ###############################################################################
 
 
-page_templates: list[str] = [
-    'landing_page.html',
-    'static_page.html',
+page_templates: list[LabelValueModel] = [
+    LabelValueModel(
+        label='Landing Page Template (Page with Blocks)',
+        value='landing_page_template.html',
+    ),
+    LabelValueModel(
+        label='Default Template (Custom HTML, CSS and JS)',
+        value='default_template.html',
+    ),
     # Add more...
 ]

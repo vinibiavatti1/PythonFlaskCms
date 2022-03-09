@@ -22,4 +22,7 @@ Write-Host "Environment activated!"
 Write-Host "Updating requirements file..."
 Invoke-Expression "python -m pip freeze | Out-File -FilePath $requirementsFilePath"
 Write-Host "Requirements updated successfully!"
+
+# Exit
+Set-Location ".\scripts"
 Read-Host -Prompt "Press Enter to exit"

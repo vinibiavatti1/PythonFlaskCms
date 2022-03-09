@@ -20,4 +20,7 @@ Write-Host "Environment activated!"
 # Run application
 Write-Host "Running application..."
 Invoke-Expression "python main.py"
+
+# Exit
+Set-Location ".\scripts"
 Read-Host -Prompt "Press Enter to exit"

@@ -4,6 +4,8 @@
     {% set name = 'name=' + data.name if not default else '' %}
     {% if data.field_type == 'string' %}
         <input class="form-control" {{disabled}} {{name}} type="text" placeholder="Property value" value="{{value}}">
+    {% elif data.field_type == 'password' %}
+        <input class="form-control" {{disabled}} {{name}} type="password" placeholder="Property value" value="{{value}}">
     {% elif data.field_type == 'text' %}
         <textarea class="form-control " {{disabled}} {{name}} rows="4" placeholder="Property value">{{value}}</textarea>
     {% elif data.field_type == 'integer' %}

@@ -2,15 +2,14 @@
 Application entry point.
 """
 from flask import Flask
-from project.config import config
-from project.registry.blueprints import register_blueprints
 from project.setup import setup
+
+
+###############################################################################
+# App Initialization
+###############################################################################
 
 
 # Init Flask application
 app = Flask(__name__)
-app.secret_key = config['secret_key']
-register_blueprints(app)
-
-# Setup
-setup()
+setup(app)

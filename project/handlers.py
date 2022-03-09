@@ -1,3 +1,6 @@
+"""
+HTTP Error handlers.
+"""
 from flask import Blueprint, render_template
 
 
@@ -11,40 +14,40 @@ blueprint = Blueprint('handlers', __name__)
 
 
 @blueprint.app_errorhandler(400)
-def bad_request(error_message):
+def bad_request(error_message: str) -> tuple[str, int]:
     """
-    Bad request (400) error handler
+    Bad request (400) error handler.
     """
     return render_template('errors/400.html', error_message=error_message), 404
 
 
 @blueprint.app_errorhandler(401)
-def unauthorized(error_message):
+def unauthorized(error_message: str) -> tuple[str, int]:
     """
-    Unauthorized (401) error handler
+    Unauthorized (401) error handler.
     """
     return render_template('errors/401.html', error_message=error_message), 401
 
 
 @blueprint.app_errorhandler(403)
-def forbidden(error_message):
+def forbidden(error_message: str) -> tuple[str, int]:
     """
-    Forbidden (403) error handler
+    Forbidden (403) error handler.
     """
     return render_template('errors/403.html', error_message=error_message), 403
 
 
 @blueprint.app_errorhandler(404)
-def not_found(error_message):
+def not_found(error_message: str) -> tuple[str, int]:
     """
-    Not found (404) error handler
+    Not found (404) error handler.
     """
     return render_template('errors/404.html', error_message=error_message), 404
 
 
 @blueprint.app_errorhandler(500)
-def internal_server_error(error_message):
+def internal_server_error(error_message: str) -> tuple[str, int]:
     """
-    Internal server error (500) error handler
+    Internal server error (500) error handler.
     """
     return render_template('errors/500.html', error_message=error_message), 500

@@ -2,7 +2,7 @@
 Block configuration module.
 """
 from typing import Any
-from project.enums import field_types_enum as field
+from project.enums import property_types_enum as prop_type
 
 
 ###############################################################################
@@ -14,7 +14,7 @@ blocks: dict[str, Any] = {
     'text': {
         'template': 'text.html',
         'properties': {
-            'text': field.TEXT,
+            'text': prop_type.TEXT,
         },
         'active': True,
     },

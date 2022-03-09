@@ -6,7 +6,7 @@ from project.models.header_model import HeaderModel
 from project.models.menu_model import MenuModel
 
 
-admin_menu: list[Union[MenuModel, HeaderModel]] = [
+menu: list[Union[MenuModel, HeaderModel]] = [
 
     ###########################################################################
     # Website

@@ -1,3 +1,6 @@
+"""
+Field types enumaration.
+"""
 STRING = 'string'
 TEXT = 'text'
 INTEGER = 'integer'
@@ -9,3 +12,4 @@ CURRENCY = 'currency'
 COLOR = 'color'
 CODE = 'code'
 BOOL = 'bool'
+PASSWORD = 'password'

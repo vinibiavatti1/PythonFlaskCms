@@ -1,0 +1,14 @@
+{% extends 'layouts/empty_layout.html' %}
+{% block style %}
+<style>
+    {{ data.css | safe}}
+</style>
+{% endblock %}
+{% block content %}
+    {# Blocks #}
+{% endblock %}
+{% block script %}
+<script>
+    {{ data.script | safe}}
+</script>
+{% endblock %}
