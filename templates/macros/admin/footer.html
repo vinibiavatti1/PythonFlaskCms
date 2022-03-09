@@ -3,9 +3,16 @@
     <div class="container text-light">
         <div class="row">
             <div class="text-center">
-                VBFoundation &copy; 2022
+                VRB &copy; <span id="footer_current_year"></span>
             </div>
         </div>
     </div>
 </div>
+<script>
+    jQuery(function() {
+        $('#footer_current_year').html(
+            new Date().getFullYear()
+        );
+    });
+</script>
 {% endmacro %}

@@ -105,3 +105,11 @@ def update(menu_id: int, data: dict[str, Any]) -> None:
             menu_id,
         )
     )
+
+
+def delete(menu_id: int) -> None:
+    """
+    Delete menu by id.
+    """
+    sql = 'DELETE FROM menus WHERE id = ?'
+    database_utils.execute_update(sql, (menu_id,))

@@ -49,3 +49,10 @@ def select_by_id(menu_id: int) -> Optional[dict[str, Any]]:
     Get menu by id.
     """
     return menu_repository.select(menu_id)
+
+
+def delete(menu_id: int) -> None:
+    """
+    Delete menu by id.
+    """
+    menu_repository.delete(menu_id)

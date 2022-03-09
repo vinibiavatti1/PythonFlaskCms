@@ -123,3 +123,18 @@ def update(menu_id: int) -> Any:
     except Exception as err:
         flash(str(err), category='danger')
     return redirect(f'/admin/menus/detail/{menu_id}')
+
+
+@blueprint.route('/delete/<menu_id>', methods=['GET'])
+@login_required()
+def delete(menu_id: int) -> Any:
+    """
+    Delete menu route.
+    """
+    try:
+        menu_service.delete(menu_id)
+        flash('Menu deleted successfully!', category='success')
+        return redirect(f'/admin/menus')
+    except Exception as err:
+        flash(str(err), category='danger')
+        return redirect(f'/admin/menus/detail/{menu_id}')
