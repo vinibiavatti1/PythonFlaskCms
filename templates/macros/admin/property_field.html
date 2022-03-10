@@ -3,32 +3,32 @@
     {% set value = data.default if default else data.value %}
     {% set name = 'name=' + data.name if not default else '' %}
     {% if data.field_type == 'string' %}
-        <input class="form-control" {{disabled}} {{name}} type="text" placeholder="Property value" value="{{value}}">
+        <input class="prop form-control" {{disabled}} {{name}} type="text" placeholder="Property value" value="{{value}}">
     {% elif data.field_type == 'password' %}
-        <input class="form-control" {{disabled}} {{name}} type="password" placeholder="Property value" value="{{value}}">
+        <input class="prop form-control" {{disabled}} {{name}} type="password" placeholder="Property value" value="{{value}}">
     {% elif data.field_type == 'text' %}
-        <textarea class="form-control " {{disabled}} {{name}} rows="4" placeholder="Property value">{{value}}</textarea>
+        <textarea class="prop form-control " {{disabled}} {{name}} rows="4" placeholder="Property value">{{value}}</textarea>
     {% elif data.field_type == 'integer' %}
-        <input class="form-control " {{disabled}} {{name}} type="number" step="1" placeholder="Property value" value="{{value}}">
+        <input class="prop form-control " {{disabled}} {{name}} type="number" step="1" placeholder="Property value" value="{{value}}">
     {% elif data.field_type == 'real' %}
-        <input class="form-control " {{disabled}} {{name}} type="number" step="0.1" placeholder="Property value" value="{{value}}">
+        <input class="prop form-control " {{disabled}} {{name}} type="number" step="0.1" placeholder="Property value" value="{{value}}">
     {% elif data.field_type == 'currency' %}
-        <input class="form-control " {{disabled}} {{name}} type="number" step="0.01" placeholder="Property value" value="{{value}}">
+        <input class="prop form-control " {{disabled}} {{name}} type="number" step="0.01" placeholder="Property value" value="{{value}}">
     {% elif data.field_type == 'code' %}
-        <textarea class="form-control font-monospace " {{disabled}} {{name}} rows="4" placeholder="Property value">{{value}}</textarea>
+        <textarea class="prop form-control font-monospace " {{disabled}} {{name}} rows="4" placeholder="Property value">{{value}}</textarea>
     {% elif data.field_type == 'date' %}
-        <input class="form-control " {{disabled}} {{name}} type="date" placeholder="Property value" value="{{value}}">
+        <input class="prop form-control " {{disabled}} {{name}} type="date" placeholder="Property value" value="{{value}}">
     {% elif data.field_type == 'datetime' %}
-        <input class="form-control " {{disabled}} {{name}} type="datetime" placeholder="Property value" value="{{value}}">
+        <input class="prop form-control " {{disabled}} {{name}} type="datetime" placeholder="Property value" value="{{value}}">
     {% elif data.field_type == 'color' %}
-        <input class="form-control form-control-color" {{disabled}} {{name}} type="color" value="{{value}}">
+        <input class="prop form-control form-control-color" {{disabled}} {{name}} type="color" value="{{value}}">
     {% elif data.field_type == 'bool' %}
-        <select class="form-select " {{disabled}} {{name}}>
+        <select class="prop form-select " {{disabled}} {{name}}>
             <option value="1" {{'selected' if value == '1' else ''}}>True</option>
             <option value="0" {{'selected' if value == '0' else ''}}>False</option>
         </select>
     {% elif data.field_type == 'list' %}
-        <select class="form-select " {{disabled}} {{name}}>
+        <select class="prop form-select " {{disabled}} {{name}}>
             {% for op in data.values %}
             <option value="{{op}}" {{'selected' if value == op else ''}}>{{op}}</option>
             {% endfor %}

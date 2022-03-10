@@ -24,12 +24,24 @@
                     >
                         {{ flash_alerts() }}
                         <div class="mb-2">
-                            <button id="btn-submit" type="submit" class="btn btn-primary">Save</button>
+                            <a class="btn btn-secondary" href="/admin/pages">
+                                <i class="bi bi-arrow-left"></i>
+                                Cancel
+                            </a>
                             {% if edit %}
-                            <button id="btn-duplicate" type="button" class="btn btn-secondary">Duplicate...</button>
-                            <button id="btn-delete" type="button" class="btn btn-danger">Delete...</button>
+                                <button id="btn-duplicate" type="button" class="btn btn-secondary">
+                                    <i class="bi bi-files"></i>
+                                    Duplicate...
+                                </button>
+                                <button id="btn-delete" type="button" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                    Delete...
+                                </button>
                             {% endif %}
-                            <a class="btn btn-secondary" href="/admin/pages">Cancel</a>
+                            <button id="btn-submit" type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i>
+                                Save
+                            </button>
                         </div>
                         <ul class="nav nav-tabs mb-2" id="landing-page-tab" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -223,6 +235,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block script %}
+{{ copy_clipboard('#copy_url_btn', '#page_url_input') }}
 <script>
     jQuery(function() {
         $('#btn-delete').on('click', function() {
@@ -232,7 +247,4 @@
         });
     });
 </script>
-{% endblock %}
-{% block script %}
-{{ copy_clipboard('#copy_url_btn', '#page_url_input') }}
 {% endblock %}

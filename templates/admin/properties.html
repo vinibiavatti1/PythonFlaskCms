@@ -20,7 +20,14 @@
                     >
                         {{ flash_alerts() }}
                         <div class="mb-2">
-                            <button id="btn-submit" type="submit" class="btn btn-primary">Save</button>
+                            <button id="btn-submit" type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i>
+                                Save
+                            </button>
+                            <span id="unsaved" class="ms-2 text-danger d-none">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                There are unsaved changes!
+                            </span>
                         </div>
 
                         <div class="table-responsive">
@@ -75,10 +82,13 @@
 </div>
 <script>
     jQuery(function() {
+        $('.prop').on('change', function() {
+            $('#unsaved').removeClass('d-none');
+        })
+
         $(".collapse_btn").click(function() {
             const header = $(this).data('header-name');
             const rows = $(`tr[data-header='${header}']`);
-            console.log(header, rows);
             if(rows.is(':visible')) {
                 rows.addClass('d-none');
             } else {
