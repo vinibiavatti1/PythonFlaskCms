@@ -28,6 +28,10 @@
                                 <i class="bi bi-arrow-left"></i>
                                 Cancel
                             </a>
+                            <button id="btn-preview" type="button" class="btn btn-primary">
+                                <i class="bi bi-list-nested"></i>
+                                Preview
+                            </button>
                             {% if edit %}
                                 <button id="btn-duplicate" type="button" class="btn btn-primary">
                                     <i class="bi bi-files"></i>
@@ -65,6 +69,24 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="preview_modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Preview Menu Structure</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control font-monospace" disabled id="preview_textarea" rows="15"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
             </div>
         </div>
     </div>
@@ -113,6 +135,8 @@
 <script>
     jQuery(function() {
         let edit = '{{ 1 if edit else 0 }}'
+        let previewModal = new bootstrap.Modal(document.getElementById('preview_modal'));
+
         if(edit == 0) {
             addMenu();
         } else {
@@ -209,6 +233,21 @@
             if(confirm('Do you really want to delete this menu?')) {
                 window.location.href = '/admin/menus/delete/{{menu_id}}';
             }
+        });
+
+        $('#btn-preview').on('click', function() {
+            let preview = '';
+            $('.menu_row').each(function() {
+                let context = $(this);
+                let level = $('select[name="level"]', context).val();
+                for(let i = 0; i < parseInt(level) - 1; i++) {
+                    preview += '    ';
+                }
+                preview += $('input[name="name"]', context).val();
+                preview += '\n';
+            });
+            $('#preview_textarea').val(preview);
+            previewModal.show();
         });
     });
 </script>
