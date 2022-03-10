@@ -62,7 +62,6 @@ CREATE TABLE IF NOT EXISTS history (
     `id` INTEGER PRIMARY KEY,
     `type_resource` TEXT,
     `id_resource` INTEGER,
-    `title` TEXT NOT NULL,
     `description` TEXT NOT NULL,
     `created_by` INTEGER NOT NULL,
     `created_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -1,0 +1,22 @@
+{% macro history_list(history_data) %}
+<div class="table-responsive">
+    <table class="table datatable">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>User</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for history in history_data %}
+            <tr>
+                <td>{{ history.description }}</td>
+                <td>{{ history.created_by_name }}</td>
+                <td>{{ history.created_on }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endmacro %}

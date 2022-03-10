@@ -6,7 +6,7 @@ This module provide the routes for page.
 from typing import Any
 from flask import Blueprint, redirect, render_template, flash, request, url_for
 from project.utils.security_utils import login_required
-from project.services import menu_service, page_service
+from project.services import menu_service, page_service, history_service
 
 
 # Blueprint
@@ -78,7 +78,9 @@ def create() -> str:
     return render_template(
         '/admin/page_detail.html',
         edit=False,
-        data=dict(menus=menus)
+        data=dict(
+            menus=menus
+        )
     )
 
 
@@ -103,6 +105,7 @@ def detail(page_id: int) -> Any:
             'label': menu['name'],
             'value': menu['id'],
         })
+    history = history_service.select_by_resource_id(page_id)
     return render_template(
         '/admin/page_detail.html',
         edit=True,
@@ -110,7 +113,8 @@ def detail(page_id: int) -> Any:
         data={
             **data,
             'page_url': page_url,
-            'menus': menus
+            'menus': menus,
+            'history': history
         }
     )
 
@@ -159,6 +163,21 @@ def delete(page_id: int) -> Any:
         page_service.delete(page_id)
         flash('Page deleted successfully!', category='success')
         return redirect(f'/admin/pages')
+    except Exception as err:
+        flash(str(err), category='danger')
+        return redirect(f'/admin/pages/detail/{page_id}')
+
+
+@blueprint.route('/duplicate/<page_id>/<name>', methods=['GET'])
+@login_required()
+def duplicate(page_id: int, name: str) -> Any:
+    """
+    Duplicate page route.
+    """
+    try:
+        new_page_id = page_service.duplicate(page_id, name)
+        flash('Page duplicated successfully!', category='success')
+        return redirect(f'/admin/pages/detail/{new_page_id}')
     except Exception as err:
         flash(str(err), category='danger')
         return redirect(f'/admin/pages/detail/{page_id}')

@@ -1,3 +1,4 @@
+{% from "macros/admin/history_list.html" import history_list with context %}
 {% from 'macros/utils/alerts.html' import flash_alerts with context %}
 {% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
 {% from "macros/utils/clipboard.html" import copy_clipboard with context %}
@@ -48,26 +49,56 @@
                             </button>
                         </div>
                         <input id="json" name="json" type="hidden" value="">
-                        <div class="mb-2">
-                            <label>Name</label>
-                            <input id="name_input" class="form-control" name="name" type="text" placeholder="Enter the menu name" value="{{ data.name if edit else '' }}" required>
-                            <small>Allowed only low case characters separated by "_". Ex: my_page</small>
+
+                        <ul class="nav nav-tabs mb-2" id="landing-page-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#detail">Detail</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#links">Links</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#history">History</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="tabContent">
+                            <div class="tab-pane fade show active" id="detail" role="tabpanel">
+                                <div class="mb-2">
+                                    <label>Name</label>
+                                    <input id="name_input" class="form-control" name="name" type="text" placeholder="Enter the menu name" value="{{ data.name if edit else '' }}" required>
+                                    <small>Allowed only low case characters separated by "_". Ex: my_page</small>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Show Idiom Selector</label>
+                                    <select class="form-select" name="idiom_selector">
+                                        <option value="0">False</option>
+                                        <option value="1">True</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="links" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>URL</th>
+                                                <th>Level</th>
+                                                <th>New tab?</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="menus"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="history" role="tabpanel">
+                                {% if edit %}
+                                    {{ history_list(data.history) }}
+                                {% endif %}
+                            </div>
                         </div>
                     </form>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>URL</th>
-                                    <th>Level</th>
-                                    <th>New tab?</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="menus"></tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
         </div>
@@ -94,13 +125,13 @@
 <template id="menu_template">
     <tr class="menu_row">
         <td style="width: 20%;">
-            <input name="name" class="form-control" type="text" placeholder="Enter the Name">
+            <input data-name="name" class="form-control" type="text" placeholder="Enter the Name">
         </td>
         <td style="width: 40%;">
-            <input name="url" class="form-control" type="text" placeholder="Enter the URL">
+            <input data-name="url" class="form-control" type="text" placeholder="Enter the URL">
         </td>
         <td style="width: 10%;">
-            <select name="level" class="form-select" id="">
+            <select data-name="level" class="form-select" id="">
                 <option value="1">1 (Root)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -109,7 +140,7 @@
             </select>
         </td>
         <td style="width: 10%;">
-            <select name="new_tab" class="form-select" id="">
+            <select data-name="new_tab" class="form-select" id="">
                 <option value="0">False</option>
                 <option value="1">True</option>
             </select>
@@ -121,10 +152,10 @@
             <button type="button" class="btn btn-secondary btn_down" title="Send to down">
                 <i class="bi bi-arrow-down"></i>
             </button>
-            <button type="button" class="btn btn-secondary btn_new" title="Add new menu">
+            <button type="button" class="btn btn-secondary btn_new" title="Add new link below">
                 <i class="bi bi-plus-circle"></i>
             </button>
-            <button type="button" class="btn btn-danger btn_delete" title="Delete menu">
+            <button type="button" class="btn btn-danger btn_delete" title="Delete link">
                 <i class="bi bi-trash"></i>
             </button>
         </td>
@@ -157,10 +188,10 @@
         function setDataInLast(item) {
             const menu_rows = $('.menu_row');
             const last = menu_rows.last();
-            $('input[name="name"]', last).val(item.name);
-            $('input[name="url"]', last).val(item.url);
-            $('select[name="level"]', last).val(item.level);
-            $('select[name="new_tab"]', last).val(item.new_tab);
+            $('input[data-name="name"]', last).val(item.name);
+            $('input[data-name="url"]', last).val(item.url);
+            $('select[data-name="level"]', last).val(item.level);
+            $('select[data-name="new_tab"]', last).val(item.new_tab);
         }
 
         $(document).delegate('.btn_new', 'click', function() {
@@ -219,10 +250,10 @@
             $('.menu_row').each(function() {
                 let context = $(this);
                 json.push({
-                    name: $('input[name="name"]', context).val(),
-                    url: $('input[name="url"]', context).val(),
-                    level: $('select[name="level"]', context).val(),
-                    new_tab: $('select[name="new_tab"]', context).val(),
+                    name: $('input[data-name="name"]', context).val(),
+                    url: $('input[data-name="url"]', context).val(),
+                    level: $('select[data-name="level"]', context).val(),
+                    new_tab: $('select[data-name="new_tab"]', context).val(),
                 });
             });
             $('#json').val(JSON.stringify(json));
@@ -239,15 +270,25 @@
             let preview = '';
             $('.menu_row').each(function() {
                 let context = $(this);
-                let level = $('select[name="level"]', context).val();
+                let level = $('select[data-name="level"]', context).val();
                 for(let i = 0; i < parseInt(level) - 1; i++) {
                     preview += '    ';
                 }
-                preview += $('input[name="name"]', context).val();
+                preview += $('input[data-name="name"]', context).val();
                 preview += '\n';
             });
             $('#preview_textarea').val(preview);
             previewModal.show();
+        });
+
+        $('#btn-duplicate').on('click', function() {
+            let name = prompt('Enter the new menu name:')
+            if(!name) return;
+            if(!/^[a-z_]+$/.test(name)) {
+                alert('The menu name allows only low case characters separated by "_".')
+                return;
+            }
+            window.location.href = '/admin/menus/duplicate/{{menu_id}}/' + name;
         });
     });
 </script>

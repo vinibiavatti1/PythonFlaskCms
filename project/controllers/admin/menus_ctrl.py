@@ -6,7 +6,7 @@ This module provide the routes for menu.
 from typing import Any
 from flask import Blueprint, redirect, render_template, flash, request, url_for
 from project.utils.security_utils import login_required
-from project.services import menu_service
+from project.services import menu_service, history_service
 
 
 # Blueprint
@@ -83,11 +83,15 @@ def detail(menu_id: int) -> Any:
     if data is None:
         flash('Menu not found', category='danger')
         return redirect(url_for('.index'))
+    history = history_service.select_by_resource_id(menu_id)
     return render_template(
         '/admin/menu_detail.html',
         edit=True,
         menu_id=menu_id,
-        data=data,
+        data={
+            **data,
+            'history': history
+        },
     )
 
 
@@ -135,6 +139,21 @@ def delete(menu_id: int) -> Any:
         menu_service.delete(menu_id)
         flash('Menu deleted successfully!', category='success')
         return redirect(f'/admin/menus')
+    except Exception as err:
+        flash(str(err), category='danger')
+        return redirect(f'/admin/menus/detail/{menu_id}')
+
+
+@blueprint.route('/duplicate/<menu_id>/<name>', methods=['GET'])
+@login_required()
+def duplicate(menu_id: int, name: str) -> Any:
+    """
+    Duplicate menu route.
+    """
+    try:
+        new_menu_id = menu_service.duplicate(menu_id, name)
+        flash('Page duplicated successfully!', category='success')
+        return redirect(f'/admin/menus/detail/{new_menu_id}')
     except Exception as err:
         flash(str(err), category='danger')
         return redirect(f'/admin/menus/detail/{menu_id}')

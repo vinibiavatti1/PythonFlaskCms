@@ -1,3 +1,4 @@
+{% from "macros/admin/history_list.html" import history_list with context %}
 {% from 'macros/utils/alerts.html' import flash_alerts with context %}
 {% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
 {% from "macros/utils/clipboard.html" import copy_clipboard with context %}
@@ -179,7 +180,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="properties" role="tabpanel">
-                                Nothing to show :D.
+                                TO DO.
                             </div>
                             <div class="tab-pane fade" id="content" role="tabpanel">
                                 <div class="mb-2">
@@ -200,10 +201,12 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="blocks" role="tabpanel">
-
+                                TO DO.
                             </div>
                             <div class="tab-pane fade" id="history" role="tabpanel">
-
+                                {% if edit %}
+                                    {{ history_list(data.history) }}
+                                {% endif %}
                             </div>
                             <div class="tab-pane fade" id="info" role="tabpanel">
                                 <label>URL</label>
@@ -244,6 +247,16 @@
             if(confirm('Do you really want to delete this page?')) {
                 window.location.href = '/admin/pages/delete/{{page_id}}';
             }
+        });
+
+        $('#btn-duplicate').on('click', function() {
+            let name = prompt('Enter the new page name:')
+            if(!name) return;
+            if(!/^[a-z_]+$/.test(name)) {
+                alert('The page name allows only low case characters separated by "_".')
+                return;
+            }
+            window.location.href = '/admin/pages/duplicate/{{page_id}}/' + name;
         });
     });
 </script>

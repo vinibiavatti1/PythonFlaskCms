@@ -4,10 +4,10 @@ Authentication service module.
 from typing import Any
 from flask import session
 from project.enums import session_enum
-from project.enums import permission_enum
 from project.repositories import user_repository
 from project.services import property_service
 from project.utils import security_utils
+from project.services import history_service
 from markupsafe import escape
 from project.errors import AuthError
 from project.enums import string_types_enum
@@ -66,16 +66,30 @@ def do_login(email: str, password: str) -> None:
     if len(users) != 1:
         raise AuthError('Invalid user and/or password')
     user = users[0]
-    session[session_enum.USER_ID] = user['id']
+    user_id = user['id']
+    user_email = user['email']
+    session[session_enum.USER_ID] = user_id
+    session[session_enum.USER_EMAIL] = user_email
     session[session_enum.USER_NAME] = user['name']
-    session[session_enum.USER_EMAIL] = user['email']
     session[session_enum.USER_PERMISSION] = user['permission']
+    history_service.insert(
+        user_id,
+        'login',
+        f'User ({user_id}, {user_email}) login'
+    )
 
 
 def do_logout() -> None:
     """
     Destroy user session.
     """
+    user_id = session[session_enum.USER_ID]
+    user_email = session[session_enum.USER_EMAIL]
+    history_service.insert(
+        user_id,
+        'logout',
+        f'User ({user_id}, {user_email}) logout'
+    )
     session.clear()
 
 
