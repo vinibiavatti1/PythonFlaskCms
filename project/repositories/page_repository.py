@@ -14,6 +14,7 @@ def select_all(active: Optional[bool] = None) -> list[Any]:
             page.id,
             page.name,
             page.idiom,
+            page.access,
             user.name as created_by_name,
             user2.name as updated_by_name,
             page.created_on,
@@ -40,7 +41,6 @@ def select(page_id: int) -> Optional[Any]:
             page.id,
             page.idiom,
             page.name,
-            page.layout,
             page.template,
             page.active,
             page.created_by,
@@ -62,6 +62,7 @@ def select(page_id: int) -> Optional[Any]:
             page.script,
             page.json,
             page.id_menu,
+            page.access,
             user.name as created_by_name,
             user2.name as updated_by_name
         FROM pages page
@@ -82,7 +83,6 @@ def insert(data: dict[str, Any]) -> int:
         INSERT INTO pages (
             idiom,
             name,
-            layout,
             created_by,
             updated_by,
             title,
@@ -99,7 +99,8 @@ def insert(data: dict[str, Any]) -> int:
             script,
             json,
             properties,
-            id_menu)
+            id_menu,
+            access)
         VALUES
             (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     '''
@@ -108,7 +109,6 @@ def insert(data: dict[str, Any]) -> int:
         (
             data['idiom'],
             data['name'],
-            data['layout'],
             data['created_by'],
             data['updated_by'],
             data['title'],
@@ -126,6 +126,7 @@ def insert(data: dict[str, Any]) -> int:
             data['json'],
             data['properties'],
             data['id_menu'],
+            data['access'],
         )
     )
     return int(page_id)
@@ -139,7 +140,6 @@ def update(page_id: int, data: dict[str, Any]) -> None:
         UPDATE pages SET
             name = ?,
             idiom = ?,
-            layout = ?,
             updated_by = ?,
             updated_on = CURRENT_TIMESTAMP,
             title = ?,
@@ -157,7 +157,8 @@ def update(page_id: int, data: dict[str, Any]) -> None:
             json = ?,
             properties = ?,
             active = ?,
-            id_menu = ?
+            id_menu = ?,
+            access = ?
         WHERE
             id = ?
     '''
@@ -166,7 +167,6 @@ def update(page_id: int, data: dict[str, Any]) -> None:
         (
             data['name'],
             data['idiom'],
-            data['layout'],
             data['updated_by'],
             data['title'],
             data['author'],
@@ -184,7 +184,8 @@ def update(page_id: int, data: dict[str, Any]) -> None:
             data['properties'],
             data['active'],
             data['id_menu'],
-            page_id
+            data['access'],
+            page_id,
         )
     )
 

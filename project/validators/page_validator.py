@@ -17,7 +17,6 @@ def validate_insert_data(form_data: dict[str, Any]) -> None:
         form_data,
         'name',
         'idiom',
-        'layout',
         'created_by',
         'updated_by',
         'title',
@@ -35,6 +34,7 @@ def validate_insert_data(form_data: dict[str, Any]) -> None:
         'json',
         'properties',
         'id_menu',
+        'access',
     )
     if not re.match(r'^[a-z_]+$', str(form_data.get('name'))):
         raise ValidationError(
@@ -50,7 +50,6 @@ def validate_update_data(form_data: dict[str, Any]) -> None:
         form_data,
         'name',
         'idiom',
-        'layout',
         'updated_on',
         'updated_by',
         'title',
@@ -68,6 +67,7 @@ def validate_update_data(form_data: dict[str, Any]) -> None:
         'json',
         'properties',
         'id_menu',
+        'access',
     )
     if not re.match(r'^[a-z_]+$', str(form_data.get('name'))):
         raise ValidationError(

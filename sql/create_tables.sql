@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS pages (
     `id` INTEGER PRIMARY KEY,
     `idiom` TEXT NOT NULL,
     `name` TEXT NOT NULL,
-    `layout` TEXT NOT NULL,
     `template` TEXT NOT NULL,
     `active` INTEGER NOT NULL DEFAULT 1,
     `created_by` INTEGER NOT NULL,
@@ -41,7 +40,8 @@ CREATE TABLE IF NOT EXISTS pages (
     `script` TEXT NULL,
     `json` TEXT NULL,
     `deleted` INTEGER NOT NULL DEFAULT 0,
-    `id_menu` INTEGER NULL
+    `id_menu` INTEGER NULL,
+    `access` INTEGER NOT NULL DEFAULT 1
 );
 
 -- Menus

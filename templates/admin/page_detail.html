@@ -91,14 +91,6 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label>Layout <span class="text-danger">*</span></label>
-                                    <select name="layout" class="form-select" required>
-                                        {% for layout in layouts %}
-                                            <option value="{{layout.value}}" {{'selected' if edit and layout.value == data.layout else ''}}>{{layout.label}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="mb-2">
                                     <label>Template <span class="text-danger">*</span></label>
                                     <select name="template" class="form-select" required>
                                         {% for template in templates %}
@@ -113,6 +105,13 @@
                                         {% for menu in data.menus %}
                                             <option value="{{menu.value}}" {{'selected' if edit and menu.value == data.id_menu else ''}}>{{menu.label}}</option>
                                         {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Access <span class="text-danger">*</span></label>
+                                    <select name="access" class="form-select" required>
+                                        <option value="1" {{'selected' if edit and data.access == '1' else ''}}>Public</option>
+                                        <option value="0" {{'selected' if edit and data.access == '0' else ''}}>Private (Requires login)</option>
                                     </select>
                                 </div>
                                 <div class="mb-2">

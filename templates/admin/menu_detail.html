@@ -85,6 +85,7 @@
                                                 <th>URL</th>
                                                 <th>Level</th>
                                                 <th>New tab?</th>
+                                                <th>Access</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -127,7 +128,7 @@
         <td style="width: 20%;">
             <input data-name="name" class="form-control" type="text" placeholder="Enter the Name">
         </td>
-        <td style="width: 40%;">
+        <td style="width: 25%;">
             <input data-name="url" class="form-control" type="text" placeholder="Enter the URL">
         </td>
         <td style="width: 10%;">
@@ -143,6 +144,12 @@
             <select data-name="new_tab" class="form-select" id="">
                 <option value="0">False</option>
                 <option value="1">True</option>
+            </select>
+        </td>
+        <td style="width: 15%;">
+            <select data-name="access" class="form-select" id="">
+                <option value="1">Public</option>
+                <option value="0">Private (Requires login)</option>
             </select>
         </td>
         <td style="width: 20%;">
@@ -192,6 +199,7 @@
             $('input[data-name="url"]', last).val(item.url);
             $('select[data-name="level"]', last).val(item.level);
             $('select[data-name="new_tab"]', last).val(item.new_tab);
+            $('select[data-name="access"]', last).val(item.access);
         }
 
         $(document).delegate('.btn_new', 'click', function() {
@@ -254,6 +262,7 @@
                     url: $('input[data-name="url"]', context).val(),
                     level: $('select[data-name="level"]', context).val(),
                     new_tab: $('select[data-name="new_tab"]', context).val(),
+                    access: $('select[data-name="access"]', context).val(),
                 });
             });
             $('#json').val(JSON.stringify(json));
@@ -271,10 +280,14 @@
             $('.menu_row').each(function() {
                 let context = $(this);
                 let level = $('select[data-name="level"]', context).val();
+                let access = $('select[data-name="access"]', context).val();
                 for(let i = 0; i < parseInt(level) - 1; i++) {
                     preview += '    ';
                 }
                 preview += $('input[data-name="name"]', context).val();
+                if(access == '1') {
+                    preview += ' (Private)'
+                }
                 preview += '\n';
             });
             $('#preview_textarea').val(preview);

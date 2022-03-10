@@ -1,0 +1,137 @@
+{% from 'macros/utils/alerts.html' import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% from "macros/admin/property_field.html" import property_field with context %}
+{% extends 'admin/layout.html' %}
+{% block title %}URLs{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', 'URLs']) }}
+            <div class="fs-3 text-white">URLs</div>
+            <div class="card">
+                <div class="card-body">
+                    <form
+                        id="example-form"
+                        action="/admin/url/save"
+                        method="POST"
+                        class="needs-validation"
+                        novalidate
+                    >
+                        {{ flash_alerts() }}
+                        <div class="mb-2">
+                            <button id="btn-submit" type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i>
+                                Save
+                            </button>
+                        </div>
+                        <ul class="nav nav-tabs mb-2" id="landing-page-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#config">Config</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#urls">URLs</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="config" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>URL</th>
+                                                <th>Active</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for url in data.config_urls %}
+                                            <tr>
+                                                <td>
+                                                    <input class="form-control" type="text" disabled value="">
+                                                </td>
+                                                <td>
+
+                                                </td>
+                                                <td>
+
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show active" id="urls" role="tabpanel">
+
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Default Value</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% set vars = {'header': ''} %}
+                                    {% for prop in data.properties %}
+                                        {% if prop.header %}
+                                            {% if vars.update({'header': prop.title}) %} {% endif %}
+                                            <tr class="bg-prop collapse_btn" role="button" data-header-name="{{prop.title}}">
+                                                <td colspan="4"><b class="text-decoration-underline">{{prop.title}}</b></td>
+                                            </tr>
+                                        {% else %}
+                                            <tr class="d-none" data-header="{{vars.header}}">
+                                                <td style="width: 10%;">
+                                                    <b>
+                                                        {{prop.name}}
+                                                        {% if prop.required %}
+                                                        <span class="text-danger" title="Required">*</span>
+                                                        {% endif %}
+                                                    </b>
+                                                </td>
+                                                <td style="width: 30%;">
+                                                    {{prop.description}}
+                                                </td>
+                                                <td style="width: 30%;">
+                                                    {{property_field(prop, true)}}
+                                                </td>
+                                                <td style="width: 30%;">
+                                                    {{property_field(prop, false)}}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(function() {
+        $('.prop').on('change', function() {
+            $('#unsaved').removeClass('d-none');
+        })
+
+        $(".collapse_btn").click(function() {
+            const header = $(this).data('header-name');
+            const rows = $(`tr[data-header='${header}']`);
+            if(rows.is(':visible')) {
+                rows.addClass('d-none');
+            } else {
+                rows.removeClass('d-none');
+            }
+        });
+    });
+</script>
+{% endblock %}
