@@ -111,5 +111,5 @@ def delete(menu_id: int) -> None:
     """
     Delete menu by id.
     """
-    sql = 'DELETE FROM menus WHERE id = ?'
+    sql = 'UPDATE menus SET deleted = 1 WHERE id = ?'
     database_utils.execute_update(sql, (menu_id,))

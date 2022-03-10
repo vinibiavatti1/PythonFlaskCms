@@ -187,3 +187,11 @@ def update(page_id: int, data: dict[str, Any]) -> None:
             page_id
         )
     )
+
+
+def delete(page_id: int) -> None:
+    """
+    Delete page by id.
+    """
+    sql = 'UPDATE pages SET deleted = 1 WHERE id = ?'
+    database_utils.execute_update(sql, (page_id,))

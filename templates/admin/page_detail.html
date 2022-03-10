@@ -25,7 +25,10 @@
                         {{ flash_alerts() }}
                         <div class="mb-2">
                             <button id="btn-submit" type="submit" class="btn btn-primary">Save</button>
-                            <button id="btn-duplicate" type="button" class="btn btn-secondary" href="/admin/list">Duplicate...</button>
+                            {% if edit %}
+                            <button id="btn-duplicate" type="button" class="btn btn-secondary">Duplicate...</button>
+                            <button id="btn-delete" type="button" class="btn btn-danger">Delete...</button>
+                            {% endif %}
                             <a class="btn btn-secondary" href="/admin/pages">Cancel</a>
                         </div>
                         <ul class="nav nav-tabs mb-2" id="landing-page-tab" role="tablist">
@@ -220,6 +223,15 @@
         </div>
     </div>
 </div>
+<script>
+    jQuery(function() {
+        $('#btn-delete').on('click', function() {
+            if(confirm('Do you really want to delete this page?')) {
+                window.location.href = '/admin/pages/delete/{{page_id}}';
+            }
+        });
+    });
+</script>
 {% endblock %}
 {% block script %}
 {{ copy_clipboard('#copy_url_btn', '#page_url_input') }}

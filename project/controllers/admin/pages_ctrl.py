@@ -147,3 +147,18 @@ def update(page_id: int) -> Any:
     except Exception as err:
         flash(str(err), category='danger')
     return redirect(f'/admin/pages/detail/{page_id}')
+
+
+@blueprint.route('/delete/<page_id>', methods=['GET'])
+@login_required()
+def delete(page_id: int) -> Any:
+    """
+    Delete page route.
+    """
+    try:
+        page_service.delete(page_id)
+        flash('Page deleted successfully!', category='success')
+        return redirect(f'/admin/pages')
+    except Exception as err:
+        flash(str(err), category='danger')
+        return redirect(f'/admin/pages/detail/{page_id}')

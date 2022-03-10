@@ -56,3 +56,10 @@ def generate_page_url(idiom: str, page_name: str) -> str:
     Generate the page URL.
     """
     return f'/page/{idiom}/{page_name}'
+
+
+def delete(page_id: int) -> None:
+    """
+    Delete page by id.
+    """
+    page_repository.delete(page_id)
