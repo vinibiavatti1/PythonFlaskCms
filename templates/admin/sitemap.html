@@ -1,0 +1,86 @@
+{% from 'macros/utils/alerts.html' import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% from "macros/utils/clipboard.html" import copy_clipboard with context %}
+{% from "macros/admin/property_field.html" import property_field with context %}
+{% extends 'admin/layout.html' %}
+{% block title %}Sitemap{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', 'Sitemap']) }}
+            <div class="fs-3 text-white">Sitemap</div>
+            <div class="card">
+                <div class="card-body">
+                    {{ flash_alerts() }}
+                    <label><b>Sitemap URL</b></label>
+                    <div class="input-group">
+                        <input id="sitemap_url" class="form-control font-monospace" type="text" value="/sitemap" disabled/>
+                        <button id="copy_sitemap_url" class="btn btn-primary">Copy</button>
+                    </div>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table datatable">
+                            <thead>
+                                <tr>
+                                    <th>URL</th>
+                                    <th>Priority</th>
+                                    <th>Change</th>
+                                    <th>Enabled</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for url in data.urls %}
+                                <tr>
+                                    <td>
+                                        <input class="form-control font-monospace" type="text" disabled value="{{ url.url }}">
+                                    </td>
+                                    <td>
+                                        <select name="sitemap_priority" class="form-select" required>
+                                            {% for i in range(0, 11) %}
+                                                {% set priority = i / 10 %}
+                                                {% set selected = 'selected' if str(priority) == str(url.sitemap_priority) else '' %}
+                                                <option value="{{priority}}" {{selected}}>{{priority}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="sitemap_change_frequently" class="form-select" required>
+                                            {% for i in ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'] %}
+                                                {% set selected = 'selected' if i == url.sitemap_change_frequently else '' %}
+                                                <option value="{{i}}" {{selected}}>{{i}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="sitemap_active" class="form-select" required>
+                                            <option value="1" {{'selected' if edit and url.sitemap_active else ''}}>True</option>
+                                            <option value="0" {{'selected' if edit and not url.sitemap_active else ''}}>False</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary">
+                                            <i class="bi bi-check-circle"></i>
+                                            Save
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+{{ copy_clipboard('#copy_sitemap_url', '#sitemap_url') }}
+<script>
+    jQuery(function() {
+
+    });
+</script>
+{% endblock %}

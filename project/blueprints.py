@@ -21,6 +21,7 @@ from project.controllers.admin import (
     properties_ctrl,
     seo_ctrl,
     menus_ctrl,
+    sitemap_ctrl,
 )
 
 
@@ -46,4 +47,5 @@ blueprints: list[Blueprint] = [
     properties_ctrl.blueprint,
     auth_ctrl.blueprint,
     menus_ctrl.blueprint,
+    sitemap_ctrl.blueprint,
 ]

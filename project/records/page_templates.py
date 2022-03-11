@@ -15,8 +15,8 @@ page_templates: list[LabelValueModel] = [
         value='landing_page_template.html',
     ),
     LabelValueModel(
-        label='Default Template (Custom HTML, CSS and JS)',
-        value='default_template.html',
+        label='Static Template (HTML, CSS and JS)',
+        value='static_template.html',
     ),
     # Add more...
 ]

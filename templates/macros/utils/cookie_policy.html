@@ -3,21 +3,27 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    {{ i18n.cookie_policy.title }}
+                <h5 class="modal-title">
+                    {{ properties.cookie_policy_title }}
                 </h5>
             </div>
-            <div class="modal-body">{{ i18n.cookie_policy.content }}</div>
+            <div class="modal-body">{{ properties.cookie_policy_content }}</div>
             <div class="modal-footer">
-                <a href="javascript:void(0)" data-bs-dismiss="modal" class="btn btn-primary">
-                    {{ i18n.cookie_policy.close }}
-                </a>
-                <a href="/cookie-policy/disagree" class="btn btn-danger">
-                    {{ i18n.cookie_policy.disagree }}
-                </a>
-                <a href="/cookie-policy/agree" class="btn btn-success">
-                    {{ i18n.cookie_policy.agree }}
-                </a>
+                {% if properties.cookie_policy_cancel %}
+                    <a href="javascript:void(0)" data-bs-dismiss="modal" class="btn btn-primary">
+                        {{ properties.cookie_policy_cancel }}
+                    </a>
+                {% endif %}
+                {% if properties.cookie_policy_disagree %}
+                    <a href="/cookie-policy/disagree" class="btn btn-danger">
+                        {{ properties.cookie_policy_disagree }}
+                    </a>
+                {% endif %}
+                {% if properties.cookie_policy_agree %}
+                    <a href="/cookie-policy/agree" class="btn btn-success">
+                        {{ properties.cookie_policy_agree }}
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -1,5 +1,3 @@
-{% from "macros/navbar.html" import navbar with context %}
-{% from "macros/sidenav.html" import sidenav with context %}
 {% from "macros/datatables.html" import datatables_script with context %}
 {% from "macros/footer.html" import footer with context %}
 {% from "macros/headers.html" import metas, links, scripts with context %}
@@ -23,8 +21,7 @@
         {{ noscript() }}
     </noscript>
     <header>
-        {{ navbar() }}
-        {{ sidenav() }}
+        {% block header %}{% endblock %}
     </header>
     <main class="flex-shrink-0">
         {% block content %}{% endblock %}
@@ -33,7 +30,9 @@
         {{ footer() }}
     </footer>
     <div class="modal-container">
-        {{ cookie_policy_modal() }}
+        {% if properties.cookie_policy_enabled == '1' %}
+            {{ cookie_policy_modal() }}
+        {% endif %}
         {{ search_modal() }}
         {% block modals %}{% endblock %}
     </div>

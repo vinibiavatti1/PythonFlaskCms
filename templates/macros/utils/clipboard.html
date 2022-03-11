@@ -3,8 +3,13 @@
 <script>
     jQuery(function() {
         $('{{btn_selector}}').on('click', function() {
-            const target = $('{{input_selector}}').get(0);
-            if (!target) return;
+            let target = $('{{input_selector}}');
+            if (!target.length) return;
+            if (target.attr('disabled')) {
+                target.removeAttr('disabled');
+                target.attr('readonly', '');
+            }
+            target = target.get(0);
             target.select();
             document.execCommand("copy");
             $(this).html('Copied!');

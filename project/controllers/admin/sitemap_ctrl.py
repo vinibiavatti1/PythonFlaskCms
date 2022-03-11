@@ -6,14 +6,15 @@ This module provide the routes for url management.
 from typing import Any
 from flask import Blueprint, redirect, render_template, flash, request, url_for
 from project.utils.security_utils import login_required
-from project.services import menu_service, history_service
+from project.services import sitemap_service
+from project.records.special_urls import special_urls
 
 
 # Blueprint
 blueprint = Blueprint(
-    'urls_ctrl',
+    'sitemap_ctrl',
     __name__,
-    url_prefix='/admin/urls'
+    url_prefix='/admin/sitemap'
 )
 
 
@@ -28,48 +29,13 @@ def index() -> str:
     """
     Index route.
     """
-    config_urls = [
-        {
-            'name': 'Login',
-            'url': '/login',
-        },
-        {
-            'name': 'Blog URL',
-            'url': '/<lang>/blog',
-        },
-        {
-            'name': 'FAQ',
-            'url': '/<lang>/faq',
-        }
-    ]
+    urls: list[Any] = sitemap_service.select_page_urls()
+    urls.extend(special_urls)
     return render_template(
-        '/admin/menu_detail.html',
-        edit=False,
+        '/admin/sitemap.html',
         data=dict(
-            config_urls=config_urls
+            urls=urls,
         )
-    )
-
-
-@blueprint.route('/detail/<menu_id>')
-@login_required()
-def detail(menu_id: int) -> Any:
-    """
-    Menu detail route.
-    """
-    data = menu_service.select_by_id(menu_id)
-    if data is None:
-        flash('Menu not found', category='danger')
-        return redirect(url_for('.index'))
-    history = history_service.select_by_resource_id(menu_id)
-    return render_template(
-        '/admin/menu_detail.html',
-        edit=True,
-        menu_id=menu_id,
-        data={
-            **data,
-            'history': history
-        },
     )
 
 
@@ -77,7 +43,7 @@ def detail(menu_id: int) -> Any:
 # Action Routes
 ###############################################################################
 
-
+'''
 @blueprint.route('/insert', methods=['POST'])
 @login_required()
 def insert() -> Any:
@@ -135,3 +101,4 @@ def duplicate(menu_id: int, name: str) -> Any:
     except Exception as err:
         flash(str(err), category='danger')
         return redirect(f'/admin/menus/detail/{menu_id}')
+'''

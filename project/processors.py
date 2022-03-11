@@ -7,7 +7,6 @@ from project.utils.cookie_utils import cookie_policy_consent
 from flask import Blueprint
 from project.records.menu import menu
 from project.records.page_templates import page_templates
-from project.records.page_layouts import layouts
 from project.records.idioms import idioms
 from project.services import property_service
 from project.utils import datetime_utils
@@ -30,7 +29,6 @@ def inject_records() -> dict[str, Any]:
     """
     return dict(
         templates=page_templates,
-        layouts=layouts,
         idioms=idioms,
     )
 

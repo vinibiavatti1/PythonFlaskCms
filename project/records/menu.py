@@ -57,8 +57,8 @@ menu: list[Union[MenuModel, HeaderModel]] = [
         'Configuration'
     ),
     MenuModel(
-        title='URLs',
-        link='/admin/urls',
+        title='Sitemap',
+        link='/admin/sitemap',
         icon='bi-signpost',
     ),
     MenuModel(

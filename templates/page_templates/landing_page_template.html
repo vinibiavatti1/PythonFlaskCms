@@ -1,4 +1,8 @@
-{% extends 'layouts/empty_layout.html' %}
+{% from "macros/navbar.html" import navbar with context %}
+{% extends 'layouts/page_layout.html' %}
+{% block header %}
+    {{ navbar() }}
+{% endblock %}
 {% block style %}
 <style>
     {{ data.css | safe}}
@@ -6,6 +10,7 @@
 {% endblock %}
 {% block content %}
     {# Blocks #}
+    {# HTML #}
 {% endblock %}
 {% block script %}
 <script>
