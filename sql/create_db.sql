@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS history;
 DROP TABLE IF EXISTS properties;
 DROP TABLE IF EXISTS translations;
 DROP TABLE IF EXISTS redirects;
+DROP TABLE IF EXISTS blocks;
 
 -------------------------------------------------------------------------------
 -- Creates
@@ -91,6 +92,15 @@ CREATE TABLE IF NOT EXISTS redirects (
     `id` INTEGER PRIMARY KEY,
     `from_url` TEXT NOT NULL,
     `to_url` TEXT NOT NULL,
+    `deleted` INTEGET NOT NULL DEFAULT 0
+);
+
+-- Blocks
+CREATE TABLE IF NOT EXISTS blocks (
+    `id` INTEGER PRIMARY KEY,
+    `id_page` INTEGER NOT NULL,
+    `name` TEXT NOT NULL,
+    `json` TEXT NOT NULL,
     `deleted` INTEGET NOT NULL DEFAULT 0
 );
 

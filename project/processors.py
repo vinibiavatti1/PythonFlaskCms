@@ -6,6 +6,7 @@ from project.utils.security_utils import is_authenticated, has_permission
 from project.utils.cookie_utils import cookie_policy_consent
 from flask import Blueprint
 from project.records.menu import menu
+from project.records.blocks import blocks
 from project.records.page_templates import page_templates
 from project.records.idioms import idioms
 from project.services import property_service
@@ -30,6 +31,7 @@ def inject_records() -> dict[str, Any]:
     return dict(
         templates=page_templates,
         idioms=idioms,
+        blocks=blocks,
     )
 
 

@@ -1,0 +1,63 @@
+{% from "macros/admin/history_list.html" import history_list with context %}
+{% from 'macros/utils/alerts.html' import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% from "macros/utils/clipboard.html" import copy_clipboard with context %}
+{% from "macros/admin/property_field.html" import property_field with context %}
+{% extends 'admin/layout.html' %}
+{% block title %}Block Detail{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', 'Block']) }}
+            <div class="fs-3 text-white">Block Detail</div>
+            <div class="card">
+                <div class="card-body">
+                    <form
+                        id="menu-form"
+                        {% if edit %}
+                            action="/admin/blocks/update/{{page_block_id}}/"
+                        {% else %}
+                            action="/admin/blocks/insert/{{block_name}}/{{page_id}}"
+                        {% endif %}
+                        method="POST"
+                        class="needs-validation"
+                        novalidate
+                    >
+                        {{ flash_alerts() }}
+                        <div class="mb-2">
+                            <a class="btn btn-secondary" href="/admin/pages/detail/{{page_id}}?tab=blocks">
+                                <i class="bi bi-arrow-left"></i>
+                                Cancel
+                            </a>
+                            {% if edit %}
+                                <button id="btn-delete" type="button" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                    Delete...
+                                </button>
+                            {% endif %}
+                            <button id="btn-submit" type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i>
+                                Save
+                            </button>
+                        </div>
+                        {% for prop in block_properties %}
+                        <div class="mb-2">
+                            <label>{{ prop.name }}</label>
+                            {{ property_field(prop) }}
+                        </div>
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    jQuery(function() {
+
+    });
+</script>
+{% endblock %}

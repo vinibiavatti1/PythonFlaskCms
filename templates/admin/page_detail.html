@@ -2,6 +2,7 @@
 {% from 'macros/utils/alerts.html' import flash_alerts with context %}
 {% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
 {% from "macros/utils/clipboard.html" import copy_clipboard with context %}
+{% from "macros/admin/block_modal.html" import block_modal with context %}
 {% extends 'admin/layout.html' %}
 {% block title %}Page Detail{% endblock %}
 {% block content %}
@@ -24,6 +25,7 @@
                         novalidate
                     >
                         {{ flash_alerts() }}
+                        <input id="page-id" type="hidden" value="{{page_id}}">
                         <div class="mb-2">
                             <a class="btn btn-secondary" href="/admin/pages">
                                 <i class="bi bi-arrow-left"></i>
@@ -64,10 +66,10 @@
                                 <button type="button" class="nav-link {{ 'disabled' if not edit else '' }}" href="#" data-bs-toggle="tab" data-bs-target="#blocks">Blocks</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link {{ 'disabled' if not edit else '' }}" href="#" data-bs-toggle="tab" data-bs-target="#history">History</button>
+                                <button type="button" class="nav-link {{ 'disabled' if not edit else '' }}" href="#" data-bs-toggle="tab" data-bs-target="#info">Info</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link {{ 'disabled' if not edit else '' }}" href="#" data-bs-toggle="tab" data-bs-target="#info">Info</button>
+                                <button type="button" class="nav-link {{ 'disabled' if not edit else '' }}" href="#" data-bs-toggle="tab" data-bs-target="#history">History</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
@@ -191,7 +193,43 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="blocks" role="tabpanel">
-                                TO DO.
+                                <button type="button" id="add_block" class="btn btn-primary mb-3">
+                                    <i class="bi bi-layers"></i>
+                                    Add Block
+                                </button>
+                                <button type="button" id="save_order_block" class="btn btn-primary mb-3">
+                                    <i class="bi bi-list-ol"></i>
+                                    Save Order
+                                </button>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 60%;">Block</th>
+                                                <th style="width: 20%;">Order</th>
+                                                <th style="width: 20%;">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for _block in page_blocks %}
+                                            <tr>
+                                                <td class="align-middle">{{_block.name}}</td>
+                                                <td>
+                                                    <input class="form-control" value="1" type="number" min="0" max="9999" step="1" required placeholder="block order">
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/blocks/edit/{{_block.id}}" class="btn btn-secondary" data-block-id="{{_block.id}}"><i class="bi bi-pencil"></i></a>
+                                                    <button class="btn btn-danger" data-block-id="{{_block.id}}"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div id="block-list-page" class="list-group block-list-page">
+
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="history" role="tabpanel">
                                 {% if edit %}
@@ -203,22 +241,6 @@
                                 <div class="input-group mb-2">
                                     <input id="page_url_input" type="text" class="form-control font-monospace" readonly value="{{ data.page_url if edit else '' }}"/>
                                     <button class="btn btn-primary" type="button" id="copy_url_btn">Copy</button>
-                                </div>
-                                <div class="mb-2">
-                                    <label>Created by</label>
-                                    <input type="text" class="form-control" disabled value="{{ data.created_by_name if edit else '' }}"/>
-                                </div>
-                                <div class="mb-2">
-                                    <label>Updated by</label>
-                                    <input type="text" class="form-control" disabled value="{{ data.updated_by_name if edit else '' }}"/>
-                                </div>
-                                <div class="mb-2">
-                                    <label>Created On</label>
-                                    <input type="text" class="form-control" disabled value="{{ data.created_on if edit else '' }}"/>
-                                </div>
-                                <div class="mb-2">
-                                    <label>Updated On</label>
-                                    <input type="text" class="form-control" disabled value="{{ data.updated_on if edit else '' }}"/>
                                 </div>
                             </div>
                         </div>
@@ -233,6 +255,22 @@
 {{ copy_clipboard('#copy_url_btn', '#page_url_input') }}
 <script>
     jQuery(function() {
+        const tab = '{{tab}}';
+        const block_modal = new bootstrap.Modal(
+            document.getElementById('block-modal')
+        );
+
+        if(tab) {
+            $(`button[data-bs-target="#${tab}"]`).click();
+        }
+
+        $('#add_block').on('click', function() {
+            block_modal.show();
+            setTimeout(function() {
+                $('#search-blocks').focus();
+            }, 500);
+        });
+
         $('#btn-delete').on('click', function() {
             if(confirm('Do you really want to delete this page?')) {
                 window.location.href = '/admin/pages/delete/{{page_id}}';
@@ -250,4 +288,7 @@
         });
     });
 </script>
+{% endblock %}
+{% block modals %}
+{{ block_modal() }}
 {% endblock %}

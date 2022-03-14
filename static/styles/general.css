@@ -14,3 +14,7 @@
 .bg-prop:hover {
     background-color: rgba(0, 0, 0, .1);
 }
+.block-list {
+    max-height: 300px;
+    overflow-y: scroll;
+}

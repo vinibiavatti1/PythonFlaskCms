@@ -10,7 +10,7 @@ class PropertyModel:
     Property class.
     """
 
-    def __init__(self, *, name: str, description: str, field_type: str,
+    def __init__(self, *, name: str, field_type: str, description: str = '',
                  required: bool = False, values: list[str] = [],
                  default: Optional[Any] = '') -> None:
         """
@@ -18,7 +18,7 @@ class PropertyModel:
 
         The name must be unique, and follow the /[a-z_]+/ pattern.
         """
-        if not re.match(r'[a-z_]+', name):
+        if not re.match(r'^[a-z\_]+$', name):
             raise ValueError(f'Property name is invalid: "{name}"')
         self.name = name
         self.description = description

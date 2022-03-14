@@ -51,10 +51,9 @@ def insert(data: dict[str, Any]) -> int:
             script,
             json,
             properties,
-            id_menu,
             access)
         VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     '''
     page_id = database_utils.execute_update(
         sql,
@@ -75,7 +74,6 @@ def insert(data: dict[str, Any]) -> int:
             data['script'],
             data['json'],
             data['properties'],
-            data['id_menu'],
             data['access'],
         )
     )
@@ -105,7 +103,6 @@ def update(page_id: int, data: dict[str, Any]) -> None:
             json = ?,
             properties = ?,
             active = ?,
-            id_menu = ?,
             access = ?
         WHERE
             id = ?
@@ -130,7 +127,6 @@ def update(page_id: int, data: dict[str, Any]) -> None:
             data['json'],
             data['properties'],
             data['active'],
-            data['id_menu'],
             data['access'],
             page_id,
         )

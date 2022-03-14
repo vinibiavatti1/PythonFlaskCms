@@ -1,0 +1,64 @@
+{% macro block_modal() %}
+<div class="modal fade" id="block-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Blocks
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <input id="search-blocks" type="search" class="form-control" placeholder="Type the name of the block to search">
+                </div>
+                <div id="block-list" class="list-group block-list">
+                    {% for _block in blocks %}
+                        <a href="javascript:void(0)" data-block-name="{{_block.name}}" class="list-group-item list-group-item-action block-item" style="line-height: 20px;">
+                            {{_block.name}}<br>
+                            <span style="font-size: 12px;">{{_block.description}}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0)" data-bs-dismiss="modal" class="btn btn-primary">
+                    Cancel
+                </a>
+                <a id="select-block" href="javascript:void(0)" class="btn btn-success disabled">
+                    Select Block
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(function() {
+
+        let selectedBlockName = null;
+        $('.block-item').on('click', function() {
+            $('#block-list').children().removeClass('active');
+            $(this).addClass('active');
+            $('#select-block').removeClass('disabled');
+            selectedBlockName = $(this).data('block-name');
+        });
+
+        $('#select-block').on('click', function() {
+            const pageId = $('#page-id').val();
+            window.location.href = `/admin/blocks/detail/${selectedBlockName}/${pageId}`;
+        });
+
+        $('#search-blocks').on('keyup change', function() {
+            let search = $('#search-blocks').val();
+            $('.block-item').each(function() {
+                let current = $(this);
+                console.log(current.data('block-name'), current.data('block-name').toUpperCase(), search);
+                if (!search || current.data('block-name').toUpperCase() == search.toUpperCase()) {
+                    current.show();
+                } else {
+                    current.hide();
+                }
+            });
+        });
+    });
+</script>
+{% endmacro %}

@@ -24,6 +24,7 @@ from project.controllers.admin import (
     sitemap_ctrl,
     translation_ctrl,
     redirect_ctrl,
+    block_ctrl,
 )
 
 
@@ -52,4 +53,5 @@ blueprints: list[Blueprint] = [
     sitemap_ctrl.blueprint,
     translation_ctrl.blueprint,
     redirect_ctrl.blueprint,
+    block_ctrl.blueprint,
 ]

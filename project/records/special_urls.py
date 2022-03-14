@@ -4,11 +4,6 @@ Special URLs records module.
 from project.models.special_url_model import SpecialUrlModel
 
 
-###############################################################################
-# Registry
-###############################################################################
-
-
 special_urls: list[SpecialUrlModel] = [
     SpecialUrlModel(
         url='/<lang>/login',

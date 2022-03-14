@@ -6,7 +6,7 @@ This module provide the routes for page.
 from typing import Any
 from flask import Blueprint, redirect, render_template, flash, request, url_for
 from project.utils.security_utils import login_required
-from project.services import menu_service, page_service, history_service
+from project.services import page_service, history_service, block_service
 
 
 # Blueprint
@@ -56,6 +56,7 @@ def index() -> str:
         data=data,
     )
 
+
 @blueprint.route('/create')
 @login_required()
 def create() -> str:
@@ -84,10 +85,14 @@ def detail(page_id: int) -> Any:
         data['name'],
     )
     history = history_service.select_by_resource(page_id, 'page')
+    page_blocks = block_service.select_page_blocks(page_id)
+    tab = request.args.get('tab')
     return render_template(
         '/admin/page_detail.html',
         edit=True,
         page_id=page_id,
+        page_blocks=page_blocks,
+        tab=tab,
         data={
             **data,
             'page_url': page_url,

@@ -4,11 +4,6 @@ URLs records module.
 from project.models.label_value_model import LabelValueModel
 
 
-###############################################################################
-# Registry
-###############################################################################
-
-
 layouts: list[LabelValueModel] = [
     LabelValueModel(
         label='Default Layout',

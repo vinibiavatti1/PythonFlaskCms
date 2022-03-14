@@ -4,11 +4,6 @@ Page templates records module.
 from project.models.label_value_model import LabelValueModel
 
 
-###############################################################################
-# Registry
-###############################################################################
-
-
 page_templates: list[LabelValueModel] = [
     LabelValueModel(
         label='Landing Page Template (Page with Blocks)',

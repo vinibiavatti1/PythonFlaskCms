@@ -7,11 +7,6 @@ from project.models.property_model import PropertyModel
 from project.enums import property_types_enum as prop_type
 
 
-###############################################################################
-# Registry
-###############################################################################
-
-
 properties: list[Union[HeaderModel, PropertyModel]] = [
 
     ###########################################################################
