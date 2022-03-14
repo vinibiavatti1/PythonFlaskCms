@@ -1,7 +1,7 @@
 """
-Menu Validator.
+Redirect Validator.
 
-This module provides validator for menu data.
+This module provides validations for redirect data.
 """
 from typing import Any
 from project.utils import validation_utils
@@ -9,25 +9,21 @@ from project.utils import validation_utils
 
 def validate_insert_data(form_data: dict[str, Any]) -> None:
     """
-    Validate page insert data.
+    Validate redirect insert data.
     """
     validation_utils.validate_form_data_fields(
         form_data,
-        'name',
-        'json',
-        'idiom',
+        'from_url',
+        'to_url',
     )
-    validation_utils.validate_name(str(form_data.get('name')))
 
 
 def validate_update_data(form_data: dict[str, Any]) -> None:
     """
-    Validate page update data.
+    Validate redirect update data.
     """
     validation_utils.validate_form_data_fields(
         form_data,
-        'name',
-        'json',
-        'idiom',
+        'from_url',
+        'to_url',
     )
-    validation_utils.validate_name(str(form_data.get('name')))

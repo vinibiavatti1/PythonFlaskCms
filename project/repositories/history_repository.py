@@ -25,7 +25,8 @@ def insert(data: dict[str, Any]) -> Any:
     ))
 
 
-def select_by_resource_id(resource_id: int) -> list[dict[str, Any]]:
+def select_by_resource(resource_id: int,
+                       resource_type: str) -> list[dict[str, Any]]:
     """
     Get all history records by resource id.
     """
@@ -39,5 +40,7 @@ def select_by_resource_id(resource_id: int) -> list[dict[str, Any]]:
         FROM history h
         LEFT JOIN users u
         ON (h.created_by = u.id)
-        WHERE h.id_resource = ? AND h.deleted = 0 ORDER BY h.id DESC'''
-    return database_utils.execute_query(sql, (resource_id,))
+        WHERE h.id_resource = ?
+        AND h.type_resource = ?
+        AND h.deleted = 0 ORDER BY h.id DESC'''
+    return database_utils.execute_query(sql, (resource_id, resource_type))

@@ -11,8 +11,8 @@ from project.models.special_url_model import SpecialUrlModel
 
 special_urls: list[SpecialUrlModel] = [
     SpecialUrlModel(
-        url='/login',
-        sitemap_priority=0.5,
+        url='/<lang>/login',
+        sitemap_priority=0.0,
         sitemap_change_frequently='never',
         sitemap_active=True,
     ),

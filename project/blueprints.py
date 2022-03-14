@@ -17,11 +17,13 @@ from project.controllers.admin import (
     list_ctrl,
     form_ctrl,
     calendar_ctrl,
-    pages_ctrl,
+    menu_ctrl,
+    page_ctrl,
     properties_ctrl,
     seo_ctrl,
-    menus_ctrl,
     sitemap_ctrl,
+    translation_ctrl,
+    redirect_ctrl,
 )
 
 
@@ -43,9 +45,11 @@ blueprints: list[Blueprint] = [
     cookie_policy_ctrl.blueprint,
     calendar_ctrl.blueprint,
     search_ctrl.blueprint,
-    pages_ctrl.blueprint,
+    page_ctrl.blueprint,
     properties_ctrl.blueprint,
     auth_ctrl.blueprint,
-    menus_ctrl.blueprint,
+    menu_ctrl.blueprint,
     sitemap_ctrl.blueprint,
+    translation_ctrl.blueprint,
+    redirect_ctrl.blueprint,
 ]

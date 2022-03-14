@@ -34,10 +34,6 @@ def index() -> str:
         'Idiom',
         'Access',
         'Active',
-        'Created By',
-        'Updated By',
-        'Created On',
-        'Updated On',
         'Actions',
     ]
     pages = page_service.select_all()
@@ -51,10 +47,6 @@ def index() -> str:
                 page['idiom'],
                 'Private' if page['access'] == '0' else 'Public',
                 'True' if page['active'] == 1 else 'False',
-                page['created_by_name'],
-                page['updated_by_name'],
-                page['created_on'],
-                page['updated_on'],
                 f'<a href="/admin/pages/detail/{page_id}">Details</a>',
             )
         )
@@ -70,19 +62,10 @@ def create() -> str:
     """
     Page create route.
     """
-    menus_db = menu_service.select_all()
-    menus = []
-    for menu in menus_db:
-        menus.append({
-            'label': menu['name'],
-            'value': menu['id'],
-        })
     return render_template(
         '/admin/page_detail.html',
         edit=False,
-        data=dict(
-            menus=menus
-        )
+        data=dict()
     )
 
 
@@ -100,14 +83,7 @@ def detail(page_id: int) -> Any:
         data['idiom'],
         data['name'],
     )
-    menus_db = menu_service.select_all()
-    menus = []
-    for menu in menus_db:
-        menus.append({
-            'label': menu['name'],
-            'value': menu['id'],
-        })
-    history = history_service.select_by_resource_id(page_id)
+    history = history_service.select_by_resource(page_id, 'page')
     return render_template(
         '/admin/page_detail.html',
         edit=True,
@@ -115,7 +91,6 @@ def detail(page_id: int) -> Any:
         data={
             **data,
             'page_url': page_url,
-            'menus': menus,
             'history': history
         }
     )

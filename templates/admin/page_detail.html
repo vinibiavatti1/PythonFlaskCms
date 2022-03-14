@@ -99,15 +99,6 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label>Menu <span class="text-danger">*</span></label>
-                                    <select name="id_menu" class="form-select" required>
-                                        <option value="0">None</option>
-                                        {% for menu in data.menus %}
-                                            <option value="{{menu.value}}" {{'selected' if edit and menu.value == data.id_menu else ''}}>{{menu.label}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="mb-2">
                                     <label>Access <span class="text-danger">*</span></label>
                                     <select name="access" class="form-select" required>
                                         <option value="1" {{'selected' if edit and data.access == '1' else ''}}>Public</option>

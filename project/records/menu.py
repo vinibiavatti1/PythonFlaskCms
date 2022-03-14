@@ -35,18 +35,20 @@ menu: list[Union[MenuModel, HeaderModel]] = [
         link='/admin/posts',
         icon='bi-question-circle',
     ),
-
-    ###########################################################################
-    # Media
-    ###########################################################################
-
-    HeaderModel(
-        'Media'
-    ),
     MenuModel(
         title='Medias',
         link='/admin/posts',
         icon='bi-image',
+    ),
+    MenuModel(
+        title='Translations',
+        link='/admin/translations',
+        icon='bi-translate',
+    ),
+    MenuModel(
+        title='Redirects',
+        link='/admin/redirects',
+        icon='bi-signpost-split',
     ),
 
     ###########################################################################
@@ -59,7 +61,7 @@ menu: list[Union[MenuModel, HeaderModel]] = [
     MenuModel(
         title='Sitemap',
         link='/admin/sitemap',
-        icon='bi-signpost',
+        icon='bi-map',
     ),
     MenuModel(
         title='Properties',

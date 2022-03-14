@@ -264,38 +264,4 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
         field_type=prop_type.BOOL,
         default=True,
     ),
-    PropertyModel(
-        name='cookie_policy_title',
-        description='Title of the cookie policy modal.',
-        field_type=prop_type.STRING,
-        default='Cookie Policy',
-    ),
-    PropertyModel(
-        name='cookie_policy_content',
-        description='Content that will be shown in cookie policy modal.',
-        field_type=prop_type.TEXT,
-        default='EN-US: We use cookies to improve user experience, and '
-                'analyze website traffic. For these reasons, we may share '
-                'your site usage data with our analytics partners. By '
-                'clicking "Agree" you consent to store on your device all the '
-                'technologies used in the application',
-    ),
-    PropertyModel(
-        name='cookie_policy_agree',
-        description='Agree button label. (Keep empty to disable)',
-        field_type=prop_type.STRING,
-        default='Agree',
-    ),
-    PropertyModel(
-        name='cookie_policy_disagree',
-        description='Disagree button label. (Keep empty to disable)',
-        field_type=prop_type.STRING,
-        default='Disagree',
-    ),
-    PropertyModel(
-        name='cookie_policy_cancel',
-        description='Cancel button label. (Keep empty to disable)',
-        field_type=prop_type.STRING,
-        default='Cancel',
-    ),
 ]

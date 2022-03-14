@@ -10,22 +10,8 @@ def select_all(active: Optional[bool] = None) -> list[Any]:
     List pages.
     """
     sql = '''
-        SELECT
-            page.id,
-            page.name,
-            page.idiom,
-            page.access,
-            user.name as created_by_name,
-            user2.name as updated_by_name,
-            page.created_on,
-            page.updated_on,
-            page.active
-        FROM pages page
-        LEFT JOIN users user
-        ON (page.created_by == user.id)
-        LEFT JOIN users user2
-        ON (page.updated_by == user2.id)
-        WHERE page.deleted = 0
+        SELECT * FROM pages page
+        WHERE deleted = 0
     '''
     if active is not None:
         sql += ' AND page.active = ' + ('1' if active else '0')
@@ -37,40 +23,8 @@ def select(page_id: int) -> Optional[Any]:
     List pages.
     """
     sql = '''
-        SELECT
-            page.id,
-            page.idiom,
-            page.name,
-            page.template,
-            page.active,
-            page.created_by,
-            page.updated_by,
-            page.created_on,
-            page.updated_on,
-            page.title,
-            page.author,
-            page.description,
-            page.keywords,
-            page.canonical_urls,
-            page.sitemap_active,
-            page.sitemap_priority,
-            page.sitemap_change_frequently,
-            page.template,
-            page.properties,
-            page.html,
-            page.css,
-            page.script,
-            page.json,
-            page.id_menu,
-            page.access,
-            user.name as created_by_name,
-            user2.name as updated_by_name
-        FROM pages page
-        LEFT JOIN users user
-        ON (page.created_by = user.id)
-        LEFT JOIN users user2
-        ON (page.updated_by = user2.id)
-        WHERE page.id = ? AND page.deleted = 0
+        SELECT * FROM pages page
+        WHERE id = ? AND deleted = 0
     '''
     return database_utils.execute_single_query(sql, page_id)
 
@@ -83,8 +37,6 @@ def insert(data: dict[str, Any]) -> int:
         INSERT INTO pages (
             idiom,
             name,
-            created_by,
-            updated_by,
             title,
             author,
             description,
@@ -109,8 +61,6 @@ def insert(data: dict[str, Any]) -> int:
         (
             data['idiom'],
             data['name'],
-            data['created_by'],
-            data['updated_by'],
             data['title'],
             data['author'],
             data['description'],
@@ -140,8 +90,6 @@ def update(page_id: int, data: dict[str, Any]) -> None:
         UPDATE pages SET
             name = ?,
             idiom = ?,
-            updated_by = ?,
-            updated_on = CURRENT_TIMESTAMP,
             title = ?,
             author = ?,
             description = ?,
@@ -167,7 +115,6 @@ def update(page_id: int, data: dict[str, Any]) -> None:
         (
             data['name'],
             data['idiom'],
-            data['updated_by'],
             data['title'],
             data['author'],
             data['description'],

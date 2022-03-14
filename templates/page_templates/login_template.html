@@ -1,0 +1,14 @@
+{% extends 'layouts/page_layout.html' %}
+{% block style %}
+<style>
+    {{ data.css | safe}}
+</style>
+{% endblock %}
+{% block content %}
+    {{ data.html | safe}}
+{% endblock %}
+{% block script %}
+<script>
+    {{ data.script | safe}}
+</script>
+{% endblock %}

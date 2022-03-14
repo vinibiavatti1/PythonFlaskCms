@@ -1,0 +1,84 @@
+{% from "macros/admin/history_list.html" import history_list with context %}
+{% from 'macros/utils/alerts.html' import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% from "macros/utils/clipboard.html" import copy_clipboard with context %}
+{% extends 'admin/layout.html' %}
+{% block title %}Redirect Detail{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', 'Redirects', redirect_id]) }}
+            <div class="fs-3 text-white">Redirect Detail</div>
+            <div class="card">
+                <div class="card-body">
+                    <form
+                        id="menu-form"
+                        {% if edit %}
+                            action="/admin/redirects/update/{{redirect_id}}"
+                        {% else %}
+                            action="/admin/redirects/insert"
+                        {% endif %}
+                        method="POST"
+                        class="needs-validation"
+                        novalidate
+                    >
+                        {{ flash_alerts() }}
+                        <div class="mb-2">
+                            <a class="btn btn-secondary" href="/admin/redirects">
+                                <i class="bi bi-arrow-left"></i>
+                                Cancel
+                            </a>
+                            {% if edit %}
+                                <button id="btn-delete" type="button" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                    Delete...
+                                </button>
+                            {% endif %}
+                            <button id="btn-submit" type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i>
+                                Save
+                            </button>
+                        </div>
+                        <input id="json" name="json" type="hidden" value="">
+
+                        <ul class="nav nav-tabs mb-2" id="landing-page-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#detail">Detail</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link {{'' if edit else 'disabled'}}" href="#" data-bs-toggle="tab" data-bs-target="#history">History</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="tabContent">
+                            <div class="tab-pane fade show active" id="detail" role="tabpanel">
+                                <div class="mb-2">
+                                    <label>From URL (Regex) <span class="text-danger">*</span></label>
+                                    <input class="form-control font-monospace" name="from_url" type="text" placeholder="Enter the url pattern to target" value="{{ data.from_url if edit else '' }}" required>
+                                    <small><a href="https://regexr.com/" target="_blank">Regex</a> is allowed to match routes by pattern</small>
+                                </div>
+                                <div class="mb-2">
+                                    <label>To URL <span class="text-danger">*</span></label>
+                                    <input class="form-control font-monospace" name="to_url" type="text" placeholder="Enter the url to redirect" value="{{ data.to_url if edit else '' }}" required/>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="history" role="tabpanel">
+                                {% if edit %}
+                                    {{ history_list(data.history) }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    jQuery(function() {
+
+    });
+</script>
+{% endblock %}

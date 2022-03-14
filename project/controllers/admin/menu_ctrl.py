@@ -31,6 +31,7 @@ def index() -> str:
     headers = [
         '#',
         'Name',
+        'Idiom',
         'Active',
         'Created By',
         'Updated By',
@@ -46,6 +47,7 @@ def index() -> str:
             (
                 menu_id,
                 menu['name'],
+                menu['idiom'],
                 'True' if menu['active'] == 1 else 'False',
                 menu['created_by_name'],
                 menu['updated_by_name'],
@@ -83,7 +85,7 @@ def detail(menu_id: int) -> Any:
     if data is None:
         flash('Menu not found', category='danger')
         return redirect(url_for('.index'))
-    history = history_service.select_by_resource_id(menu_id)
+    history = history_service.select_by_resource(menu_id, 'menux')
     return render_template(
         '/admin/menu_detail.html',
         edit=True,

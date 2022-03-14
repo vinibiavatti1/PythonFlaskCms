@@ -22,8 +22,9 @@ def insert(resource_id: int, type_resource: str, description: str) -> None:
     history_repository.insert(data)
 
 
-def select_by_resource_id(resource_id: int) -> list[dict[str, Any]]:
+def select_by_resource(resource_id: int,
+                       resource_type: str) -> list[dict[str, Any]]:
     """
-    Select the history by resource id.
+    Select the history by resource id and type.
     """
-    return history_repository.select_by_resource_id(resource_id)
+    return history_repository.select_by_resource(resource_id, resource_type)

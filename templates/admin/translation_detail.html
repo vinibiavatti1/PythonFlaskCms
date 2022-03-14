@@ -1,0 +1,97 @@
+{% from "macros/admin/history_list.html" import history_list with context %}
+{% from 'macros/utils/alerts.html' import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% from "macros/utils/clipboard.html" import copy_clipboard with context %}
+{% extends 'admin/layout.html' %}
+{% block title %}Translation Detail{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', 'Translations', translation_id]) }}
+            <div class="fs-3 text-white">Translation Detail</div>
+            <div class="card">
+                <div class="card-body">
+                    <form
+                        id="menu-form"
+                        {% if edit %}
+                            action="/admin/translations/update/{{translation_id}}"
+                        {% else %}
+                            action="/admin/translations/insert"
+                        {% endif %}
+                        method="POST"
+                        class="needs-validation"
+                        novalidate
+                    >
+                        {{ flash_alerts() }}
+                        <div class="mb-2">
+                            <a class="btn btn-secondary" href="/admin/translations">
+                                <i class="bi bi-arrow-left"></i>
+                                Cancel
+                            </a>
+                            {% if edit %}
+                                <button id="btn-delete" type="button" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                    Delete...
+                                </button>
+                            {% endif %}
+                            <button id="btn-submit" type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i>
+                                Save
+                            </button>
+                        </div>
+                        <input id="json" name="json" type="hidden" value="">
+
+                        <ul class="nav nav-tabs mb-2" id="landing-page-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#detail">Detail</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link {{'' if edit else 'disabled'}}" href="#" data-bs-toggle="tab" data-bs-target="#history">History</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="tabContent">
+                            <div class="tab-pane fade show active" id="detail" role="tabpanel">
+                                <div class="mb-2">
+                                    <label>Idiom <span class="text-danger">*</span></label>
+                                    <select name="idiom" class="form-select" required>
+                                        {% for idiom in idioms %}
+                                            {% if edit %}
+                                                {% set selected = 'selected' if data.idiom == idiom.code else '' %}
+                                            {% else %}
+                                                {% set selected = 'selected' if idiom.default else '' %}
+                                            {% endif %}
+                                            <option value="{{idiom.code}}" {{selected}}>{{idiom.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Name <span class="text-danger">*</span></label>
+                                    <input id="name_input" class="form-control" name="name" type="text" placeholder="Enter the menu name" value="{{ data.name if edit else '' }}" required>
+                                    <small>Allowed only low case characters separated by "_". Ex: my_page</small>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Value <span class="text-danger">*</span></label>
+                                    <textarea id="name_input" class="form-control" name="value" type="text" placeholder="Enter the value" rows="10" required>{{ data.value if edit else '' }}</textarea>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="history" role="tabpanel">
+                                {% if edit %}
+                                    {{ history_list(data.history) }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    jQuery(function() {
+
+    });
+</script>
+{% endblock %}

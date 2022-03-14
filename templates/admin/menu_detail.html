@@ -55,28 +55,34 @@
                                 <button type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#detail">Detail</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#links">Links</button>
+                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#structure">Structure</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#history">History</button>
+                                <button type="button" class="nav-link {{'' if edit else 'disabled'}}" href="#" data-bs-toggle="tab" data-bs-target="#history">History</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="tabContent">
                             <div class="tab-pane fade show active" id="detail" role="tabpanel">
                                 <div class="mb-2">
-                                    <label>Name</label>
+                                    <label>Name <span class="text-danger">*</span></label>
                                     <input id="name_input" class="form-control" name="name" type="text" placeholder="Enter the menu name" value="{{ data.name if edit else '' }}" required>
                                     <small>Allowed only low case characters separated by "_". Ex: my_page</small>
                                 </div>
                                 <div class="mb-2">
-                                    <label>Show Idiom Selector</label>
-                                    <select class="form-select" name="idiom_selector">
-                                        <option value="0">False</option>
-                                        <option value="1">True</option>
+                                    <label>Idiom <span class="text-danger">*</span></label>
+                                    <select name="idiom" class="form-select" required>
+                                        {% for idiom in idioms %}
+                                            {% if edit %}
+                                                {% set selected = 'selected' if data.idiom == idiom.code else '' %}
+                                            {% else %}
+                                                {% set selected = 'selected' if idiom.default else '' %}
+                                            {% endif %}
+                                            <option value="{{idiom.code}}" {{selected}}>{{idiom.name}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="links" role="tabpanel">
+                            <div class="tab-pane fade" id="structure" role="tabpanel">
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
@@ -285,7 +291,7 @@
                     preview += '    ';
                 }
                 preview += $('input[data-name="name"]', context).val();
-                if(access == '1') {
+                if(access == '0') {
                     preview += ' (Private)'
                 }
                 preview += '\n';
