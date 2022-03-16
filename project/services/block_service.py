@@ -43,3 +43,11 @@ def insert(page_id: int, block_name: str, data: dict[str, Any]) -> Any:
         block_name,
         json.dumps(data)
     )
+
+
+def save_order(block_ids: list[int], new_orders: list[int]) -> None:
+    """
+    Save new order for blocks.
+    """
+    for block_id, new_order in zip(block_ids, new_orders):
+        block_repository.update_order(block_id, new_order)

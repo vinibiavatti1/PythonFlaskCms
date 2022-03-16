@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS blocks (
     `id_page` INTEGER NOT NULL,
     `name` TEXT NOT NULL,
     `json` TEXT NOT NULL,
+    `order` INTEGER NOT NULL,
     `deleted` INTEGET NOT NULL DEFAULT 0
 );
 

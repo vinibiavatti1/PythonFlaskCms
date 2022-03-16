@@ -75,7 +75,7 @@ def insert(block_name: str, page_id: int) -> Any:
     Insert block route.
     """
     try:
-        block_id = block_service.insert(
+        block_service.insert(
             page_id,
             block_name,
             request.form.to_dict()
@@ -84,7 +84,24 @@ def insert(block_name: str, page_id: int) -> Any:
         return redirect(f'/admin/pages/detail/{page_id}?tab=blocks')
     except Exception as err:
         flash(str(err), category='danger')
-        return redirect(f'/admin/blocks/edit/{block_id}')
+        return redirect(f'/admin/blocks/detail/{block_name}/{page_id}')
+
+
+@blueprint.route('/update_order/<page_id>', methods=['POST'])
+@login_required()
+def update_order(page_id: int) -> Any:
+    """
+    Update order of the blocks route.
+    """
+    try:
+        data = request.form.to_dict()
+        block_ids = json.loads(data['block_ids'])
+        new_orders = json.loads(data['new_orders'])
+        block_service.save_order(block_ids, new_orders)
+        flash('Order updated successfully!', category='success')
+    except Exception as err:
+        flash(str(err), category='danger')
+    return redirect(f'/admin/pages/detail/{page_id}?tab=blocks')
 
 
 '''

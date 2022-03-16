@@ -27,7 +27,7 @@
                         <div class="mb-2">
                             <a class="btn btn-secondary" href="/admin/translations">
                                 <i class="bi bi-arrow-left"></i>
-                                Cancel
+                                Back
                             </a>
                             {% if edit %}
                                 <button id="btn-delete" type="button" class="btn btn-danger">
@@ -67,12 +67,12 @@
                                 </div>
                                 <div class="mb-2">
                                     <label>Name <span class="text-danger">*</span></label>
-                                    <input id="name_input" class="form-control" name="name" type="text" placeholder="Enter the menu name" value="{{ data.name if edit else '' }}" required>
+                                    <input id="name_input" class="form-control" name="name" type="text" placeholder="Enter the translation name" value="{{ data.name if edit else '' }}" required>
                                     <small>Allowed only low case characters separated by "_". Ex: my_page</small>
                                 </div>
                                 <div class="mb-2">
                                     <label>Value <span class="text-danger">*</span></label>
-                                    <textarea id="name_input" class="form-control" name="value" type="text" placeholder="Enter the value" rows="10" required>{{ data.value if edit else '' }}</textarea>
+                                    <textarea id="name_input" class="form-control" name="value" type="text" placeholder="Enter the text" rows="10" required>{{ data.value if edit else '' }}</textarea>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="history" role="tabpanel">

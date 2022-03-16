@@ -29,7 +29,7 @@
                         <div class="mb-2">
                             <a class="btn btn-secondary" href="/admin/pages">
                                 <i class="bi bi-arrow-left"></i>
-                                Cancel
+                                Back
                             </a>
                             {% if edit %}
                                 <button id="btn-duplicate" type="button" class="btn btn-secondary">
@@ -205,30 +205,26 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th style="width: 60%;">Block</th>
                                                 <th style="width: 20%;">Order</th>
+                                                <th style="width: 60%;">Block</th>
                                                 <th style="width: 20%;">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for _block in page_blocks %}
-                                            <tr>
+                                            <tr class="block-row" data-block-id="{{_block.id}}">
+                                                <td class="order-number">{{_block.order}}</td>
                                                 <td class="align-middle">{{_block.name}}</td>
                                                 <td>
-                                                    <input class="form-control" value="1" type="number" min="0" max="9999" step="1" required placeholder="block order">
-                                                </td>
-                                                <td>
+                                                    <button type="button" class="btn btn-secondary block_btn_up" data-block-id="{{_block.id}}"><i class="bi bi-arrow-up"></i></button>
+                                                    <button type="button" class="btn btn-secondary block_btn_down" data-block-id="{{_block.id}}"><i class="bi bi-arrow-down"></i></button>
                                                     <a href="/admin/blocks/edit/{{_block.id}}" class="btn btn-secondary" data-block-id="{{_block.id}}"><i class="bi bi-pencil"></i></a>
-                                                    <button class="btn btn-danger" data-block-id="{{_block.id}}"><i class="bi bi-trash"></i></button>
+                                                    <button type="button" class="btn btn-danger" data-block-id="{{_block.id}}"><i class="bi bi-trash"></i></button>
                                                 </td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
                                     </table>
-                                </div>
-
-                                <div id="block-list-page" class="list-group block-list-page">
-
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="history" role="tabpanel">
@@ -245,6 +241,10 @@
                             </div>
                         </div>
                     </form>
+                    <form id="order_form" method="POST" action="/admin/blocks/update_order/{{page_id}}" class="d-none">
+                        <input id="block_ids" name="block_ids" type="hidden" value="[]">
+                        <input id="new_orders" name="new_orders" type="hidden" value="[]">
+                    </form>
                 </div>
             </div>
         </div>
@@ -255,6 +255,8 @@
 {{ copy_clipboard('#copy_url_btn', '#page_url_input') }}
 <script>
     jQuery(function() {
+
+        processButtons();
         const tab = '{{tab}}';
         const block_modal = new bootstrap.Modal(
             document.getElementById('block-modal')
@@ -285,6 +287,43 @@
                 return;
             }
             window.location.href = '/admin/pages/duplicate/{{page_id}}/' + name;
+        });
+
+        $(document).delegate('.block_btn_up', 'click', function() {
+            const current_row = $(this).closest('tr');
+            current_row.insertBefore(current_row.prev());
+            processButtons();
+        });
+
+        $(document).delegate('.block_btn_down', 'click', function() {
+            const current_row = $(this).closest('tr');
+            current_row.next().insertBefore(current_row);
+            processButtons();
+        });
+
+        function processButtons() {
+            $('.block_btn_up').attr('disabled', false);
+            $('.block_btn_down').attr('disabled', false);
+            const block_itens = $('.block-row');
+            const first = block_itens.first();
+            const last = block_itens.last();
+            $('.block_btn_up', first).attr('disabled', true);
+            $('.block_btn_down', last).attr('disabled', true);
+        }
+
+        $('#save_order_block').on('click', function() {
+            let new_orders = [];
+            let block_ids = [];
+            $('.block-row').each(function() {
+                let context = $(this);
+                let order = $('.order-number', context).html().trim();
+                let block_id = context.data('block-id');
+                new_orders.push(order);
+                block_ids.push(block_id);
+            });
+            $('#new_orders').val(JSON.stringify(new_orders));
+            $('#block_ids').val(JSON.stringify(block_ids));
+            $('#order_form').submit();
         });
     });
 </script>
