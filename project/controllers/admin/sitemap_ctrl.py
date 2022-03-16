@@ -5,7 +5,7 @@ This module provide the routes for url management.
 """
 from typing import Any
 from flask import Blueprint, redirect, render_template, flash, request, url_for
-from project.utils.security_utils import login_required
+from project.decorators.security_decorators import login_required
 from project.services import sitemap_service
 from project.records.special_urls import special_urls
 

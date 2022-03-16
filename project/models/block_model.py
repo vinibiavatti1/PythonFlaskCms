@@ -2,7 +2,7 @@
 Block module.
 """
 from project.models.property_model import PropertyModel
-import re
+from project.utils import validation_utils
 
 
 class BlockModel:
@@ -15,8 +15,7 @@ class BlockModel:
         """
         Init block model.
         """
-        if not re.match(r'^[a-z\_]+$', name):
-            raise ValueError(f'Property name is invalid: "{name}"')
+        validation_utils.validate_name(name)
         self.name = name
         self.description = description
         self.properties = properties

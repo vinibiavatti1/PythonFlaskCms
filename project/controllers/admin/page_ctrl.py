@@ -5,7 +5,7 @@ This module provide the routes for page.
 """
 from typing import Any
 from flask import Blueprint, redirect, render_template, flash, request, url_for
-from project.utils.security_utils import login_required
+from project.decorators.security_decorators import login_required
 from project.services import page_service, history_service, block_service
 
 

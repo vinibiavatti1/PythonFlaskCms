@@ -5,7 +5,7 @@ This module provide the routes for tranlations.
 """
 from typing import Any
 from flask import Blueprint, redirect, render_template, flash, request, url_for
-from project.utils.security_utils import login_required
+from project.decorators.security_decorators import login_required
 from project.services import menu_service, translation_service, history_service
 from project.enums import resource_type_enum
 

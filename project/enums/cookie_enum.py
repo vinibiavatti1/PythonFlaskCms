@@ -1,5 +1,5 @@
 """
 Cookie enumeration.
 """
-LOCALE = 'locale'
+IDIOM = 'locale'
 COOKIE_POLICY = 'cookie-policy'

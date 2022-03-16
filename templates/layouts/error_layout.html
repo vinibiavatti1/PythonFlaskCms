@@ -1,0 +1,25 @@
+{% from "macros/public/footer.html" import footer with context %}
+{% from "macros/utils/headers.html" import metas, links, scripts with context %}
+{% from "macros/utils/cookie_policy.html" import cookie_policy_modal with context %}
+{% from "macros/utils/noscript.html" import noscript with context %}
+
+<!DOCTYPE html>
+<html lang="{{config.lang}}" class="bg-dark h-100">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {{ metas() }}
+    {{ links() }}
+    {{ scripts() }}
+</head>
+<body class="d-flex flex-column bg-dark h-100">
+    <noscript>
+        {{ noscript() }}
+    </noscript>
+    <main class="flex-shrink-0">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="mt-auto">
+        {{ footer() }}
+    </footer>
+</body>
+</html>

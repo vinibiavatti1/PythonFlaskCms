@@ -2,6 +2,7 @@
 Translation functions module.
 """
 from typing import Any
+from flask import session
 from project.repositories import translation_repository
 from project.enums import resource_type_enum
 from project.services import history_service
@@ -14,11 +15,25 @@ def select_all() -> Any:
     return translation_repository.select_all()
 
 
+def select_all_by_idiom(idiom: str) -> Any:
+    """
+    Select all translations of idiom.
+    """
+    return translation_repository.select_all_by_idiom(idiom)
+
+
 def select_by_id(translation_id: int) -> Any:
     """
     Select translation by id.
     """
     return translation_repository.select_by_id(translation_id)
+
+
+def select_by_idiom_and_name(idiom: str, name: str) -> Any:
+    """
+    Select translation by idiom and name.
+    """
+    return translation_repository.select_by_idiom_and_name(idiom, name)
 
 
 def insert(data: dict[str, Any]) -> Any:

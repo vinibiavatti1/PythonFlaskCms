@@ -2,7 +2,7 @@
 Property model module.
 """
 from typing import Any, Optional
-import re
+from project.utils import validation_utils
 
 
 class PropertyModel:
@@ -18,8 +18,7 @@ class PropertyModel:
 
         The name must be unique, and follow the /[a-z_]+/ pattern.
         """
-        if not re.match(r'^[a-z\_]+$', name):
-            raise ValueError(f'Property name is invalid: "{name}"')
+        validation_utils.validate_name(name)
         self.name = name
         self.description = description
         self.field_type = field_type

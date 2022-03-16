@@ -1,11 +1,13 @@
-{% extends 'layout.html' %}
+{% extends 'layouts/error_layout.html' %}
 {% block title %}500{% endblock %}
 {% block content %}
 <div class="container">
     <div class="text-light text-center" style="margin-top: 12rem">
-        <h1 class="light center white-text">500</h1>
+        <h1 class="light center white-text">500 - Internal Server Error</h1>
         <hr>
-        <h3 class="light center white-text">{{i18n.errors.internal_server_error}}</h3>
+        <h5 class="light center white-text">{{ i18n.error_internal_server }}</h5>
+        <br>
+        <button class="btn btn-light" onclick="history.back()">Back</button>
     </div>
 </div>
 {% endblock %}

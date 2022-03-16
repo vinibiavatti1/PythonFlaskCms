@@ -9,9 +9,10 @@ from project.records.menu import menu
 from project.records.blocks import blocks
 from project.records.page_templates import page_templates
 from project.records.idioms import idioms
-from project.services import property_service
+from project.services import property_service, translation_service
 from project.utils import datetime_utils
 from project.utils import page_utils
+from project.utils import cookie_utils
 
 
 # Blueprint
@@ -87,3 +88,16 @@ def inject_properties() -> dict[str, Any]:
     Inject the global properties.
     """
     return dict(properties=property_service.select_all())
+
+
+@blueprint.app_context_processor
+def inject_translations() -> dict[str, Any]:
+    """
+    Inject translations.
+    """
+    session_idiom = cookie_utils.get_idiom('en')
+    translations = translation_service.select_all_by_idiom(session_idiom)
+    if not translations:
+        return dict(i18n={})
+    dct = {t['name']: t['value'] for t in translations}
+    return dict(i18n=dct)

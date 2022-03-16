@@ -18,11 +18,11 @@ def validate_form_data_fields(form_data: dict[str, Any], *fields: str) -> None:
             raise ValidationError(f'"{field.title()}" is required')
 
 
-def validate_name(key: str) -> None:
+def validate_name(name: str) -> None:
     """
     Validates if name is a valid name by admin rules.
     """
-    if re.match(NAME_VALIDATION_REGEX, key) is None:
+    if re.match(NAME_VALIDATION_REGEX, name) is None:
         raise ValidationError(
             'The name is invalid. It supports low characters and "_" as '
             'separator only'

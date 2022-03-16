@@ -104,21 +104,3 @@ CREATE TABLE IF NOT EXISTS blocks (
     `order` INTEGER NOT NULL,
     `deleted` INTEGET NOT NULL DEFAULT 0
 );
-
--------------------------------------------------------------------------------
--- Inserts
--------------------------------------------------------------------------------
-
--- Insert native user
-INSERT INTO users (name, email, password, permission) VALUES ('Admin', 'admin@admin.com', '0410424fb170091dabc47fae4c19173574061b575c35434971e4e3ad4534eabb', 'administrator');
-
--- Insert initial homepage
-
--- Insert initial menu
-
--- Insert default translations
-INSERT INTO translations (idiom, name, value) VALUES ('en', 'cookie_policy_title', 'Cookie Policy');
-INSERT INTO translations (idiom, name, value) VALUES ('en', 'cookie_policy_content', 'We use cookies to improve user experience, and analyze website traffic. For these reasons, we may share your site usage data with our analytics partners. By clicking "Agree" you consent to store on your device all the technologies used in the application');
-INSERT INTO translations (idiom, name, value) VALUES ('en', 'cookie_policy_agree', 'Agree');
-INSERT INTO translations (idiom, name, value) VALUES ('en', 'cookie_policy_disagree', 'Disagree');
-INSERT INTO translations (idiom, name, value) VALUES ('en', 'cookie_policy_cancel', 'Cancel');
