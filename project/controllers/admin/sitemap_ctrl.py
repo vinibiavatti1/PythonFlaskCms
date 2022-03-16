@@ -12,7 +12,7 @@ from project.records.special_urls import special_urls
 
 # Blueprint
 blueprint = Blueprint(
-    'sitemap_ctrl',
+    'admin_sitemap_ctrl',
     __name__,
     url_prefix='/admin/sitemap'
 )

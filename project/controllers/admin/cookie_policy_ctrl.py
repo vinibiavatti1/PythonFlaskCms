@@ -3,7 +3,11 @@ from project.enums import cookie_enum
 
 
 # Blueprint
-blueprint = Blueprint('cookie_policy', __name__, url_prefix='/cookie-policy')
+blueprint = Blueprint(
+    'admin_cookie_policy_ctrl',
+    __name__,
+    url_prefix='/cookie-policy'
+)
 
 
 ###############################################################################

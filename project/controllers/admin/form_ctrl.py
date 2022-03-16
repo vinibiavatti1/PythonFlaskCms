@@ -3,7 +3,11 @@ from project.decorators.security_decorators import login_required
 
 
 # Blueprint
-blueprint = Blueprint('form', __name__, url_prefix='/admin/form')
+blueprint = Blueprint(
+    'admin_form_ctrl',
+    __name__,
+    url_prefix='/admin/form'
+)
 
 
 ###############################################################################

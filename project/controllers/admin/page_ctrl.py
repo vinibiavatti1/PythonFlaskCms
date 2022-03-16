@@ -11,7 +11,7 @@ from project.services import page_service, history_service, block_service
 
 # Blueprint
 blueprint = Blueprint(
-    'pages_ctrl',
+    'admin_page_ctrl',
     __name__,
     url_prefix='/admin/pages'
 )

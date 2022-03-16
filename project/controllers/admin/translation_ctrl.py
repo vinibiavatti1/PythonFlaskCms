@@ -12,7 +12,7 @@ from project.enums import resource_type_enum
 
 # Blueprint
 blueprint = Blueprint(
-    'translation_ctrl',
+    'admin_translation_ctrl',
     __name__,
     url_prefix='/admin/translations'
 )

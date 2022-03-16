@@ -59,13 +59,12 @@ def do_login(email: str, password: str) -> None:
     Authenticate user to application.
     """
     password_sha256 = security_utils.generate_hash(password)
-    users = user_repository.select_by_email_and_password(
+    user = user_repository.select_by_email_and_password(
         email,
         password_sha256
     )
-    if len(users) != 1:
+    if user is None:
         raise AuthError('Invalid user and/or password')
-    user = users[0]
     user_id = user['id']
     user_email = user['email']
     session[session_enum.USER_ID] = user_id

@@ -3,7 +3,11 @@ from project.decorators.security_decorators import login_required
 
 
 # Blueprint
-blueprint = Blueprint('list', __name__, url_prefix='/admin/list')
+blueprint = Blueprint(
+    'admin_list_ctrl',
+    __name__,
+    url_prefix='/admin/list'
+)
 
 
 ###############################################################################

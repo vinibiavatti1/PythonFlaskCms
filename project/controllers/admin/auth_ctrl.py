@@ -9,7 +9,10 @@ from project.services import auth_service
 
 
 # Blueprint
-blueprint = Blueprint('admin_auth', __name__)
+blueprint = Blueprint(
+    'admin_auth_ctrl',
+    __name__
+)
 
 
 ###############################################################################
@@ -30,7 +33,7 @@ def login() -> str:
 ###############################################################################
 
 
-@blueprint.route('/admin', methods=['POST'])
+@blueprint.route('/admin/login', methods=['POST'])
 def login_action() -> Any:
     """
     Login action route.
@@ -39,10 +42,10 @@ def login_action() -> Any:
         login_data = request.form.to_dict()
         auth_validator.validate_login_data(login_data)
         auth_service.process_login(login_data)
-        return redirect('/')
+        return redirect('/admin/pages')
     except Exception as err:
         flash(str(err), category='danger')
-        return redirect('.login')
+        return redirect('/admin')
 
 
 @blueprint.route('/admin/logout')

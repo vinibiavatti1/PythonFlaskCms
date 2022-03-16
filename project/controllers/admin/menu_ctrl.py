@@ -11,7 +11,7 @@ from project.services import menu_service, history_service
 
 # Blueprint
 blueprint = Blueprint(
-    'menus_ctrl',
+    'admin_menu_ctrl',
     __name__,
     url_prefix='/admin/menus'
 )

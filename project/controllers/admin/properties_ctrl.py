@@ -10,7 +10,11 @@ from project.services import property_service
 
 
 # Blueprint
-blueprint = Blueprint('properties', __name__, url_prefix='/admin/properties')
+blueprint = Blueprint(
+    'admin_properties_ctrl',
+    __name__,
+    url_prefix='/admin/properties'
+)
 
 
 ###############################################################################

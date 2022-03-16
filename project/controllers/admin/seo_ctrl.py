@@ -2,7 +2,10 @@ from flask import Blueprint, send_from_directory, current_app, request
 
 
 # Blueprint
-blueprint = Blueprint('seo', __name__)
+blueprint = Blueprint(
+    'admin_seo_ctrl',
+    __name__
+)
 
 
 ###############################################################################

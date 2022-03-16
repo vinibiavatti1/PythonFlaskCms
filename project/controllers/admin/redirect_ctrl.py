@@ -12,7 +12,7 @@ from project.enums import resource_type_enum
 
 # Blueprint
 blueprint = Blueprint(
-    'redirect_ctrl',
+    'admin_redirect_ctrl',
     __name__,
     url_prefix='/admin/redirects'
 )

@@ -12,7 +12,7 @@ import json
 
 # Blueprint
 blueprint = Blueprint(
-    'block_ctrl',
+    'admin_block_ctrl',
     __name__,
     url_prefix='/admin/blocks'
 )
