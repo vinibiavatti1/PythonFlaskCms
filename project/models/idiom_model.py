@@ -12,6 +12,11 @@ class IdiomModel:
         """
         Init idiom object.
         """
+        if len(code) != 2:
+            raise ValueError(
+                f'Idiom code must have exactly two characters, '
+                f'but has: {len(code)} characters. Idiom code: {code}'
+            )
         self.code = code
         self.name = name
         self.default = default

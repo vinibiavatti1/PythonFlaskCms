@@ -9,14 +9,19 @@ from project.records.menu import menu
 from project.records.blocks import blocks
 from project.records.page_templates import page_templates
 from project.records.idioms import idioms
-from project.services import property_service, translation_service
+from project.services import property_service
+from project.services import translation_service
+from project.services import page_service
 from project.utils import datetime_utils
 from project.utils import page_utils
 from project.utils import cookie_utils
 
 
 # Blueprint
-blueprint = Blueprint('processors', __name__)
+blueprint = Blueprint(
+    'processors',
+    __name__
+)
 
 
 ###############################################################################
@@ -101,3 +106,11 @@ def inject_translations() -> dict[str, Any]:
         return dict(i18n={})
     dct = {t['name']: t['value'] for t in translations}
     return dict(i18n=dct)
+
+
+@blueprint.app_context_processor
+def inject_urls() -> dict[str, Any]:
+    """
+    Inject all website URLs.
+    """
+    return dict(urls=page_service.get_all_website_urls())

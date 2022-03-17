@@ -1,4 +1,5 @@
 {% from "macros/admin/history_list.html" import history_list with context %}
+{% from "macros/admin/url_modal.html" import url_modal with context %}
 {% from 'macros/utils/alerts.html' import flash_alerts with context %}
 {% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
 {% from "macros/utils/clipboard.html" import copy_clipboard with context %}
@@ -135,7 +136,10 @@
             <input data-name="name" class="form-control" type="text" placeholder="Enter the Name">
         </td>
         <td style="width: 25%;">
-            <input data-name="url" class="form-control" type="text" placeholder="Enter the URL">
+            <div class="input-group">
+                <input data-name="url" class="form-control" type="text" placeholder="Enter the URL">
+                <button type="button" class="btn btn-secondary url-selector"><i class="bi bi-search"></i></button>
+            </div>
         </td>
         <td style="width: 10%;">
             <select data-name="level" class="form-select" id="">
@@ -311,4 +315,7 @@
         });
     });
 </script>
+{% endblock %}
+{% block modals %}
+{{ url_modal() }}
 {% endblock %}

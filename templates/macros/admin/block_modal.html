@@ -51,7 +51,6 @@
             let search = $('#search-blocks').val();
             $('.block-item').each(function() {
                 let current = $(this);
-                console.log(current.data('block-name'), current.data('block-name').toUpperCase(), search);
                 if (!search || current.data('block-name').toUpperCase() == search.toUpperCase()) {
                     current.show();
                 } else {

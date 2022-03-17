@@ -5,6 +5,7 @@ from typing import Union
 from project.models.header_model import HeaderModel
 from project.models.property_model import PropertyModel
 from project.enums import property_types_enum as prop_type
+from project.enums import string_types_enum as str_type
 
 
 properties: list[Union[HeaderModel, PropertyModel]] = [
@@ -18,7 +19,7 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
         name='website_title',
         description='Website title. This title will be used to navbars, '
                     'SEO titles, etc.',
-        field_type=prop_type.STRING,
+        property_type=prop_type.STRING,
         required=True,
         default='Website',
     ),
@@ -26,21 +27,21 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
         name='index_page',
         description='Initial page name of website. The user will be '
                     'redirected when the root URL (/) is accessed.',
-        field_type=prop_type.STRING,
+        property_type=prop_type.STRING,
         required=True,
         default='homepage',
     ),
     PropertyModel(
         name='favicon_url',
         description='Favicon URL that will be used for all pages',
-        field_type=prop_type.STRING,
+        property_type=prop_type.STRING,
         required=True,
         default='/static/medias/favicon-32x32.png',
     ),
     PropertyModel(
         name='charset',
         description='Charset used in website',
-        field_type=prop_type.STRING,
+        property_type=prop_type.STRING,
         required=True,
         default='UTF-8',
     ),
@@ -48,9 +49,9 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
         name='responsive',
         description='Adaptate website for small screens (mobiles, tablets, '
                     '...)',
-        field_type=prop_type.BOOL,
+        property_type=prop_type.BOOL,
         required=True,
-        default=True,
+        default=str_type.TRUE,
     ),
 
     ###########################################################################
@@ -62,32 +63,32 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
         name='seo_default_title',
         description='Default SEO title. It will be used if no '
                     'page title was specified.',
-        field_type=prop_type.STRING,
+        property_type=prop_type.STRING,
     ),
     PropertyModel(
         name='seo_default_description',
         description='Default SEO description. It will be used if no '
                     'page description was specified.',
-        field_type=prop_type.TEXT,
+        property_type=prop_type.TEXT,
     ),
     PropertyModel(
         name='seo_default_keywords',
         description='Default SEO keywords. It will be used if no '
                     'page keywords was specified. Use comma (,) to separate.',
-        field_type=prop_type.TEXT,
+        property_type=prop_type.TEXT,
     ),
     PropertyModel(
         name='seo_default_author',
         description='Default SEO author. It will be used if no '
                     'page author was specified.',
-        field_type=prop_type.TEXT,
+        property_type=prop_type.TEXT,
     ),
     PropertyModel(
         name='seo_title_template',
         description='SEO title template. Use {{WEBSITE_TITLE}} to print the '
                     'website title and {{PAGE_TITLE}} to print the page '
                     'title.',
-        field_type=prop_type.TEXT,
+        property_type=prop_type.TEXT,
         default='{{WEBSITE_TITLE}} / {{PAGE_TITLE}}',
     ),
 
@@ -99,25 +100,25 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     PropertyModel(
         name='head_script',
         description='Javascript script that will be inserted into <head> tag.',
-        field_type=prop_type.CODE,
+        property_type=prop_type.CODE,
     ),
     PropertyModel(
         name='body_script',
         description='Javascript script that will be inserted into <body> tag.',
-        field_type=prop_type.CODE,
+        property_type=prop_type.CODE,
     ),
     PropertyModel(
         name='noscript_message',
         description='Message that will be shown when user does not have '
                     'javascript enabled in his browser.',
-        field_type=prop_type.TEXT,
+        property_type=prop_type.TEXT,
         default='You need Javascript enabled to use this website!',
     ),
     PropertyModel(
         name='noscript_link_label',
         description='Label of the link to redirect user to information of '
                     'scripts',
-        field_type=prop_type.STRING,
+        property_type=prop_type.STRING,
         default='Info...',
     ),
 
@@ -129,26 +130,26 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     PropertyModel(
         name='recaptcha_enabled',
         description='Enables the Google reCaptcha v3 in the website.',
-        field_type=prop_type.BOOL,
-        default=False,
+        property_type=prop_type.BOOL,
+        default=str_type.FALSE,
     ),
     PropertyModel(
         name='recaptcha_site_key',
         description='reCaptcha site key.',
-        field_type=prop_type.TEXT,
+        property_type=prop_type.TEXT,
         default='6LfoMNgdAAAAAFC-FumFY8ga7QGAhBlPaOb0xBdH',
     ),
     PropertyModel(
         name='recaptcha_secret_key',
         description='reCaptcha secret key.',
-        field_type=prop_type.TEXT,
+        property_type=prop_type.TEXT,
         default='6LfoMNgdAAAAAEu51riSXQK5Pkcda8wf3gp5mNRk',
     ),
     PropertyModel(
         name='recaptcha_threshold',
         description='reCaptcha threshold 0.0 to 1.0.',
-        field_type=prop_type.REAL,
-        default=0.5
+        property_type=prop_type.REAL,
+        default='0.5'
     ),
 
     ###########################################################################
@@ -159,7 +160,7 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     PropertyModel(
         name='google_api_key',
         description='API Key for Google resources.',
-        field_type=prop_type.TEXT,
+        property_type=prop_type.TEXT,
     ),
 
     ###########################################################################
@@ -170,39 +171,39 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     PropertyModel(
         name='email_enabled',
         description='Enable email sending.',
-        field_type=prop_type.BOOL,
-        default=False,
+        property_type=prop_type.BOOL,
+        default=str_type.FALSE,
     ),
     PropertyModel(
         name='email_smtp',
         description='Simple Mail Transfer Protocol Domain.',
-        field_type=prop_type.STRING,
+        property_type=prop_type.STRING,
     ),
     PropertyModel(
         name='email_port',
         description='Port of SMTP.',
-        field_type=prop_type.INTEGER,
+        property_type=prop_type.INTEGER,
     ),
     PropertyModel(
         name='email_ssl',
         description='Set True if SMTP is SSL, False to TLS.',
-        field_type=prop_type.BOOL,
-        default=True,
+        property_type=prop_type.BOOL,
+        default='1',
     ),
     PropertyModel(
         name='email_login',
         description='SMTP user login.',
-        field_type=prop_type.STRING,
+        property_type=prop_type.STRING,
     ),
     PropertyModel(
         name='email_password',
         description='SMTP user password.',
-        field_type=prop_type.PASSWORD,
+        property_type=prop_type.PASSWORD,
     ),
     PropertyModel(
         name='email_charset',
         description='SMTP charset.',
-        field_type=prop_type.STRING,
+        property_type=prop_type.STRING,
         default='UTF-8',
     ),
 
@@ -214,13 +215,13 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     PropertyModel(
         name='date_format',
         description='Format of the date. Reference: https://strftime.org/',
-        field_type=prop_type.STRING,
+        property_type=prop_type.STRING,
         default='%Y-%m-%d',
     ),
     PropertyModel(
         name='datetime_format',
         description='Format of the datetime. Reference: https://strftime.org/',
-        field_type=prop_type.STRING,
+        property_type=prop_type.STRING,
         default='%Y-%m-%d %H:%M:%S',
     ),
 
@@ -232,20 +233,20 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     PropertyModel(
         name='login_ctrl_active',
         description='Activate login controller.',
-        field_type=prop_type.BOOL,
-        default=True,
+        property_type=prop_type.BOOL,
+        default=str_type.TRUE,
     ),
     PropertyModel(
         name='blog_ctrl_active',
         description='Activate blog controller.',
-        field_type=prop_type.BOOL,
-        default=True,
+        property_type=prop_type.BOOL,
+        default=str_type.TRUE,
     ),
     PropertyModel(
         name='faq_ctrl_active',
         description='Activate FAQ controller.',
-        field_type=prop_type.BOOL,
-        default=True,
+        property_type=prop_type.BOOL,
+        default=str_type.TRUE,
     ),
 
     ###########################################################################
@@ -256,7 +257,7 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     PropertyModel(
         name='cookie_policy_enabled',
         description='Enables cookie policy modal.',
-        field_type=prop_type.BOOL,
-        default=True,
+        property_type=prop_type.BOOL,
+        default=str_type.TRUE,
     ),
 ]

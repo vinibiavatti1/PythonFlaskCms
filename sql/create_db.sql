@@ -48,7 +48,10 @@ CREATE TABLE IF NOT EXISTS pages (
     `script` TEXT NULL,
     `json` TEXT NULL,
     `deleted` INTEGER NOT NULL DEFAULT 0,
-    `access` INTEGER NOT NULL DEFAULT 1
+    `access` INTEGER NOT NULL DEFAULT 1,
+    `inject_posts` INTEGER NOT NULL DEFAULT 0,
+    `inject_faqs` INTEGER NOT NULL DEFAULT 0,
+    `inject_events` INTEGER NOT NULL DEFAULT 0
 );
 
 -- Menus
@@ -91,6 +94,7 @@ CREATE TABLE IF NOT EXISTS translations (
 CREATE TABLE IF NOT EXISTS redirects (
     `id` INTEGER PRIMARY KEY,
     `from_url` TEXT NOT NULL,
+    `from_url_regex` INTEGER NOT NULL DEFAULT 0,
     `to_url` TEXT NOT NULL,
     `deleted` INTEGET NOT NULL DEFAULT 0
 );

@@ -1,6 +1,6 @@
 {% from 'macros/utils/alerts.html' import flash_alerts with context %}
 {% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
-{% from "macros/admin/property_field.html" import property_field with context %}
+{% from "macros/admin/property.html" import property with context %}
 {% extends 'admin/layout.html' %}
 {% block title %}Properties{% endblock %}
 {% block content %}
@@ -62,10 +62,17 @@
                                                     {{prop.description}}
                                                 </td>
                                                 <td style="width: 30%;">
-                                                    {{property_field(prop, true)}}
+                                                    {{property(
+                                                        prop,
+                                                        disabled=true,
+                                                        name_attr='data-name',
+                                                        render_default_value=true,
+                                                    )}}
                                                 </td>
                                                 <td style="width: 30%;">
-                                                    {{property_field(prop, false)}}
+                                                    {{property(
+                                                        prop
+                                                    )}}
                                                 </td>
                                             </tr>
                                         {% endif %}
@@ -73,7 +80,6 @@
                                 </tbody>
                             </table>
                         </div>
-
                     </form>
                 </div>
             </div>

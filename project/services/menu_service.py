@@ -17,7 +17,7 @@ def insert(data: dict[str, Any]) -> int:
     Return it's id after insert.
     """
     data['properties'] = '{}'
-    menu_validator.validate_insert_data(data)
+    menu_validator.validate_save_data(data)
     new_id = menu_repository.insert(data)
     history_service.insert(
         new_id,
@@ -32,7 +32,7 @@ def update(menu_id: int, data: dict[str, Any]) -> None:
     Validate and update menu data to database.
     """
     data['properties'] = '{}'
-    menu_validator.validate_update_data(data)
+    menu_validator.validate_save_data(data)
     menu_repository.update(menu_id, data)
     history_service.insert(
         menu_id,

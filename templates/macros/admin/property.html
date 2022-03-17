@@ -1,0 +1,135 @@
+{% macro property(prop_data, *, disabled = False, render_default_value = False, name_attr = 'name') %}
+    {% set disabled = 'disabled' if disabled else '' %}
+    {% set value = prop_data.default if render_default_value else prop_data.value %}
+    {% set name = name_attr + '=' + prop_data.name %}
+
+    {# Render label #}
+    {% if prop_data.label %}
+        <label>{{ prop_data.label }}</label>
+    {% endif %}
+
+    {# Render property fields #}
+    {% if prop_data.property_type == 'string' %}
+        <input
+            {{name}}
+            {{disabled}}
+            type="text"
+            class="prop form-control {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+            value="{{value}}"
+        />
+    {% elif prop_data.property_type == 'password' %}
+        <input
+            {{name}}
+            {{disabled}}
+            type="password"
+            class="prop form-control {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+            value="{{value}}"
+        />
+    {% elif prop_data.property_type == 'integer' %}
+        <input
+            {{name}}
+            {{disabled}}
+            type="number"
+            step="1"
+            class="prop form-control {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+            value="{{value}}"
+        />
+    {% elif prop_data.property_type == 'real' %}
+        <input
+            {{name}}
+            {{disabled}}
+            type="number"
+            step="0.1"
+            class="prop form-control {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+            value="{{value}}"
+        />
+    {% elif prop_data.property_type == 'currency' %}
+        <input
+            {{name}}
+            {{disabled}}
+            type="number"
+            step="0.01"
+            class="prop form-control {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+            value="{{value}}"
+        />
+    {% elif prop_data.property_type == 'date' %}
+        <input
+            {{name}}
+            {{disabled}}
+            type="date"
+            class="prop form-control {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+            value="{{value}}"
+        />
+    {% elif prop_data.property_type == 'datetime' %}
+        <input
+            {{name}}
+            {{disabled}}
+            type="datetime"
+            class="prop form-control {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+            value="{{value}}"
+        />
+    {% elif prop_data.property_type == 'color' %}
+        <input
+            {{name}}
+            {{disabled}}
+            type="color"
+            class="prop form-control {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+            value="{{value}}"
+        />
+    {% elif prop_data.property_type == 'url' %}
+        <div class="input-group">
+            <input
+                {{name}}
+                {{disabled}}
+                type="text"
+                class="prop form-control {{css_class}}"
+                placeholder="{{prop_data.placeholder}}"
+                value="{{value}}"
+            />
+            <button class="btn btn-secondary">
+                <i class="bi bi-search url-selector"></i>
+            </button>
+        </div>
+    {% elif prop_data.property_type == 'code' %}
+        <textarea
+            {{name}}
+            {{disabled}}
+            rows="{{prop_data.rows}}"
+            class="prop form-control font-monospace {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+        >{{value}}</textarea>
+    {% elif prop_data.property_type == 'text' %}
+        <textarea
+            {{name}}
+            {{disabled}}
+            rows="{{prop_data.rows}}"
+            class="prop form-control {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+        >{{value}}</textarea>
+    {% elif prop_data.property_type == 'bool' %}
+        <select
+            {{name}}
+            {{disabled}}
+            class="prop form-select {{css_class}}">
+                <option value="1" {{'selected' if value == '1' else ''}}>True</option>
+                <option value="0" {{'selected' if value == '0' else ''}}>False</option>
+        </select>
+    {% elif prop_data.property_type == 'enum' %}
+        <select
+            {{name}}
+            {{disabled}}
+            class="prop form-select {{css_class}}">
+                {% for val, label in prop_data.enum_values.items() %}
+                    <option value="{{val}}" {{'selected' if value == val else ''}}>{{label}}</option>
+                {% endfor %}
+        </select>
+    {% endif %}
+{% endmacro %}

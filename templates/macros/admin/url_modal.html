@@ -1,0 +1,73 @@
+{% macro url_modal() %}
+<div class="modal fade" id="url-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    URLs
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <input id="search-urls" type="search" class="form-control" placeholder="Type the name of the block to search">
+                </div>
+                <div id="url-list" class="list-group url-list">
+                    {% for url in urls %}
+                        <a href="javascript:void(0)" data-url="{{url.url}}" class="list-group-item list-group-item-action url-item" style="line-height: 20px;">
+                            {{url.url}}<br>
+                            <span style="font-size: 12px;">{{url.description}}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0)" data-bs-dismiss="modal" class="btn btn-primary">
+                    Cancel
+                </a>
+                <a id="select-url" href="javascript:void(0)" class="btn btn-success disabled">
+                    Select URL
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(function() {
+
+        let selectedURL = null;
+        let target = null;
+        const url_modal = new bootstrap.Modal(
+            document.getElementById('url-modal')
+        );
+
+        $(document).delegate('.url-selector', 'click', function() {
+            target = $(this);
+            url_modal.show();
+        });
+
+        $('.url-item').on('click', function() {
+            $('#url-list').children().removeClass('active');
+            $(this).addClass('active');
+            $('#select-url').removeClass('disabled');
+            selectedURL = $(this).data('url');
+        });
+
+        $('#select-url').on('click', function() {
+            target.siblings('input').val(selectedURL);
+            url_modal.hide();
+        });
+
+        $('#search-urls').on('keyup change', function() {
+            let search = $('#search-urls').val();
+            $('.url-item').each(function() {
+                let current = $(this);
+                if (!search || current.data('url').toUpperCase() == search.toUpperCase()) {
+                    current.show();
+                } else {
+                    current.hide();
+                }
+            });
+        });
+    });
+</script>
+{% endmacro %}

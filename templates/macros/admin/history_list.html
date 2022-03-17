@@ -3,18 +3,20 @@
     <table class="table datatable">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Description</th>
                 <th>User</th>
                 <th>Date</th>
             </tr>
         </thead>
         <tbody>
-            {% for history in history_data %}
-            <tr>
-                <td>{{ history.description }}</td>
-                <td>{{ history.created_by_name }}</td>
-                <td>{{ history.created_on }}</td>
-            </tr>
+            {% for index, history in enumerate(history_data) %}
+                <tr>
+                    <td>{{ len(history_data) - index }}</td>
+                    <td>{{ history.description }}</td>
+                    <td>{{ history.created_by_name }}</td>
+                    <td>{{ history.created_on }}</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

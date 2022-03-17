@@ -11,6 +11,8 @@ from project.enums import resource_type_enum
 from flask import session
 from project.enums import session_enum
 from datetime import datetime
+from project.models.custom_url_model import CustomUrlModel
+from project.records.custom_urls import custom_urls
 
 
 def insert(data: dict[str, Any]) -> int:
@@ -20,7 +22,7 @@ def insert(data: dict[str, Any]) -> int:
     Return it's id after insert.
     """
     data['properties'] = '{}'
-    page_validator.validate_insert_data(data)
+    page_validator.validate_save_data(data)
     new_id = page_repository.insert(data)
     history_service.insert(
         new_id,
@@ -35,7 +37,7 @@ def update(page_id: int, data: dict[str, Any]) -> None:
     Validate and update page data to database.
     """
     data['properties'] = '{}'
-    page_validator.validate_update_data(data)
+    page_validator.validate_save_data(data)
     page_repository.update(page_id, data)
     history_service.insert(
         page_id,
@@ -98,3 +100,19 @@ def duplicate(page_id: int, name: str) -> int:
         'Page created'
     )
     return new_id
+
+
+def get_all_website_urls() -> list[CustomUrlModel]:
+    """
+    Return all website urls.
+    """
+    urls: list[CustomUrlModel] = []
+    pages = page_repository.select_all(True)
+    for page in pages:
+        name = page['name']
+        urls.append(CustomUrlModel(
+            url=generate_page_url(page['idiom'], name),
+            description=f'Link to {name} page.'
+        ))
+    urls.extend(custom_urls)
+    return urls

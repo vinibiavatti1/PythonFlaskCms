@@ -63,6 +63,9 @@
                                 <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#content">Content</button>
                             </li>
                             <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#records">Records</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
                                 <button type="button" class="nav-link {{ 'disabled' if not edit else '' }}" href="#" data-bs-toggle="tab" data-bs-target="#blocks">Blocks</button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -190,6 +193,32 @@
                                 <div class="mb-2">
                                     <label>JSON</label>
                                     <textarea name="json" rows="10" placeholder="Aditional JSON data that will be injected to the page" type="text" class="form-control font-monospace">{{data.json if edit else ''}}</textarea>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="records" role="tabpanel">
+                                <div class="mb-2">
+                                    <label>Inject Blog Posts <span class="text-danger">*</span></label>
+                                    <select name="inject_posts" class="form-select" required>
+                                        <option value="0" {{'selected' if edit and not data.inject_posts else ''}}>False</option>
+                                        <option value="1" {{'selected' if edit and data.inject_posts else ''}}>True</option>
+                                    </select>
+                                    <small>Inject blog posts to the page. The data will be available in <code>data.posts</code></small>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Inject FAQs <span class="text-danger">*</span></label>
+                                    <select name="inject_faqs" class="form-select" required>
+                                        <option value="0" {{'selected' if edit and not data.inject_faqs else ''}}>False</option>
+                                        <option value="1" {{'selected' if edit and data.inject_faqs else ''}}>True</option>
+                                    </select>
+                                    <small>Inject FAQs to the page. The data will be available in <code>data.faqs</code></small>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Inject Events <span class="text-danger">*</span></label>
+                                    <select name="inject_events" class="form-select" required>
+                                        <option value="0" {{'selected' if edit and not data.inject_events else ''}}>False</option>
+                                        <option value="1" {{'selected' if edit and data.inject_events else ''}}>True</option>
+                                    </select>
+                                    <small>Inject events to the page. The data will be available in <code>data.events</code></small>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="blocks" role="tabpanel">

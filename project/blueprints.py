@@ -6,7 +6,6 @@ from project.processors import blueprint as processors
 from project.handlers import blueprint as handlers
 from project.controllers.public import (
     homepage_ctrl,
-    locale_ctrl,
     page_render_ctrl,
     search_ctrl,
 )
@@ -21,6 +20,7 @@ from project.controllers.admin import (
     translation_ctrl,
     redirect_ctrl,
     block_ctrl,
+    articles_ctrl,
 )
 
 
@@ -35,7 +35,6 @@ blueprints: list[Blueprint] = [
     page_ctrl.blueprint,
     seo_ctrl.blueprint,
     homepage_ctrl.blueprint,
-    locale_ctrl.blueprint,
     cookie_policy_ctrl.blueprint,
     search_ctrl.blueprint,
     page_render_ctrl.blueprint,
@@ -46,4 +45,5 @@ blueprints: list[Blueprint] = [
     translation_ctrl.blueprint,
     redirect_ctrl.blueprint,
     block_ctrl.blueprint,
+    articles_ctrl.blueprint,
 ]

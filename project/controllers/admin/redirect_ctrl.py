@@ -31,19 +31,22 @@ def index() -> str:
     """
     headers = [
         '#',
-        'From URL (Regex)',
-        'To URL',
+        'Type',
+        'From',
+        'To',
         'Actions',
     ]
     redirects = redirect_service.select_all()
     data = []
     for redirect in redirects:
         redirect_id = redirect['id']
+        regex = 'Regex' if redirect['from_url_regex'] == 1 else 'Text'
         from_url = redirect['from_url']
         to_url = redirect['to_url']
         data.append(
             (
                 redirect_id,
+                regex,
                 f'<span class="font-monospace">{from_url}</span>',
                 f'<span class="font-monospace">{to_url}</span>',
                 f'<a href="/admin/redirects/detail/{redirect_id}"'

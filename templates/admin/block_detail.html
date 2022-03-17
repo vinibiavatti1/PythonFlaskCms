@@ -2,7 +2,7 @@
 {% from 'macros/utils/alerts.html' import flash_alerts with context %}
 {% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
 {% from "macros/utils/clipboard.html" import copy_clipboard with context %}
-{% from "macros/admin/property_field.html" import property_field with context %}
+{% from "macros/admin/property.html" import property with context %}
 {% extends 'admin/layout.html' %}
 {% block title %}Block Detail{% endblock %}
 {% block content %}
@@ -44,7 +44,7 @@
                         {% for prop in block_properties %}
                         <div class="mb-2">
                             <label>{{ prop.name }}</label>
-                            {{ property_field(prop) }}
+                            {{ property(prop) }}
                         </div>
                         {% endfor %}
                     </form>

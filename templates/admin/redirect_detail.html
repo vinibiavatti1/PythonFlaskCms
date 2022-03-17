@@ -53,9 +53,15 @@
                         <div class="tab-content" id="tabContent">
                             <div class="tab-pane fade show active" id="detail" role="tabpanel">
                                 <div class="mb-2">
-                                    <label>From URL (Regex) <span class="text-danger">*</span></label>
+                                    <label>From URL Format <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="from_url_regex" id="regex_select">
+                                        <option value="0" {{'selected' if edit and str(data.from_url_regex) == '0' else ''}}>Text</option>
+                                        <option value="1" {{'selected' if edit and str(data.from_url_regex) == '1' else ''}}>Regular Expression</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>From URL <span class="text-danger">*</span></label>
                                     <input class="form-control font-monospace" name="from_url" type="text" placeholder="Enter the url pattern to target" value="{{ data.from_url if edit else '' }}" required>
-                                    <small><a href="https://regexr.com/" target="_blank">Regex</a> is allowed to match routes by pattern</small>
                                 </div>
                                 <div class="mb-2">
                                     <label>To URL <span class="text-danger">*</span></label>

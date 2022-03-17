@@ -13,5 +13,17 @@ page_templates: list[LabelValueModel] = [
         label='Static Template (HTML, CSS and JS)',
         value='static_template.html',
     ),
+    LabelValueModel(
+        label='Blog Template',
+        value='blog_template.html',
+    ),
+    LabelValueModel(
+        label='FAQ Template',
+        value='faq_template.html',
+    ),
+    LabelValueModel(
+        label='Login Template',
+        value='login_template.html',
+    ),
     # Add more...
 ]

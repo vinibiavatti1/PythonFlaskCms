@@ -8,7 +8,7 @@ class HeaderModel:
     Header model.
     """
 
-    def __init__(self, title: str) -> None:
+    def __init__(self, *, title: str) -> None:
         """
         Init header model.
         """

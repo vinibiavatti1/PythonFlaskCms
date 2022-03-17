@@ -12,12 +12,14 @@ def insert(data: dict[str, Any]) -> Any:
     sql = '''
         INSERT INTO redirects (
             from_url,
-            to_url
-        ) VALUES (?, ?)
+            to_url,
+            from_url_regex
+        ) VALUES (?, ?, ?)
     '''
     return database_utils.execute_update(sql, (
         data['from_url'],
         data['to_url'],
+        data['from_url_regex'],
     ))
 
 
@@ -28,13 +30,15 @@ def update(redirect_id: int, data: dict[str, Any]) -> Any:
     sql = '''
         UPDATE redirects SET
             from_url = ?,
-            to_url = ?
+            to_url = ?,
+            from_url_regex = ?
         WHERE
             id = ?
     '''
     return database_utils.execute_update(sql, (
         data['from_url'],
         data['to_url'],
+        data['from_url_regex'],
         redirect_id,
     ))
 
