@@ -11,12 +11,20 @@
                 <hr class="bg-light mt-2">
                 {{ flash_alerts() }}
                 <div class="form-floating">
-                    <input type="email" class="form-control rounded-0 rounded-top" style="margin-bottom: -1px;" id="email" placeholder="Put your e-mail" name="email" required="" value="admin@admin.com">
+                    <input type="email" class="form-control rounded-0 rounded-top" style="margin-bottom: -1px;" id="email" placeholder="Enter your e-mail" name="email" required="" value="admin@admin.com">
                     <label for="email">E-mail</label>
                 </div>
-                <div class="form-floating mb-2">
-                    <input type="password" class="form-control rounded-0 rounded-bottom" id="password" placeholder="Put your password" name="password" required="" value="admin">
+                <div class="form-floating">
+                    <input type="password" class="form-control rounded-0" style="margin-bottom: -1px;" id="password" placeholder="Enter your password" name="password" required="" value="admin">
                     <label for="password">Password</label>
+                </div>
+                <div class="form-floating mb-2">
+                    <select id="context" class="form-select rounded-0 rounded-bottom" name="context">
+                        {% for context in records.context_records %}
+                        <option value="{{context.code}}">{{context.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="context">Context</label>
                 </div>
                 {% if config.recaptcha_enabled %}
                     {{ recaptcha('btn-submit', 'login-form') }}

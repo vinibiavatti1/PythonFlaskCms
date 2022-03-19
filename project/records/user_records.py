@@ -5,7 +5,7 @@ from project.models.user_model import UserModel
 from project.enums import permission_enum
 
 
-users: list[UserModel] = [
+user_records: list[UserModel] = [
     UserModel(
         name='Admin',
         email='admin@admin.com',

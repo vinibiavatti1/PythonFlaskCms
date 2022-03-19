@@ -6,7 +6,6 @@ This module provide the routes for url management.
 from typing import Any
 from flask import Blueprint, redirect, render_template, flash, request, url_for
 from project.decorators.security_decorators import login_required
-from project.services import sitemap_service
 
 
 # Blueprint
@@ -28,11 +27,10 @@ def index() -> str:
     """
     Index route.
     """
-    urls: list[Any] = sitemap_service.select_page_urls()
     return render_template(
         '/admin/sitemap.html',
         data=dict(
-            urls=urls,
+            urls=[],
         )
     )
 

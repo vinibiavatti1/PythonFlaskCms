@@ -102,3 +102,4 @@ def process_login(login_data: dict[str, Any]) -> None:
     email = escape(login_data.get('email'))
     password = str(login_data.get('password'))
     do_login(email, password)
+    session[session_enum.CONTEXT] = login_data.get('context')

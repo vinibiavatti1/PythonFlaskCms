@@ -10,7 +10,7 @@
             <div>{{session['user_email']}}</div>
         </div>
         <ul class="nav nav-pills flex-column">
-            {% for item in menu %}
+            {% for item in records.menu_records %}
                 {% if item.header %}
                 <li class="nav-item mt-3">
                     <h6>{{ item.title }}</h6>

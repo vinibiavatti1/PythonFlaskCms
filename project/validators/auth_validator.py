@@ -12,5 +12,6 @@ def validate_login_data(form_data: dict[str, Any]) -> None:
     validate_form_data_fields(
         form_data,
         'email',
-        'password'
+        'password',
+        'context',
     )

@@ -6,7 +6,6 @@ from werkzeug.utils import redirect
 from flask import Blueprint, request, flash
 from project.services import content_service
 from project.decorators.security_decorators import login_required
-from project.properties.idioms import idioms
 
 
 # Blueprint

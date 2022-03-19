@@ -5,7 +5,7 @@ from typing import Any
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 from project.models.property_model import PropertyModel
 from project.decorators.security_decorators import login_required
-from project.properties.properties import properties
+from project.records.property_records import property_records
 from project.services import property_service
 
 
@@ -29,12 +29,12 @@ def index() -> str:
     Render properties page.
     """
     db_properties = property_service.select_all()
-    for prop in properties:
+    for prop in property_records:
         if isinstance(prop, PropertyModel):
             prop.value = db_properties[prop.name]
     return render_template(
         '/admin/properties.html',
-        data=dict(properties=properties),
+        data=dict(properties=property_records),
     )
 
 

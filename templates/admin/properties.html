@@ -52,10 +52,12 @@
                                             <tr class="d-none" data-header="{{vars.header}}">
                                                 <td style="width: 10%;">
                                                     <b>
-                                                        {{prop.name}}
+                                                        {{prop.label}}
                                                         {% if prop.required %}
                                                         <span class="text-danger" title="Required">*</span>
                                                         {% endif %}
+                                                        <br>
+                                                        <small>{{ prop.name }}</small>
                                                     </b>
                                                 </td>
                                                 <td style="width: 30%;">

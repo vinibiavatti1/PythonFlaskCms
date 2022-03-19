@@ -5,16 +5,11 @@ from typing import Any
 from project.utils.security_utils import is_authenticated, has_permission
 from project.utils.cookie_utils import cookie_policy_consent
 from flask import Blueprint
-from project.properties.menu_properties import menu_properties
-from project.properties.blocks import blocks
-from project.properties.page_templates import page_templates
-from project.properties.idioms import idioms
+from project.records.menu_records import menu_records
+from project.records.context_records import context_records
 from project.services import property_service
-from project.services import translation_service
-from project.services import page_service
 from project.utils import datetime_utils
 from project.utils import page_utils
-from project.utils import cookie_utils
 
 
 # Blueprint
@@ -35,9 +30,10 @@ def inject_records() -> dict[str, Any]:
     Inject records.
     """
     return dict(
-        templates=page_templates,
-        idioms=idioms,
-        blocks=blocks,
+        records=dict(
+            menu_records=menu_records,
+            context_records=context_records,
+        )
     )
 
 
@@ -68,14 +64,6 @@ def inject_security_resources() -> dict[str, Any]:
 
 
 @blueprint.app_context_processor
-def inject_menu() -> dict[str, Any]:
-    """
-    Inject the sidenav menus by user authentication.
-    """
-    return dict(menu=menu_properties)
-
-
-@blueprint.app_context_processor
 def inject_utilities() -> dict[str, Any]:
     """
     Inject utilities.
@@ -93,24 +81,3 @@ def inject_properties() -> dict[str, Any]:
     Inject the global properties.
     """
     return dict(properties=property_service.select_all())
-
-
-@blueprint.app_context_processor
-def inject_translations() -> dict[str, Any]:
-    """
-    Inject translations.
-    """
-    session_idiom = cookie_utils.get_idiom('en')
-    translations = translation_service.select_all_by_idiom(session_idiom)
-    if not translations:
-        return dict(i18n={})
-    dct = {t['name']: t['value'] for t in translations}
-    return dict(i18n=dct)
-
-
-@blueprint.app_context_processor
-def inject_urls() -> dict[str, Any]:
-    """
-    Inject all website URLs.
-    """
-    return dict(urls=page_service.get_all_website_urls())

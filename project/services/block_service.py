@@ -3,7 +3,7 @@ Block service.
 """
 from typing import Any, Optional
 from project.models.property_model import PropertyModel
-from project.properties.blocks import blocks
+from project.records.block_records import block_records
 from project.repositories import block_repository
 import json
 
@@ -13,7 +13,7 @@ def get_block_properties_by_name(block_name: str
     """
     Get block properties by name.
     """
-    for block in blocks:
+    for block in block_records:
         if block.name == block_name:
             return block.properties
     return None

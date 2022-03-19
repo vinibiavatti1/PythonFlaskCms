@@ -6,7 +6,7 @@ from project.models.header_model import HeaderModel
 from project.models.menu_item_model import MenuItemModel
 
 
-menu_properties: list[Union[MenuItemModel, HeaderModel]] = [
+menu_records: list[Union[MenuItemModel, HeaderModel]] = [
 
     ###########################################################################
     # Content
