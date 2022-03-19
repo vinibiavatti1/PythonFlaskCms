@@ -2,15 +2,10 @@
 Setup app functions.
 """
 from flask import Flask
-from project.models.property_model import PropertyModel
-from project.services import property_service
-from project.services import translation_service
 from project.services import user_service
-from project.records.properties import properties
 from project.blueprints import blueprints
 from project.enums.security_enum import SECRET
-from project.records.translations import translations
-from project.records.users import users
+from project.properties.users import users
 
 
 ###############################################################################
@@ -32,7 +27,7 @@ def __register_blueprints(app: Flask) -> None:
     for blueprint in blueprints:
         app.register_blueprint(blueprint)
 
-
+'''
 def __register_properties() -> None:
     """
     Set properties into database.
@@ -54,7 +49,7 @@ def __register_translations() -> None:
         )
         if found is None:
             translation_service.insert(translation.__dict__)
-
+'''
 
 def __register_users() -> None:
     """
@@ -77,7 +72,7 @@ def setup(app: Flask) -> None:
     """
     __register_secret_key(app)
     __register_blueprints(app)
-    __register_properties()
-    __register_translations()
+    # __register_properties()
+    # __register_translations()
     __register_users()
     # Add more actions...

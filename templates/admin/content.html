@@ -1,0 +1,129 @@
+{% from 'macros/utils/alerts.html' import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% from "macros/admin/property.html" import property with context %}
+{% extends 'admin/layout.html' %}
+{% block title %}{{ page_data.title }}{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', page_data.title]) }}
+            <div class="fs-3 text-white">{{ page_data.title }}</div>
+            <div class="card">
+                <div class="card-body">
+                    <form
+                        id="content-form"
+                        action="{{ '/admin/content/edit/' + page_data.content_id if page_data.edit else '/admin/content/create' }}"
+                        method="POST"
+                        class="needs-validation"
+                        novalidate
+                    >
+                        <input name="type" type="hidden" value="{{page_data.content_type}}">
+                        <input name="back_url" type="hidden" value="{{page_data.back_url}}">
+
+                        {{ flash_alerts() }}
+                        <div class="mb-2">
+                            <a class="btn btn-secondary" href="{{ page_data.back_url }}">
+                                <i class="bi bi-arrow-left"></i>
+                                Back
+                            </a>
+                            {% if page_data.edit %}
+                                <button id="btn-duplicate" type="button" class="btn btn-secondary">
+                                    <i class="bi bi-files"></i>
+                                    Duplicate...
+                                </button>
+                                <button id="btn-delete" type="button" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                    Delete...
+                                </button>
+                                {% if page_data.blocks_url %}
+                                <a href="{{page_data.blocks_url}}" class="btn btn-primary">
+                                    <i class="bi bi-layers"></i>
+                                    Blocks
+                                </a>
+                                {% endif %}
+                            {% endif %}
+                            <button id="btn-submit" type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i>
+                                Save
+                            </button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%;">Property</th>
+                                        <th style="width: 30%;">Description</th>
+                                        <th style="width: 50%;">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% set vars = {'header': ''} %}
+                                    {% for prop in page_data.properties %}
+                                        {% if prop.header %}
+                                            {% if vars.update({'header': prop.title}) %} {% endif %}
+                                            <tr class="bg-prop collapse_btn" role="button" data-header-name="{{prop.title}}">
+                                                <td colspan="4"><b class="text-decoration-underline">{{prop.title}}</b></td>
+                                            </tr>
+                                        {% else %}
+                                            <tr class="d-none" data-header="{{vars.header}}">
+                                                <td>
+                                                    <b>
+                                                        {{prop.label}}
+                                                        {% if prop.required %}
+                                                        <span class="text-danger" title="Required">*</span>
+                                                        {% endif %}
+                                                    </b>
+                                                    <br>
+                                                    <small>{{ prop.name }}</small>
+                                                </td>
+                                                <td>
+                                                    {{prop.description}}
+                                                </td>
+                                                <td>
+                                                    {{property(
+                                                        prop,
+                                                        render_default_value=not page_data.edit
+                                                    )}}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    jQuery(function() {
+        $(".collapse_btn").click(function() {
+            const header = $(this).data('header-name');
+            const rows = $(`tr[data-header='${header}']`);
+            if(rows.is(':visible')) {
+                rows.addClass('d-none');
+            } else {
+                rows.removeClass('d-none');
+            }
+        });
+
+        $("#btn-delete").on('click', function() {
+            if(confirm('Do you really want to delete this record?')) {
+                window.location.href = '/admin/content/delete/{{page_data.content_id}}/{{page_data.list_name}}'
+            }
+        });
+
+        $("#btn-duplicate").on('click', function() {
+            let idiom = prompt('Type the idiom to attach the duplicated record');
+            if (!idiom) return;
+            window.localtion.href = '/admin/content/duplicate/{{page_data.content_id}}/{{page_data.list_name}}/' + idiom;
+        });
+    });
+</script>
+{% endblock %}

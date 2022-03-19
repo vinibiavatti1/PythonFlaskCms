@@ -3,7 +3,7 @@ Property functions module.
 """
 from typing import Any, Optional
 from project.repositories import property_repository
-from project.records.properties import properties
+from project.properties.properties import properties
 
 
 def set_properties(properties: dict[str, Any]) -> None:

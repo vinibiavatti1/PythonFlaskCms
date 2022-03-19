@@ -5,10 +5,10 @@ from typing import Any
 from project.utils.security_utils import is_authenticated, has_permission
 from project.utils.cookie_utils import cookie_policy_consent
 from flask import Blueprint
-from project.records.menu import menu
-from project.records.blocks import blocks
-from project.records.page_templates import page_templates
-from project.records.idioms import idioms
+from project.properties.menu_properties import menu_properties
+from project.properties.blocks import blocks
+from project.properties.page_templates import page_templates
+from project.properties.idioms import idioms
 from project.services import property_service
 from project.services import translation_service
 from project.services import page_service
@@ -72,7 +72,7 @@ def inject_menu() -> dict[str, Any]:
     """
     Inject the sidenav menus by user authentication.
     """
-    return dict(menu=menu)
+    return dict(menu=menu_properties)
 
 
 @blueprint.app_context_processor

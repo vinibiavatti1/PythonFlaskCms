@@ -15,7 +15,7 @@ seo_properties: list[Union[PropertyModel, HeaderModel]] = [
     PropertyModel(
         label='Title',
         name='seo_title',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
         description='Resource title that will be used to title tag.',
         placeholder='Enter the resource title',
         required=False,
@@ -23,10 +23,10 @@ seo_properties: list[Union[PropertyModel, HeaderModel]] = [
     PropertyModel(
         label='Author',
         name='seo_author',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
         description='Resource author that will be used to meta '
                     'author tag.',
-        placeholder='Enter the resource keywords separated by comma (,)',
+        placeholder='Enter the resource author name',
         required=False,
     ),
     PropertyModel(
@@ -48,8 +48,8 @@ seo_properties: list[Union[PropertyModel, HeaderModel]] = [
         required=False,
     ),
     PropertyModel(
-        label='Canonical URLs',
-        name='seo_canonical_urls',
+        label='Canonical URL',
+        name='seo_canonical_url',
         property_type=prop_type.URL,
         description='Resource canonical url that will be used to link '
                     'canonical tag.',

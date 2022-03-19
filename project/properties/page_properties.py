@@ -12,12 +12,12 @@ page_properties: list[Union[HeaderModel, PropertyModel]] = [
     PropertyModel(
         name='h1',
         description='Primary header title',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
     ),
     PropertyModel(
         name='h2',
         description='Secondary header title',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
     ),
     # Add more here...
 ]

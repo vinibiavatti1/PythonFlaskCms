@@ -5,7 +5,7 @@ from typing import Any
 from flask import Blueprint, render_template, flash, request, redirect, url_for
 from project.models.property_model import PropertyModel
 from project.decorators.security_decorators import login_required
-from project.records.properties import properties
+from project.properties.properties import properties
 from project.services import property_service
 
 

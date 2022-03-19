@@ -1,8 +1,13 @@
+"""
+Controller utilities.
+"""
 from werkzeug import utils
 from typing import Any
 
+from project.models.property_model import PropertyModel
 
-def escape_dict(data: dict) -> dict:
+
+def escape_dict(data: dict[str, Any]) -> dict[str, Any]:
     """
     Escape all fields of dict.
     """
@@ -11,12 +16,12 @@ def escape_dict(data: dict) -> dict:
 
 def escape(value: Any) -> str:
     """
-    Alias to werkzeug.utils.escape().
+    Alias to werkzeug::utils::escape.
     """
     return utils.escape(value)
 
 
-def result_api_message(type: str, message: str) -> dict:
+def result_api_message(type: str, message: str) -> dict[str, Any]:
     """
     Generates a common dict response message with type and message.
     """

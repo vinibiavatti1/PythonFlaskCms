@@ -37,7 +37,7 @@ sitemap_properties: list[Union[PropertyModel, HeaderModel]] = [
             '0.9': '0.9',
             '1.0': '1.0',
         },
-        description='Show this resource in sitemap',
+        description='Set the priority 0.0 ~ 1.0 in sitemap',
         default='0.5',
         required=True,
     ),
@@ -45,7 +45,7 @@ sitemap_properties: list[Union[PropertyModel, HeaderModel]] = [
         label='Change frequently',
         name='sitemap_change_frequently',
         property_type=prop_type.ENUM,
-        description='Show this resource in sitemap',
+        description='Set the change frequently to sitemap',
         enum_values={
             'always': 'always',
             'hourly': 'hourly',

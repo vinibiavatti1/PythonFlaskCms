@@ -12,7 +12,7 @@ from flask import session
 from project.enums import session_enum
 from datetime import datetime
 from project.models.custom_url_model import CustomUrlModel
-from project.records.custom_urls import custom_urls
+from project.properties.custom_urls import custom_urls
 
 
 def insert(data: dict[str, Any]) -> int:

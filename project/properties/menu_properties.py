@@ -3,10 +3,10 @@ Admin menu records module.
 """
 from typing import Union
 from project.models.header_model import HeaderModel
-from project.models.menu_model import MenuModel
+from project.models.menu_item_model import MenuItemModel
 
 
-menu: list[Union[MenuModel, HeaderModel]] = [
+menu_properties: list[Union[MenuItemModel, HeaderModel]] = [
 
     ###########################################################################
     # Content
@@ -15,35 +15,40 @@ menu: list[Union[MenuModel, HeaderModel]] = [
     HeaderModel(
         title='Content'
     ),
-    MenuModel(
+    MenuItemModel(
         title='Articles',
         link='/admin/articles',
         icon='bi-files',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Landing Pages',
         link='/admin/landing-pages',
         icon='bi-layers',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Events',
         link='/admin/events',
         icon='bi-calendar-event',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Posts',
         link='/admin/posts',
         icon='bi-pin-angle',
     ),
-    MenuModel(
+    MenuItemModel(
         title='FAQs',
         link='/admin/faqs',
         icon='bi-question-circle',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Custom Pages',
         link='/admin/custom-pages',
         icon='bi-filetype-html',
+    ),
+    MenuItemModel(
+        title='Trash Bin',
+        link='/admin/trash-bin',
+        icon='bi-trash',
     ),
 
     ###########################################################################
@@ -53,47 +58,47 @@ menu: list[Union[MenuModel, HeaderModel]] = [
     HeaderModel(
         title='Pages'
     ),
-    MenuModel(
+    MenuItemModel(
         title='Article List',
         link='/admin/pages',
         icon='bi-file-earmark-post',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Event List',
         link='/admin/pages',
         icon='bi-file-earmark-medical',
     ),
-    MenuModel(
+    MenuItemModel(
         title='FAQ List',
         link='/admin/pages',
         icon='bi-file-earmark-text',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Calendar',
         link='/admin/pages',
         icon='bi-calendar',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Search',
         link='/admin/pages',
         icon='bi-search',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Login',
         link='/admin/pages',
         icon='bi-key',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Contact',
         link='/admin/pages',
         icon='bi-file-earmark-person',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Sitemap',
         link='/admin/pages',
         icon='bi-map',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Blog',
         link='/admin/pages',
         icon='bi-postage',
@@ -106,17 +111,17 @@ menu: list[Union[MenuModel, HeaderModel]] = [
     HeaderModel(
         title='Media'
     ),
-    MenuModel(
+    MenuItemModel(
         title='Images',
         link='/admin/pages',
         icon='bi-file-earmark-image',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Videos',
         link='/admin/pages',
         icon='bi-file-earmark-play',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Files',
         link='/admin/pages',
         icon='bi-file-earmark',
@@ -129,12 +134,12 @@ menu: list[Union[MenuModel, HeaderModel]] = [
     HeaderModel(
         title='Components'
     ),
-    MenuModel(
+    MenuItemModel(
         title='Navbar',
         link='/admin/pages',
         icon='bi-window',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Footer',
         link='/admin/pages',
         icon='bi-window-desktop',
@@ -147,22 +152,22 @@ menu: list[Union[MenuModel, HeaderModel]] = [
     HeaderModel(
         title='Configuration'
     ),
-    MenuModel(
+    MenuItemModel(
         title='Properties',
         link='/admin/pages',
         icon='bi-gear',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Translations',
         link='/admin/pages',
         icon='bi-translate',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Users',
         link='/admin/pages',
         icon='bi-people',
     ),
-    MenuModel(
+    MenuItemModel(
         title='Logout',
         link='/admin/pages',
         icon='bi-box-arrow-left',

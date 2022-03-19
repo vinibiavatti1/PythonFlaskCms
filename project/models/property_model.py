@@ -39,5 +39,5 @@ class PropertyModel:
         self.value = ''
         self.css_class = css_class
         self.rows = rows
-        if self.description[-1] != '.':
+        if len(description) and self.description[-1] != '.':
             self.description += '.'

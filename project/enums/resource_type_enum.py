@@ -1,9 +1,9 @@
 """
-Admin resource type enumeration.
+Resource type enumeration.
 """
-PAGE = 'page'
-MENU = 'menu'
-TRANSLATION = 'translation'
+ARTICLE = 'article'
+LANDING_PAGE = 'landing_page'
+EVENT = 'event'
 POST = 'post'
 FAQ = 'faq'
-REDIRECT = 'redirect'
+CUSTOM = 'custom'

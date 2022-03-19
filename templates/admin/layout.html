@@ -1,7 +1,9 @@
 {% from "macros/admin/navbar.html" import admin_navbar with context %}
 {% from "macros/admin/sidenav.html" import admin_sidenav with context %}
 {% from "macros/admin/footer.html" import admin_footer with context %}
+{% from "macros/admin/url_modal.html" import url_modal with context %}
 {% from "macros/utils/datatables.html" import datatables_script with context %}
+{% from "macros/utils/clipboard.html" import copy_clipboard_behavior with context %}
 {% from "macros/utils/headers.html" import metas, links, scripts with context %}
 {% from "macros/utils/cookie_policy.html" import cookie_policy_modal with context %}
 {% from "macros/utils/toast.html" import toasts_script with context %}
@@ -34,6 +36,7 @@
         {{ admin_footer() }}
     </footer>
     <div class="modal-container">
+        {{ url_modal() }}
         {% block modals %}{% endblock %}
     </div>
     <div class="toast-container position-absolute p-3 top-0 end-0">
@@ -48,4 +51,5 @@
 {{ datatables_script() }}
 {{ toasts_script() }}
 {{ form_validation_script() }}
+{{ copy_clipboard_behavior() }}
 </html>

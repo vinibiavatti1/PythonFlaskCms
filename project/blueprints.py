@@ -21,6 +21,7 @@ from project.controllers.admin import (
     redirect_ctrl,
     block_ctrl,
     articles_ctrl,
+    content_ctrl,
 )
 
 
@@ -46,4 +47,5 @@ blueprints: list[Blueprint] = [
     redirect_ctrl.blueprint,
     block_ctrl.blueprint,
     articles_ctrl.blueprint,
+    content_ctrl.blueprint,
 ]

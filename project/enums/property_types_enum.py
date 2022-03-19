@@ -1,7 +1,7 @@
 """
 Field types enumaration.
 """
-STRING = 'string'
+STR = 'str'
 TEXT = 'text'
 INTEGER = 'integer'
 REAL = 'real'
@@ -14,4 +14,7 @@ CODE = 'code'
 BOOL = 'bool'
 PASSWORD = 'password'
 URL = 'url'
-BLOCKS = 'blocks'
+RICH_TEXT = 'rich_text'
+KEY = 'key'
+INFO = 'info'
+# NESTED

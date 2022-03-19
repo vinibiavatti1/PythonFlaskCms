@@ -5,7 +5,7 @@ from flask import session
 from project.enums import session_enum
 from typing import Any
 from project.repositories import history_repository
-from project.records.properties import properties
+from project.properties.properties import properties
 
 
 def insert(resource_id: int, type_resource: str, description: str) -> None:

@@ -3,7 +3,7 @@ Menu model.
 """
 
 
-class MenuModel:
+class MenuItemModel:
     """
     Model of menu property.
     """

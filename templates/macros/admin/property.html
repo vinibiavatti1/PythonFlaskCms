@@ -1,15 +1,12 @@
-{% macro property(prop_data, *, disabled = False, render_default_value = False, name_attr = 'name') %}
+{}
+
+{% macro property(prop_data, disabled = False, render_default_value = False, name_attr = 'name', resource_id = none) %}
     {% set disabled = 'disabled' if disabled else '' %}
     {% set value = prop_data.default if render_default_value else prop_data.value %}
     {% set name = name_attr + '=' + prop_data.name %}
 
-    {# Render label #}
-    {% if prop_data.label %}
-        <label>{{ prop_data.label }}</label>
-    {% endif %}
-
     {# Render property fields #}
-    {% if prop_data.property_type == 'string' %}
+    {% if prop_data.property_type == 'str' %}
         <input
             {{name}}
             {{disabled}}
@@ -18,6 +15,17 @@
             placeholder="{{prop_data.placeholder}}"
             value="{{value}}"
         />
+    {% elif prop_data.property_type == 'key' %}
+        <input
+            {{name}}
+            {{disabled}}
+            type="text"
+            pattern="^[a-z\_]$"
+            class="prop form-control {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+            value="{{value}}"
+        />
+        <small>The value can only have small characters and "_"</small>
     {% elif prop_data.property_type == 'password' %}
         <input
             {{name}}
@@ -85,7 +93,7 @@
             value="{{value}}"
         />
     {% elif prop_data.property_type == 'url' %}
-        <div class="input-group">
+        <div class="input-group url-selector-behavior">
             <input
                 {{name}}
                 {{disabled}}
@@ -94,7 +102,7 @@
                 placeholder="{{prop_data.placeholder}}"
                 value="{{value}}"
             />
-            <button class="btn btn-secondary">
+            <button type="button" class="btn btn-secondary">
                 <i class="bi bi-search url-selector"></i>
             </button>
         </div>
@@ -131,5 +139,18 @@
                     <option value="{{val}}" {{'selected' if value == val else ''}}>{{label}}</option>
                 {% endfor %}
         </select>
+    {% elif prop_data.property_type == 'info' %}
+        <div class="input-group copy-behavior">
+            <input
+                readonly
+                type="text"
+                class="prop form-control {{css_class}}"
+                placeholder="{{prop_data.placeholder}}"
+                value="{{value}}"
+            />
+            <button type="button" class="btn btn-secondary">
+                Copy
+            </button>
+        </div>
     {% endif %}
 {% endmacro %}

@@ -3,7 +3,7 @@ Block service.
 """
 from typing import Any, Optional
 from project.models.property_model import PropertyModel
-from project.records.blocks import blocks
+from project.properties.blocks import blocks
 from project.repositories import block_repository
 import json
 

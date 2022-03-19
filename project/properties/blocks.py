@@ -15,7 +15,7 @@ blocks: list[BlockModel] = [
         properties=[
             PropertyModel(
                 name='header',
-                property_type=prop_type.STRING,
+                property_type=prop_type.STR,
             ),
             PropertyModel(
                 name='dark_theme',

@@ -14,12 +14,14 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     # Website
     ###########################################################################
 
-    HeaderModel('Website'),
+    HeaderModel(
+        title='Website'
+    ),
     PropertyModel(
         name='website_title',
         description='Website title. This title will be used to navbars, '
                     'SEO titles, etc.',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
         required=True,
         default='Website',
     ),
@@ -27,21 +29,21 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
         name='index_page',
         description='Initial page name of website. The user will be '
                     'redirected when the root URL (/) is accessed.',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
         required=True,
         default='homepage',
     ),
     PropertyModel(
         name='favicon_url',
         description='Favicon URL that will be used for all pages',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
         required=True,
         default='/static/medias/favicon-32x32.png',
     ),
     PropertyModel(
         name='charset',
         description='Charset used in website',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
         required=True,
         default='UTF-8',
     ),
@@ -58,12 +60,14 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     # SEO
     ###########################################################################
 
-    HeaderModel('SEO'),
+    HeaderModel(
+        title='SEO'
+    ),
     PropertyModel(
         name='seo_default_title',
         description='Default SEO title. It will be used if no '
                     'page title was specified.',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
     ),
     PropertyModel(
         name='seo_default_description',
@@ -96,7 +100,9 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     # Scripts
     ###########################################################################
 
-    HeaderModel('Scripts'),
+    HeaderModel(
+        title='Scripts'
+    ),
     PropertyModel(
         name='head_script',
         description='Javascript script that will be inserted into <head> tag.',
@@ -118,7 +124,7 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
         name='noscript_link_label',
         description='Label of the link to redirect user to information of '
                     'scripts',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
         default='Info...',
     ),
 
@@ -126,7 +132,9 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     # reCaptcha
     ###########################################################################
 
-    HeaderModel('reCaptcha'),
+    HeaderModel(
+        title='reCaptcha'
+    ),
     PropertyModel(
         name='recaptcha_enabled',
         description='Enables the Google reCaptcha v3 in the website.',
@@ -156,7 +164,9 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     # Google
     ###########################################################################
 
-    HeaderModel('Google'),
+    HeaderModel(
+        title='Google'
+    ),
     PropertyModel(
         name='google_api_key',
         description='API Key for Google resources.',
@@ -167,7 +177,9 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     # E-mail
     ###########################################################################
 
-    HeaderModel('E-mail'),
+    HeaderModel(
+        title='E-mail'
+    ),
     PropertyModel(
         name='email_enabled',
         description='Enable email sending.',
@@ -177,7 +189,7 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     PropertyModel(
         name='email_smtp',
         description='Simple Mail Transfer Protocol Domain.',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
     ),
     PropertyModel(
         name='email_port',
@@ -193,7 +205,7 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     PropertyModel(
         name='email_login',
         description='SMTP user login.',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
     ),
     PropertyModel(
         name='email_password',
@@ -203,7 +215,7 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     PropertyModel(
         name='email_charset',
         description='SMTP charset.',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
         default='UTF-8',
     ),
 
@@ -211,49 +223,29 @@ properties: list[Union[HeaderModel, PropertyModel]] = [
     # Formats
     ###########################################################################
 
-    HeaderModel('Formats'),
+    HeaderModel(
+        title='Formats'
+    ),
     PropertyModel(
         name='date_format',
         description='Format of the date. Reference: https://strftime.org/',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
         default='%Y-%m-%d',
     ),
     PropertyModel(
         name='datetime_format',
         description='Format of the datetime. Reference: https://strftime.org/',
-        property_type=prop_type.STRING,
+        property_type=prop_type.STR,
         default='%Y-%m-%d %H:%M:%S',
-    ),
-
-    ###########################################################################
-    # Controllers
-    ###########################################################################
-
-    HeaderModel('Controllers'),
-    PropertyModel(
-        name='login_ctrl_active',
-        description='Activate login controller.',
-        property_type=prop_type.BOOL,
-        default=str_type.TRUE,
-    ),
-    PropertyModel(
-        name='blog_ctrl_active',
-        description='Activate blog controller.',
-        property_type=prop_type.BOOL,
-        default=str_type.TRUE,
-    ),
-    PropertyModel(
-        name='faq_ctrl_active',
-        description='Activate FAQ controller.',
-        property_type=prop_type.BOOL,
-        default=str_type.TRUE,
     ),
 
     ###########################################################################
     # Cookies
     ###########################################################################
 
-    HeaderModel('Cookies'),
+    HeaderModel(
+        title='Cookies'
+    ),
     PropertyModel(
         name='cookie_policy_enabled',
         description='Enables cookie policy modal.',

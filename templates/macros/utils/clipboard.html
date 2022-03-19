@@ -20,3 +20,26 @@
     });
 </script>
 {% endmacro %}
+
+
+{% macro copy_clipboard_behavior() %}
+<script>
+    jQuery(function() {
+        $('.copy-behavior button').on('click', function() {
+            let target = $('.copy-behavior').children('input');
+            if (!target.length) return;
+            if (target.attr('disabled')) {
+                target.removeAttr('disabled');
+                target.attr('readonly', '');
+            }
+            target = target.get(0);
+            target.select();
+            document.execCommand("copy");
+            $(this).html('Copied!');
+            setTimeout(() => {
+                $(this).html('Copy');
+            }, {{delay}});
+        });
+    });
+</script>
+{% endmacro %}
