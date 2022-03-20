@@ -30,19 +30,20 @@ event_properties: list[Union[PropertyModel, HeaderModel]] = [
         property_type=prop_type.TEXT,
         description='The description of the event',
         placeholder='Enter the event description',
-        required=True,
     ),
     PropertyModel(
         name='event_begin_date',
         label='Begin date',
         property_type=prop_type.DATETIME,
         description='Enter the begin date',
+        required=True,
     ),
     PropertyModel(
         name='event_end_date',
         label='End date',
         property_type=prop_type.DATETIME,
         description='Enter the end date',
+        required=True,
     ),
     PropertyModel(
         name='event_show_in_calendar',

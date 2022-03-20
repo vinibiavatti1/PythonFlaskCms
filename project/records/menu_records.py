@@ -154,12 +154,12 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
     MenuItemModel(
         title='Properties',
-        link='/admin/pages',
+        link='/admin/properties',
         icon='bi-gear',
     ),
     MenuItemModel(
         title='Translations',
-        link='/admin/pages',
+        link='/admin/translations',
         icon='bi-translate',
     ),
     MenuItemModel(
@@ -169,7 +169,7 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
     MenuItemModel(
         title='Logout',
-        link='/admin/pages',
+        link='/admin/logout',
         icon='bi-box-arrow-left',
     ),
 ]

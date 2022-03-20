@@ -20,6 +20,7 @@ from project.controllers.admin import (
     block_ctrl,
     articles_ctrl,
     content_ctrl,
+    events_ctrl,
 )
 
 
@@ -44,4 +45,5 @@ blueprints: list[Blueprint] = [
     block_ctrl.blueprint,
     articles_ctrl.blueprint,
     content_ctrl.blueprint,
+    events_ctrl.blueprint,
 ]

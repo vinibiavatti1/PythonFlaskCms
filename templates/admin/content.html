@@ -13,13 +13,12 @@
                 <div class="card-body">
                     <form
                         id="content-form"
-                        action="{{ '/admin/content/edit/' + page_data.content_id if page_data.edit else '/admin/content/create' }}"
+                        action="{{ page_data.action_url }}"
                         method="POST"
                         class="needs-validation"
                         novalidate
                     >
                         <input name="type" type="hidden" value="{{page_data.content_type}}">
-                        <input name="back_url" type="hidden" value="{{page_data.back_url}}">
 
                         {{ flash_alerts() }}
                         <div class="mb-2">

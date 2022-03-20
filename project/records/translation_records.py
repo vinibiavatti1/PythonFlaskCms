@@ -4,7 +4,7 @@ Default translations.
 from project.models.translation_model import TranslationModel
 
 
-translations: list[TranslationModel] = [
+translation_records: list[TranslationModel] = [
     TranslationModel(
         idiom='en',
         name='cookie_policy_title',

@@ -1,7 +1,7 @@
 {% macro datatables_script(selector = '.datatable') %}
     <script>
         $("{{selector}}").dataTable({
-            'order': [[0, 'asc']],
+            'order': [[0, 'desc']],
             'language': {
                 'searchPlaceholder': "Search records"
             }

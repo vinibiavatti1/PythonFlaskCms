@@ -10,15 +10,5 @@ context_records: list[ContextModel] = [
         name='English',
         description='English context',
     ),
-    ContextModel(
-        code='pt',
-        name='Portuguese',
-        description='Portuguese context',
-    ),
-    ContextModel(
-        code='es',
-        name='Spanish',
-        description='Spanish context',
-    ),
     # Add more...
 ]

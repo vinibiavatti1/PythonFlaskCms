@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- Contents
 CREATE TABLE IF NOT EXISTS contents (
     `id` INTEGER PRIMARY KEY,
-    `idiom` TEXT NOT NULL,
+    `context` TEXT NOT NULL,
     `name` TEXT NOT NULL,
     `type` TEXT NOT NULL,
     `private` INTEGER NOT NULL DEFAULT 0,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS contents (
 -- Pages
 CREATE TABLE IF NOT EXISTS pages (
     `id` INTEGER PRIMARY KEY,
-    `idiom` TEXT NOT NULL,
+    `context` TEXT NOT NULL,
     `name` TEXT NOT NULL,
     `private` INTEGER NOT NULL DEFAULT 0,
     `published` INTEGER NOT NULL DEFAULT 1,
@@ -51,7 +51,8 @@ CREATE TABLE IF NOT EXISTS pages (
 -- History
 CREATE TABLE IF NOT EXISTS history (
     `id` INTEGER PRIMARY KEY,
-    `type` TEXT NOT NULL,
+    `context` TEXT NOT NULL,
+    `resource_type` TEXT NOT NULL,
     `resource_id` INTEGER NOT NULL,
     `description` TEXT NOT NULL,
     `created_by` INTEGER NOT NULL,
@@ -62,7 +63,7 @@ CREATE TABLE IF NOT EXISTS history (
 -- Properties
 CREATE TABLE IF NOT EXISTS properties (
     `id` INTEGER PRIMARY KEY,
-    `idiom` TEXT NOT NULL,
+    `context` TEXT NOT NULL,
     `name` TEXT NOT NULL,
     `value` TEXT NULL
 );

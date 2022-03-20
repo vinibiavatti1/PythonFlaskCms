@@ -29,3 +29,10 @@ def result_api_message(type: str, message: str) -> dict[str, Any]:
         'type': type,
         'message': message
     }
+
+
+def get_admin_list_url(context: str, list_name: str) -> str:
+    """
+    Get list url.
+    """
+    return f'/{context}/admin/{list_name}'
