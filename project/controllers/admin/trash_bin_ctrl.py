@@ -12,9 +12,9 @@ from project.decorators.context_decorators import process_context
 
 # Controller properties
 CONTROLLER_NAME = 'admin_trash_bin_ctrl'
-ROOT_URL = '/<context>/admin/trash-bin'
+ROOT_URL = '/<context>/admin/trash_bin'
 PAGE_TITLE = 'Trash Bin'
-LIST_NAME = 'trash-bin'
+LIST_NAME = 'trash_bin'
 
 
 # Blueprint

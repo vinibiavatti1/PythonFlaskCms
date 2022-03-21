@@ -12,9 +12,9 @@ from project.processors import content_ctrl_processor
 
 # Controller data
 CONTROLLER_NAME = 'admin_custom_pages_ctrl'
-URL_PREFIX = '/<context>/admin/custom-pages'
+URL_PREFIX = '/<context>/admin/custom_pages'
 PAGE_TITLE = 'Custom Pages'
-LIST_NAME = 'custom-pages'
+LIST_NAME = 'custom_pages'
 RESOURCE_TYPE = resource_type_enum.CUSTOM_PAGE
 PROPERTIES = custom_page_properties
 

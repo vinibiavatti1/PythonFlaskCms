@@ -168,5 +168,14 @@
                 Copy
             </button>
         </div>
+    {% elif prop_data.property_type == 'rich_text' %}
+        <textarea
+            {{name}}
+            {{disabled}}
+            {{required}}
+            rows="{{prop_data.rows}}"
+            class="prop form-control richtext {{css_class}}"
+            placeholder="{{prop_data.placeholder}}"
+        >{{value}}</textarea>
     {% endif %}
 {% endmacro %}

@@ -11,6 +11,8 @@ from project.controllers.public import (
 from project.controllers.admin import (
     auth_ctrl,
     cookie_policy_ctrl,
+    faqs_ctrl,
+    landing_pages_ctrl,
     menu_ctrl,
     properties_ctrl,
     seo_ctrl,
@@ -22,6 +24,7 @@ from project.controllers.admin import (
     events_ctrl,
     trash_bin_ctrl,
     custom_pages_ctrl,
+    post_ctrl,
 )
 
 
@@ -48,4 +51,7 @@ blueprints: list[Blueprint] = [
     events_ctrl.blueprint,
     trash_bin_ctrl.blueprint,
     custom_pages_ctrl.blueprint,
+    post_ctrl.blueprint,
+    landing_pages_ctrl.blueprint,
+    faqs_ctrl.blueprint,
 ]

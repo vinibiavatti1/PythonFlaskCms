@@ -22,7 +22,7 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
     MenuItemModel(
         title='Landing Pages',
-        link='/landing-pages',
+        link='/landing_pages',
         icon='bi-layers',
     ),
     MenuItemModel(
@@ -42,12 +42,12 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
     MenuItemModel(
         title='Custom Pages',
-        link='/custom-pages',
+        link='/custom_pages',
         icon='bi-filetype-html',
     ),
     MenuItemModel(
         title='Trash Bin',
-        link='/trash-bin',
+        link='/trash_bin',
         icon='bi-trash',
     ),
 
