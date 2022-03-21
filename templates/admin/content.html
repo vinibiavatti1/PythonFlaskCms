@@ -1,6 +1,7 @@
 {% from 'macros/utils/alerts.html' import flash_alerts with context %}
 {% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
 {% from "macros/admin/property.html" import property with context %}
+{% from "macros/admin/history_list.html" import history_list with context %}
 {% extends 'admin/layout.html' %}
 {% block title %}{{ page_data.title }}{% endblock %}
 {% block content %}
@@ -13,7 +14,7 @@
                 <div class="card-body">
                     <form
                         id="content-form"
-                        action="{{ page_data.root_url + '/edit/' + page_data.content_id if page_data.edit else age_data.root_url + '/create' }}"
+                        action="{{ page_data.root_url + '/edit/' + page_data.content_id if page_data.edit else page_data.root_url + '/create' }}"
                         method="POST"
                         class="needs-validation"
                         novalidate
@@ -48,50 +49,67 @@
                             </button>
                         </div>
 
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 20%;">Property</th>
-                                        <th style="width: 30%;">Description</th>
-                                        <th style="width: 50%;">Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% set vars = {'header': ''} %}
-                                    {% for prop in page_data.properties %}
-                                        {% if prop.header %}
-                                            {% if vars.update({'header': prop.title}) %} {% endif %}
-                                            <tr class="bg-prop collapse_btn" role="button" data-header-name="{{prop.title}}">
-                                                <td colspan="4"><b class="text-decoration-underline">{{prop.title}}</b></td>
+                        <ul class="nav nav-tabs mb-2" id="tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button id="tab_detail" type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#properties">Properties</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button id="tab_detail" type="button" class="nav-link {{ '' if page_data.edit else 'disabled' }}" href="#" data-bs-toggle="tab" data-bs-target="#history">History</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="properties" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 20%;">Property</th>
+                                                <th style="width: 30%;">Description</th>
+                                                <th style="width: 50%;">Value</th>
                                             </tr>
-                                        {% else %}
-                                            <tr class="d-none" data-header="{{vars.header}}">
-                                                <td>
-                                                    <b>
-                                                        {{prop.label}}
-                                                        {% if prop.required %}
-                                                        <span class="text-danger" title="Required">*</span>
-                                                        {% endif %}
-                                                    </b>
-                                                    <br>
-                                                    <small>{{ prop.name }}</small>
-                                                </td>
-                                                <td>
-                                                    {{prop.description}}
-                                                </td>
-                                                <td>
-                                                    {{property(
-                                                        prop,
-                                                        render_default_value=not page_data.edit
-                                                    )}}
-                                                </td>
-                                            </tr>
-                                        {% endif %}
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                        </thead>
+                                        <tbody>
+                                            {% set vars = {'header': ''} %}
+                                            {% for prop in page_data.properties %}
+                                                {% if prop.header %}
+                                                    {% if vars.update({'header': prop.title}) %} {% endif %}
+                                                    <tr class="bg-prop collapse_btn" role="button" data-header-name="{{prop.title}}">
+                                                        <td colspan="4"><b class="text-decoration-underline">{{prop.title}}</b></td>
+                                                    </tr>
+                                                {% else %}
+                                                    <tr class="d-none" data-header="{{vars.header}}">
+                                                        <td>
+                                                            <b>
+                                                                {{prop.label}}
+                                                                {% if prop.required %}
+                                                                <span class="text-danger" title="Required">*</span>
+                                                                {% endif %}
+                                                            </b>
+                                                            <br>
+                                                            <small>{{ prop.name }}</small>
+                                                        </td>
+                                                        <td>
+                                                            {{prop.description}}
+                                                        </td>
+                                                        <td>
+                                                            {{property(
+                                                                prop,
+                                                                render_default_value=not page_data.edit
+                                                            )}}
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="history" role="tabpanel">
+                                {{ history_list(page_data.history) }}
+                            </div>
                         </div>
+
+
                     </form>
                 </div>
             </div>

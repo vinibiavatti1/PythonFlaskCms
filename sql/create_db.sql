@@ -52,8 +52,6 @@ CREATE TABLE IF NOT EXISTS pages (
 -- History
 CREATE TABLE IF NOT EXISTS history (
     `id` INTEGER PRIMARY KEY,
-    `context` TEXT NOT NULL,
-    `resource_type` TEXT NOT NULL,
     `resource_id` INTEGER NOT NULL,
     `description` TEXT NOT NULL,
     `created_by` INTEGER NOT NULL,

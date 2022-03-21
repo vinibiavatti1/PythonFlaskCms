@@ -8,15 +8,20 @@ from project.validators import auth_validator
 from project.services import auth_service
 
 
+# Controller data
+CONTROLLER_NAME = 'admin_auth_ctrl'
+INITIAL_PAGE = 'articles'
+
+
 # Blueprint
 blueprint = Blueprint(
-    'admin_auth_ctrl',
+    CONTROLLER_NAME,
     __name__
 )
 
 
 ###############################################################################
-# View Routes
+# Routes
 ###############################################################################
 
 
@@ -26,11 +31,6 @@ def login() -> str:
     Render login page route.
     """
     return render_template('/admin/login.html')
-
-
-###############################################################################
-# Action Routes
-###############################################################################
 
 
 @blueprint.route('/admin/login', methods=['POST'])
@@ -43,7 +43,7 @@ def login_action() -> Any:
         auth_validator.validate_login_data(login_data)
         auth_service.process_login(login_data)
         context = login_data['context']
-        return redirect(f'/{context}/admin/articles')
+        return redirect(f'/{context}/admin/{INITIAL_PAGE}')
     except Exception as err:
         flash(str(err), category='danger')
         return redirect('/admin')

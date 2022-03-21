@@ -49,9 +49,7 @@ def insert(context: str, data: dict[str, Any]) -> Any:
     data['data'] = json.dumps(data)
     content_id = content_repository.insert(context, data)
     history_service.insert(
-        context,
         content_id,
-        data['type'],
         'Content created'
     )
     return content_id
@@ -69,9 +67,7 @@ def update(context: str, content_id: int, data: dict[str, Any]) -> Any:
     data['data'] = json.dumps(data)
     content_id = content_repository.update(context, content_id, data)
     history_service.insert(
-        context,
         content_id,
-        data['type'],
         'Content updated'
     )
 
@@ -85,9 +81,7 @@ def delete(context: str, content_id: int) -> None:
         return
     content_repository.delete(context, content_id)
     history_service.insert(
-        context,
         content_id,
-        content['type'],
         'Content deleted'
     )
 
@@ -96,14 +90,9 @@ def restore(context: str, content_id: int) -> None:
     """
     Restore a content by id.
     """
-    content = content_repository.select_by_id(context, content_id)
-    if not content:
-        return
     content_repository.restore(context, content_id)
     history_service.insert(
-        context,
         content_id,
-        content['type'],
         'Content restored'
     )
 
@@ -121,9 +110,7 @@ def duplicate(context: str, content_id: int, to_context: str) -> Any:
     content_dict['published'] = 0
     new_id = content_repository.insert(to_context, content_dict)
     history_service.insert(
-        context,
         content_id,
-        content['type'],
         f'Content duplicated (id={new_id})',
     )
     return new_id

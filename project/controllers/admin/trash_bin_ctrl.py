@@ -72,7 +72,7 @@ def list_view(context: str) -> str:
 ###############################################################################
 
 
-@blueprint.route('/restore/<content_id>', methods=['POST'])
+@blueprint.route('/restore/<content_id>', methods=['GET'])
 @login_required()
 @process_context()
 def restore_action(context: str, content_id: int) -> Any:

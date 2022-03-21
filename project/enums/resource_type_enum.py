@@ -12,7 +12,7 @@ LANDING_PAGE = 'landing_page'
 EVENT = 'event'
 POST = 'post'
 FAQ = 'faq'
-CUSTOM = 'custom'
+CUSTOM_PAGE = 'custom_page'
 
 ###############################################################################
 # Configurations

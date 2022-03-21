@@ -2,7 +2,7 @@
 Blueprints registry module.
 """
 from flask import Blueprint
-from project.processors import blueprint as processors
+from project.injections import blueprint as injections
 from project.handlers import blueprint as handlers
 from project.controllers.public import (
     homepage_ctrl,
@@ -19,9 +19,9 @@ from project.controllers.admin import (
     redirect_ctrl,
     block_ctrl,
     articles_ctrl,
-    content_ctrl,
     events_ctrl,
     trash_bin_ctrl,
+    custom_pages_ctrl,
 )
 
 
@@ -31,7 +31,7 @@ from project.controllers.admin import (
 
 
 blueprints: list[Blueprint] = [
-    processors,
+    injections,
     handlers,
     seo_ctrl.blueprint,
     homepage_ctrl.blueprint,
@@ -45,7 +45,7 @@ blueprints: list[Blueprint] = [
     redirect_ctrl.blueprint,
     block_ctrl.blueprint,
     articles_ctrl.blueprint,
-    content_ctrl.blueprint,
     events_ctrl.blueprint,
     trash_bin_ctrl.blueprint,
+    custom_pages_ctrl.blueprint,
 ]

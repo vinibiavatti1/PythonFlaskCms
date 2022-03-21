@@ -1,5 +1,5 @@
 """
-Context processors module.
+Injection resources module.
 """
 from typing import Any
 from project.models.menu_item_model import MenuItemModel
@@ -11,11 +11,12 @@ from project.records.context_records import context_records
 from project.services import property_service
 from project.utils import datetime_utils
 from project.utils import page_utils
+from project.utils import context_utils
 
 
 # Blueprint
 blueprint = Blueprint(
-    'processors',
+    'injections',
     __name__
 )
 
@@ -30,7 +31,7 @@ def inject_records() -> dict[str, Any]:
     """
     Inject records.
     """
-    context = g.context
+    context = context_utils.get_current_context()
     for menu in menu_records:
         if isinstance(menu, MenuItemModel):
             menu.context = context
@@ -85,4 +86,7 @@ def inject_properties() -> dict[str, Any]:
     """
     Inject the global properties.
     """
-    return dict(properties=property_service.select_all())
+    context = context_utils.get_current_context()
+    return dict(
+        properties=property_service.select_all(context)
+    )

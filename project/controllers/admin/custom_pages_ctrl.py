@@ -1,22 +1,22 @@
 """
-Articles controller.
+Custom pages controller.
 """
 from typing import Any
 from flask import Blueprint, request
 from project.enums import resource_type_enum
 from project.decorators.security_decorators import login_required
-from project.properties.article_properties import article_properties
+from project.properties.custom_page_properties import custom_page_properties
 from project.decorators.context_decorators import process_context
 from project.processors import content_ctrl_processor
 
 
 # Controller data
-CONTROLLER_NAME = 'admin_articles_ctrl'
-URL_PREFIX = '/<context>/admin/articles'
-PAGE_TITLE = 'Articles'
-LIST_NAME = 'articles'
-RESOURCE_TYPE = resource_type_enum.ARTICLE
-PROPERTIES = article_properties
+CONTROLLER_NAME = 'admin_custom_pages_ctrl'
+URL_PREFIX = '/<context>/admin/custom-pages'
+PAGE_TITLE = 'Custom Pages'
+LIST_NAME = 'custom-pages'
+RESOURCE_TYPE = resource_type_enum.CUSTOM_PAGE
+PROPERTIES = custom_page_properties
 
 
 # Blueprint data

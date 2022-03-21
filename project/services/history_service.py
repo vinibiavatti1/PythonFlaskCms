@@ -7,28 +7,21 @@ from typing import Any
 from project.repositories import history_repository
 
 
-def insert(context: str, resource_id: int, resource_type: str,
-           description: str) -> None:
+def insert(resource_id: int, description: str) -> None:
     """
     Insert new history.
     """
     user_id = session[session_enum.USER_ID]
     data = dict(
         resource_id=resource_id,
-        resource_type=resource_type,
         description=description,
         created_by=user_id
     )
-    history_repository.insert(context, data)
+    history_repository.insert(data)
 
 
-def select_by_resource(context: str, resource_id: int,
-                       resource_type: str) -> list[dict[str, Any]]:
+def select_by_resource(resource_id: int) -> list[dict[str, Any]]:
     """
     Select the history by resource id and type.
     """
-    return history_repository.select_by_resource(
-        context,
-        resource_id,
-        resource_type
-    )
+    return history_repository.select_by_resource(resource_id)

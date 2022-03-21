@@ -9,6 +9,7 @@ context_records: list[ContextModel] = [
         code='en',
         name='English',
         description='English context',
+        default=True,
     ),
     # Add more...
 ]
