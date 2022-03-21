@@ -42,7 +42,8 @@ def login_action() -> Any:
         login_data = request.form.to_dict()
         auth_validator.validate_login_data(login_data)
         auth_service.process_login(login_data)
-        return redirect('/admin/articles')
+        context = login_data['context']
+        return redirect(f'/{context}/admin/articles')
     except Exception as err:
         flash(str(err), category='danger')
         return redirect('/admin')

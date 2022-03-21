@@ -2,9 +2,10 @@
 Context processors module.
 """
 from typing import Any
+from project.models.menu_item_model import MenuItemModel
 from project.utils.security_utils import is_authenticated, has_permission
 from project.utils.cookie_utils import cookie_policy_consent
-from flask import Blueprint
+from flask import Blueprint, g
 from project.records.menu_records import menu_records
 from project.records.context_records import context_records
 from project.services import property_service
@@ -29,6 +30,10 @@ def inject_records() -> dict[str, Any]:
     """
     Inject records.
     """
+    context = g.context
+    for menu in menu_records:
+        if isinstance(menu, MenuItemModel):
+            menu.context = context
     return dict(
         records=dict(
             menu_records=menu_records,

@@ -56,3 +56,14 @@ def insert(data: dict[str, Any]) -> Any:
         data['password'],
         data['permission'],
     ))
+
+
+def update_last_login(user_id: int) -> None:
+    """
+    Update user last login date by user id.
+    """
+    sql = '''
+        UPDATE users SET last_login = CURRENT_TIMESTAMP
+        WHERE id = ?
+    '''
+    database_utils.execute_update(sql, (user_id,))

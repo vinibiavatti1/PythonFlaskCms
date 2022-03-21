@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS contents (
     `published` INTEGER NOT NULL DEFAULT 1,
     `deleted` INTEGER NOT NULL DEFAULT 0,
     `created_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `deleted_on` TEXT NULL DEFAULT NULL,
     `data` TEXT NOT NULL DEFAULT '{}'
 );
 

@@ -36,4 +36,5 @@ def insert(data: dict[str, Any]) -> Any:
     """
     Insert user to database.
     """
+    data['password'] = security_utils.generate_hash(data['password'])
     return user_repository.insert(data)

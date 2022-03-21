@@ -30,7 +30,7 @@ content_properties: list[Union[PropertyModel, HeaderModel]] = [
         name='published',
         property_type=prop_type.BOOL,
         description='Set to True to publish the content.',
-        default=str_type.TRUE,
+        default=str_type.FALSE,
         required=True,
     ),
     PropertyModel(

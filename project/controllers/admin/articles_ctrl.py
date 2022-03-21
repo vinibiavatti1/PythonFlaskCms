@@ -11,15 +11,16 @@ from project.decorators.security_decorators import login_required
 from project.properties.article_properties import article_properties
 from project.utils.data_utils import set_properties_value
 from project.utils.ctrl_utils import get_admin_list_url
-from project.decorators.context_decorators import validate_context
+from project.decorators.context_decorators import process_context
 
 
 # Controller properties
 CONTROLLER_NAME = 'admin_articles_ctrl'
-ROOT_URL = '/<context>/admin/articles'
-RESOURCE_TYPE = resource_type_enum.ARTICLE
+URL_PREFIX = '/<context>/admin/articles'
+
 PAGE_TITLE = 'Articles'
 LIST_NAME = 'articles'
+RESOURCE_TYPE = resource_type_enum.ARTICLE
 PROPERTIES = article_properties
 
 
@@ -27,7 +28,7 @@ PROPERTIES = article_properties
 blueprint = Blueprint(
     CONTROLLER_NAME,
     __name__,
-    url_prefix=ROOT_URL
+    url_prefix=URL_PREFIX
 )
 
 
@@ -38,7 +39,7 @@ blueprint = Blueprint(
 
 @blueprint.route('/', methods=['GET'])
 @login_required()
-@validate_context()
+@process_context()
 def list_view(context: str) -> str:
     """
     Render datatable with data.
@@ -62,7 +63,7 @@ def list_view(context: str) -> str:
             'True' if content['private'] == 1 else 'False',
             'True' if content['published'] == 1 else 'False',
             content['created_on'],
-            f'<a href="{list_url}/edit/{id_}">Details...</a>'
+            f'<a href="{list_url}/edit/{id_}">Details</a>'
         ))
     return render_template(
         '/admin/datatable.html',
@@ -77,7 +78,7 @@ def list_view(context: str) -> str:
 
 @blueprint.route('/create', methods=['GET'])
 @login_required()
-@validate_context()
+@process_context()
 def create_view(context: str) -> str:
     """
     Render create page.
@@ -86,18 +87,20 @@ def create_view(context: str) -> str:
     return render_template(
         '/admin/content.html',
         page_data=dict(
+            context=context,
+            content_id=None,
+            edit=False,
             title=PAGE_TITLE,
-            back_url=ROOT_URL,
-            action_url=f'{list_url}/create',
+            root_url=list_url,
             properties=PROPERTIES,
-            content_type=RESOURCE_TYPE,
+            resource_type=RESOURCE_TYPE,
         )
     )
 
 
 @blueprint.route('/edit/<content_id>', methods=['GET'])
 @login_required()
-@validate_context()
+@process_context()
 def edit_view(context: str, content_id: int) -> str:
     """
     Render edit page.
@@ -110,15 +113,13 @@ def edit_view(context: str, content_id: int) -> str:
     return render_template(
         '/admin/content.html',
         page_data=dict(
+            context=context,
             content_id=content_id,
             edit=True,
-            article=None,
             title=PAGE_TITLE,
-            back_url=ROOT_URL,
-            action_url=f'{list_url}/edit/{content_id}',
+            root_url=list_url,
             properties=props,
-            blocks_url=f'{list_url}/blocks/{content_id}',
-            content_type=RESOURCE_TYPE,
+            resource_type=RESOURCE_TYPE,
         )
     )
 
@@ -130,7 +131,7 @@ def edit_view(context: str, content_id: int) -> str:
 
 @blueprint.route('/create', methods=['POST'])
 @login_required()
-@validate_context()
+@process_context()
 def create_action(context: str) -> Any:
     """
     Insert content to database.
@@ -148,7 +149,7 @@ def create_action(context: str) -> Any:
 
 @blueprint.route('/edit/<content_id>', methods=['POST'])
 @login_required()
-@validate_context()
+@process_context()
 def edit_action(context: str, content_id: int) -> Any:
     """
     Update content in database.
@@ -166,7 +167,7 @@ def edit_action(context: str, content_id: int) -> Any:
 
 @blueprint.route('/delete/<content_id>', methods=['GET'])
 @login_required()
-@validate_context()
+@process_context()
 def delete_action(context: str, content_id: int) -> Any:
     """
     Delete content from database.
@@ -184,7 +185,7 @@ def delete_action(context: str, content_id: int) -> Any:
 @blueprint.route('/duplicate/<content_id>/<to_context>',
                  methods=['GET'])
 @login_required()
-@validate_context()
+@process_context()
 def duplicate_action(context: str, content_id: int, to_context: str) -> Any:
     """
     Duplicate content.

@@ -17,3 +17,4 @@ class MenuItemModel:
         self.link = link
         self.icon = icon
         self.target = target
+        self.context = ''

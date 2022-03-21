@@ -21,6 +21,7 @@ from project.controllers.admin import (
     articles_ctrl,
     content_ctrl,
     events_ctrl,
+    trash_bin_ctrl,
 )
 
 
@@ -46,4 +47,5 @@ blueprints: list[Blueprint] = [
     articles_ctrl.blueprint,
     content_ctrl.blueprint,
     events_ctrl.blueprint,
+    trash_bin_ctrl.blueprint,
 ]

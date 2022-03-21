@@ -13,16 +13,16 @@
                 <div class="card-body">
                     <form
                         id="content-form"
-                        action="{{ page_data.action_url }}"
+                        action="{{ page_data.root_url + '/edit/' + page_data.content_id if page_data.edit else age_data.root_url + '/create' }}"
                         method="POST"
                         class="needs-validation"
                         novalidate
                     >
-                        <input name="type" type="hidden" value="{{page_data.content_type}}">
+                        <input name="type" type="hidden" value="{{page_data.resource_type}}">
 
                         {{ flash_alerts() }}
                         <div class="mb-2">
-                            <a class="btn btn-secondary" href="{{ page_data.back_url }}">
+                            <a class="btn btn-secondary" href="{{ page_data.root_url }}">
                                 <i class="bi bi-arrow-left"></i>
                                 Back
                             </a>
@@ -36,7 +36,7 @@
                                     Delete...
                                 </button>
                                 {% if page_data.blocks_url %}
-                                <a href="{{page_data.blocks_url}}" class="btn btn-primary">
+                                <a href="{{ page_data.context }}/admin/blocks/{{page_data.content_id}}" class="btn btn-primary">
                                     <i class="bi bi-layers"></i>
                                     Blocks
                                 </a>
@@ -114,14 +114,15 @@
 
         $("#btn-delete").on('click', function() {
             if(confirm('Do you really want to delete this record?')) {
-                window.location.href = '/admin/content/delete/{{page_data.content_id}}/{{page_data.list_name}}'
+                window.location.href = '{{page_data.root_url}}/delete/{{page_data.content_id}}'
             }
         });
 
         $("#btn-duplicate").on('click', function() {
-            let idiom = prompt('Type the idiom to attach the duplicated record');
-            if (!idiom) return;
-            window.localtion.href = '/admin/content/duplicate/{{page_data.content_id}}/{{page_data.list_name}}/' + idiom;
+            // TODO - DO MODAL FOR IT
+            let context = prompt('Type the context to attach the duplicated record');
+            if (!context) return;
+            window.localtion.href = '{{page_data.root_url}}/duplicate/{{page_data.content_id}}/' + context;
         });
     });
 </script>

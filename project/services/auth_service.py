@@ -7,19 +7,13 @@ from project.enums import session_enum
 from project.repositories import user_repository
 from project.services import property_service
 from project.utils import security_utils
-from project.services import history_service
 from markupsafe import escape
 from project.errors import AuthError
 from project.enums import string_types_enum
 import requests
 
 
-###############################################################################
-# Private Functions
-###############################################################################
-
-
-def __validate_recaptcha(token: str) -> None:
+def validate_recaptcha(token: str) -> None:
     """
     Validate Google reCaptcha.
 
@@ -49,12 +43,7 @@ def __validate_recaptcha(token: str) -> None:
         raise AuthError(message)
 
 
-###############################################################################
-# Public Functions
-###############################################################################
-
-
-def do_login(email: str, password: str) -> None:
+def do_login(email: str, password: str) -> dict[str, Any]:
     """
     Authenticate user to application.
     """
@@ -65,31 +54,25 @@ def do_login(email: str, password: str) -> None:
     )
     if user is None:
         raise AuthError('Invalid user and/or password')
-    user_id = user['id']
-    user_email = user['email']
-    session[session_enum.USER_ID] = user_id
-    session[session_enum.USER_EMAIL] = user_email
-    session[session_enum.USER_NAME] = user['name']
-    session[session_enum.USER_PERMISSION] = user['permission']
-    history_service.insert(
-        user_id,
-        'login',
-        f'User ({user_id}, {user_email}) login'
-    )
+    return user
 
 
 def do_logout() -> None:
     """
     Destroy user session.
     """
-    user_id = session[session_enum.USER_ID]
-    user_email = session[session_enum.USER_EMAIL]
-    history_service.insert(
-        user_id,
-        'logout',
-        f'User ({user_id}, {user_email}) logout'
-    )
     session.clear()
+
+
+def initialize_session(context: str, user: dict[str, Any]) -> None:
+    """
+    Set session data.
+    """
+    session[session_enum.CONTEXT] = context
+    session[session_enum.USER_ID] = user['id']
+    session[session_enum.USER_EMAIL] = user['email']
+    session[session_enum.USER_NAME] = user['name']
+    session[session_enum.USER_PERMISSION] = user['permission']
 
 
 def process_login(login_data: dict[str, Any]) -> None:
@@ -98,8 +81,7 @@ def process_login(login_data: dict[str, Any]) -> None:
     """
     recaptcha_enabled = property_service.get_property('recaptcha_enabled')
     if recaptcha_enabled == string_types_enum.TRUE:
-        __validate_recaptcha(str(login_data.get('recaptcha-token')))
-    email = escape(login_data.get('email'))
-    password = str(login_data.get('password'))
-    do_login(email, password)
-    session[session_enum.CONTEXT] = login_data.get('context')
+        validate_recaptcha(str(login_data.get('recaptcha-token')))
+    user = do_login(escape(login_data['email']), login_data['password'])
+    initialize_session(login_data['context'], user)
+    user_repository.update_last_login(user['id'])

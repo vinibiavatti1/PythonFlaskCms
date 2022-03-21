@@ -17,37 +17,37 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
     MenuItemModel(
         title='Articles',
-        link='/admin/articles',
+        link='/articles',
         icon='bi-files',
     ),
     MenuItemModel(
         title='Landing Pages',
-        link='/admin/landing-pages',
+        link='/landing-pages',
         icon='bi-layers',
     ),
     MenuItemModel(
         title='Events',
-        link='/admin/events',
+        link='/events',
         icon='bi-calendar-event',
     ),
     MenuItemModel(
         title='Posts',
-        link='/admin/posts',
+        link='/posts',
         icon='bi-pin-angle',
     ),
     MenuItemModel(
         title='FAQs',
-        link='/admin/faqs',
+        link='/faqs',
         icon='bi-question-circle',
     ),
     MenuItemModel(
         title='Custom Pages',
-        link='/admin/custom-pages',
+        link='/custom-pages',
         icon='bi-filetype-html',
     ),
     MenuItemModel(
         title='Trash Bin',
-        link='/admin/trash-bin',
+        link='/trash-bin',
         icon='bi-trash',
     ),
 
@@ -60,47 +60,47 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
     MenuItemModel(
         title='Article List',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-file-earmark-post',
     ),
     MenuItemModel(
         title='Event List',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-file-earmark-medical',
     ),
     MenuItemModel(
         title='FAQ List',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-file-earmark-text',
     ),
     MenuItemModel(
         title='Calendar',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-calendar',
     ),
     MenuItemModel(
         title='Search',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-search',
     ),
     MenuItemModel(
         title='Login',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-key',
     ),
     MenuItemModel(
         title='Contact',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-file-earmark-person',
     ),
     MenuItemModel(
         title='Sitemap',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-map',
     ),
     MenuItemModel(
         title='Blog',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-postage',
     ),
 
@@ -113,17 +113,17 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
     MenuItemModel(
         title='Images',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-file-earmark-image',
     ),
     MenuItemModel(
         title='Videos',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-file-earmark-play',
     ),
     MenuItemModel(
         title='Files',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-file-earmark',
     ),
 
@@ -136,12 +136,12 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
     MenuItemModel(
         title='Navbar',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-window',
     ),
     MenuItemModel(
         title='Footer',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-window-desktop',
     ),
 
@@ -154,22 +154,22 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
     MenuItemModel(
         title='Properties',
-        link='/admin/properties',
+        link='/properties',
         icon='bi-gear',
     ),
     MenuItemModel(
         title='Translations',
-        link='/admin/translations',
+        link='/translations',
         icon='bi-translate',
     ),
     MenuItemModel(
         title='Users',
-        link='/admin/pages',
+        link='/pages',
         icon='bi-people',
     ),
     MenuItemModel(
         title='Logout',
-        link='/admin/logout',
+        link='/logout',
         icon='bi-box-arrow-left',
     ),
 ]

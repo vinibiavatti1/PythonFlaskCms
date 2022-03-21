@@ -82,6 +82,20 @@ def delete(context: str, content_id: int) -> None:
     Delete a content by id.
     """
     sql = '''
-        UPDATE contents SET deleted = 1 WHERE id = ? AND context = ?
+        UPDATE contents SET deleted = 1,
+        deleted_on = CURRENT_TIMESTAMP
+        WHERE id = ? AND context = ?
+    '''
+    database_utils.execute_update(sql, (content_id, context))
+
+
+def restore(context: str, content_id: int) -> None:
+    """
+    Restore a content by id.
+    """
+    sql = '''
+        UPDATE contents SET deleted = 0,
+        deleted_on = NULL
+        WHERE id = ? AND context = ?
     '''
     database_utils.execute_update(sql, (content_id, context))

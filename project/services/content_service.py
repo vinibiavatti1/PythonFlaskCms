@@ -80,7 +80,6 @@ def delete(context: str, content_id: int) -> None:
     """
     Delete a content by id.
     """
-    context = session[session_enum.CONTEXT]
     content = content_repository.select_by_id(context, content_id)
     if not content:
         return
@@ -90,6 +89,22 @@ def delete(context: str, content_id: int) -> None:
         content_id,
         content['type'],
         'Content deleted'
+    )
+
+
+def restore(context: str, content_id: int) -> None:
+    """
+    Restore a content by id.
+    """
+    content = content_repository.select_by_id(context, content_id)
+    if not content:
+        return
+    content_repository.restore(context, content_id)
+    history_service.insert(
+        context,
+        content_id,
+        content['type'],
+        'Content restored'
     )
 
 
@@ -103,6 +118,7 @@ def duplicate(context: str, content_id: int, to_context: str) -> Any:
     content_dict = {
         **content
     }
+    content_dict['published'] = 0
     new_id = content_repository.insert(to_context, content_dict)
     history_service.insert(
         context,
