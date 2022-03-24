@@ -15,7 +15,7 @@ def select_all(context: str, content_type: str) -> list[dict[str, Any]]:
     """
     Select all contents by content type.
     """
-    contents = content_repository.select_all(context, content_type)
+    contents = content_repository.select_all_by_type(context, content_type)
     return data_utils.parse_list_json_data(contents)
 
 
@@ -25,6 +25,26 @@ def select_all_deleted(context: str) -> list[dict[str, Any]]:
     """
     contents = content_repository.select_all_deleted(context)
     return data_utils.parse_list_json_data(contents)
+
+
+def select_all_urls(context: str,
+                    published: bool = True) -> list[dict[str, str]]:
+    """
+    Select all content urls.
+    """
+    urls = list()
+    contents = content_repository.select_all(context, published)
+    for content in contents:
+        urls.append(dict(
+            url=generate_content_url(
+                context,
+                content['type'],
+                content['name'],
+            ),
+            name=content['name'],
+            resource_type=content['type'],
+        ))
+    return urls
 
 
 def select_by_id(context: str, content_id: int) -> Optional[dict[str, Any]]:

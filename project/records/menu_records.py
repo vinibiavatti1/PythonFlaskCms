@@ -146,12 +146,12 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
     MenuItemModel(
         title='Navbar',
-        link='/pages',
+        link='/navbar',
         icon='bi-window',
     ),
     MenuItemModel(
         title='Footer',
-        link='/pages',
+        link='/footer',
         icon='bi-window-desktop',
     ),
 

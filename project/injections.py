@@ -12,6 +12,7 @@ from project.services import property_service
 from project.utils import datetime_utils
 from project.utils import page_utils
 from project.utils import context_utils
+from project.services import content_service
 
 
 # Blueprint
@@ -87,6 +88,25 @@ def inject_properties() -> dict[str, Any]:
     Inject the global properties.
     """
     context = context_utils.get_current_context()
+    if not context:
+        return dict()
     return dict(
         properties=property_service.select_all(context)
+    )
+
+
+@blueprint.app_context_processor
+def inject_urls() -> dict[str, Any]:
+    """
+    Inject the URLs.
+    """
+    context = context_utils.get_current_context()
+    if not context:
+        return dict()
+    content_urls = content_service.select_all_urls(context, True)
+    return dict(
+        urls=dict(
+            content_urls=content_urls,
+            page_urls=[]
+        )
     )

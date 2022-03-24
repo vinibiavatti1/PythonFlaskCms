@@ -9,15 +9,32 @@
             </div>
             <div class="modal-body">
                 <div class="mb-2">
-                    <input id="search-urls" type="search" class="form-control" placeholder="Type the name of the block to search">
+                    <input id="search-urls" type="search" class="form-control" placeholder="Type the name of the URL to search">
                 </div>
-                <div id="url-list" class="list-group url-list">
-                    {% for url in urls %}
-                        <a href="javascript:void(0)" data-url="{{url.url}}" class="list-group-item list-group-item-action url-item" style="line-height: 20px;">
-                            {{url.url}}<br>
-                            <span style="font-size: 12px;">{{url.description}}</span>
-                        </a>
-                    {% endfor %}
+                <ul class="nav nav-tabs mb-2" id="landing-page-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#pages">Pages</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#contents">Contents</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="pages" role="tabpanel">
+                        <div>
+                            TO DO
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="contents" role="tabpanel">
+                        <div id="url-list" class="list-group url-list">
+                            {% for content_url in urls.content_urls %}
+                                <a href="javascript:void(0)" data-url="{{content_url.url}}" class="list-group-item list-group-item-action url-item" style="line-height: 20px;">
+                                    {{content_url.url}}<br>
+                                    <span style="font-size: 12px;">{{content_url.name}} / {{content_url.resource_type}}</span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -46,7 +63,7 @@
         });
 
         $('.url-item').on('click', function() {
-            $('#url-list').children().removeClass('active');
+            $('.url-item').removeClass('active');
             $(this).addClass('active');
             $('#select-url').removeClass('disabled');
             selectedURL = $(this).data('url');
@@ -61,7 +78,7 @@
             let search = $('#search-urls').val();
             $('.url-item').each(function() {
                 let current = $(this);
-                if (!search || current.data('url').toUpperCase() == search.toUpperCase()) {
+                if (!search || current.data('url').toUpperCase().includes(search.toUpperCase())) {
                     current.show();
                 } else {
                     current.hide();

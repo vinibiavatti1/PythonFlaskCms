@@ -5,7 +5,8 @@ from typing import Any, Optional
 from project.utils import database_utils
 
 
-def select_all(context: str, content_type: str) -> list[dict[str, Any]]:
+def select_all_by_type(context: str,
+                       content_type: str) -> list[dict[str, Any]]:
     """
     Select all contents by content type.
     """
@@ -13,6 +14,17 @@ def select_all(context: str, content_type: str) -> list[dict[str, Any]]:
         SELECT * FROM contents WHERE deleted = 0 AND type = ? AND context = ?
     '''
     return database_utils.execute_query(sql, (content_type, context))
+
+
+def select_all(context: str, published: bool) -> list[dict[str, Any]]:
+    """
+    Select all contents.
+    """
+    sql = '''
+        SELECT * FROM contents WHERE deleted = 0 AND published = ?
+        AND context = ?
+    '''
+    return database_utils.execute_query(sql, (published, context))
 
 
 def select_all_deleted(context: str) -> list[dict[str, Any]]:
