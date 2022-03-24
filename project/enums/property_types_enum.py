@@ -17,4 +17,5 @@ URL = 'url'
 RICH_TEXT = 'rich_text'
 KEY = 'key'
 INFO = 'info'
+IMAGE = 'image'
 # NESTED

@@ -6,6 +6,10 @@ from project.models.header_model import HeaderModel
 from project.properties.extensions.seo_properties import seo_properties
 from project.properties.extensions.sitemap_properties import sitemap_properties
 from project.properties.extensions.content_properties import content_properties
+from project.properties.extensions.list_properties import list_properties
+from project.properties.extensions.access_properties import access_properties
+from project.properties.extensions.information_properties \
+    import information_properties
 from project.enums import property_types_enum as prop_type
 from project.enums import string_types_enum as str_type
 from typing import Union
@@ -46,6 +50,13 @@ event_properties: list[Union[PropertyModel, HeaderModel]] = [
         required=True,
     ),
     PropertyModel(
+        name='event_category',
+        label='Event category',
+        property_type=prop_type.STR,
+        description='The category of the event',
+        placeholder='Enter the category',
+    ),
+    PropertyModel(
         name='event_show_in_calendar',
         label='Show in calendar',
         property_type=prop_type.BOOL,
@@ -57,5 +68,8 @@ event_properties: list[Union[PropertyModel, HeaderModel]] = [
 
 # Extensions
 event_properties.extend(content_properties)
+event_properties.extend(list_properties)
+event_properties.extend(information_properties)
 event_properties.extend(seo_properties)
 event_properties.extend(sitemap_properties)
+event_properties.extend(access_properties)

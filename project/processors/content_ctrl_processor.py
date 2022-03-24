@@ -30,7 +30,7 @@ def process_list_view(context: str, list_name: str, title: str,
     contents = content_service.select_all(context, resource_type)
     for content in contents:
         id_ = content['id']
-        private = content['private'] == 1
+        private = content['data']['private'] == '1'
         published = content['published'] == 1
         data.append((
             id_,
@@ -94,6 +94,7 @@ def process_edit_view(context: str, list_name: str, title: str,
             properties=props,
             resource_type=resource_type,
             history=history,
+            name=content['name'],
         )
     )
 
@@ -145,13 +146,14 @@ def process_delete_action(context: str, list_name: str,
 
 
 def process_duplicate_action(context: str, list_name: str,
-                             content_id: int, to_context: str) -> Any:
+                             content_id: int, to_context: str,
+                             new_name: str) -> Any:
     """
     Duplicate action wrapper.
     """
     list_url = get_admin_list_url(context, list_name)
     try:
-        content_service.duplicate(context, content_id, to_context)
+        content_service.duplicate(context, content_id, to_context, new_name)
         flash('Content duplicated successfully!', category='success')
         return redirect(list_url)
     except Exception as err:

@@ -1,5 +1,5 @@
 """
-Article properties configuration.
+News properties configuration.
 """
 from project.models.property_model import PropertyModel
 from project.models.header_model import HeaderModel
@@ -15,13 +15,13 @@ from typing import Union
 
 
 # Properties
-article_properties: list[Union[PropertyModel, HeaderModel]] = [
+news_properties: list[Union[PropertyModel, HeaderModel]] = [
 ]
 
 # Extensions
-article_properties.extend(content_properties)
-article_properties.extend(list_properties)
-article_properties.extend(information_properties)
-article_properties.extend(seo_properties)
-article_properties.extend(sitemap_properties)
-article_properties.extend(access_properties)
+news_properties.extend(content_properties)
+news_properties.extend(list_properties)
+news_properties.extend(information_properties)
+news_properties.extend(seo_properties)
+news_properties.extend(sitemap_properties)
+news_properties.extend(access_properties)

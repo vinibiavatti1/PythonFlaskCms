@@ -97,7 +97,8 @@ def restore(context: str, content_id: int) -> None:
     )
 
 
-def duplicate(context: str, content_id: int, to_context: str) -> Any:
+def duplicate(context: str, content_id: int, to_context: str,
+              new_name: str) -> Any:
     """
     Delete a content by id.
     """
@@ -108,6 +109,16 @@ def duplicate(context: str, content_id: int, to_context: str) -> Any:
         **content
     }
     content_dict['published'] = 0
+    content_dict['name'] = new_name
+    data = json.loads(content_dict['data'])
+    data['published'] = 0
+    data['name'] = new_name
+    data['url'] = generate_content_url(
+        to_context,
+        data['type'],
+        data['name'],
+    )
+    content_dict['data'] = json.dumps(data)
     new_id = content_repository.insert(to_context, content_dict)
     history_service.insert(
         content_id,

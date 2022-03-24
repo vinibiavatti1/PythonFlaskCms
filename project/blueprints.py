@@ -25,6 +25,7 @@ from project.controllers.admin import (
     trash_bin_ctrl,
     custom_pages_ctrl,
     post_ctrl,
+    news_ctrl,
 )
 
 
@@ -54,4 +55,5 @@ blueprints: list[Blueprint] = [
     post_ctrl.blueprint,
     landing_pages_ctrl.blueprint,
     faqs_ctrl.blueprint,
+    news_ctrl.blueprint,
 ]

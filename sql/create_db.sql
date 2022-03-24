@@ -30,7 +30,6 @@ CREATE TABLE IF NOT EXISTS contents (
     `context` TEXT NOT NULL,
     `name` TEXT NOT NULL,
     `type` TEXT NOT NULL,
-    `private` INTEGER NOT NULL DEFAULT 0,
     `published` INTEGER NOT NULL DEFAULT 1,
     `deleted` INTEGER NOT NULL DEFAULT 0,
     `created_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -43,7 +42,6 @@ CREATE TABLE IF NOT EXISTS pages (
     `id` INTEGER PRIMARY KEY,
     `context` TEXT NOT NULL,
     `name` TEXT NOT NULL,
-    `private` INTEGER NOT NULL DEFAULT 0,
     `published` INTEGER NOT NULL DEFAULT 1,
     `deleted` INTEGER NOT NULL DEFAULT 0,
     `data` TEXT NOT NULL DEFAULT '{}'

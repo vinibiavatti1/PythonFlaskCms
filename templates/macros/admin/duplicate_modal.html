@@ -1,0 +1,50 @@
+{% macro duplicate_modal(default_name) %}
+<div class="modal fade" id="duplicate-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Duplicate
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <label>Name <span class="text-danger">*</span></label>
+                    <input id="duplicate_name" class="form-control" placeholder="Enter the new name" type="text" value="{{default_name}}">
+                </div>
+                <div class="mb-2">
+                    <label>Context <span class="text-danger">*</span></label>
+                    <select id="duplicate_context" class="form-select">
+                        {% for ctx in records.context_records %}
+                        <option value="{{ctx.code}}">{{ctx.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0)" data-bs-dismiss="modal" class="btn btn-primary">
+                    Cancel
+                </a>
+                <a id="duplicate_action_btn" href="javascript:void(0)" class="btn btn-success">
+                    Duplicate
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(function() {
+
+        const url_modal = new bootstrap.Modal(
+            document.getElementById('duplicate-modal')
+        );
+
+        $(document).delegate('.duplicate-btn', 'click', function() {
+            url_modal.show();
+            setTimeout(function() {
+                $("#duplicate_name").focus();
+            }, 500);
+        });
+    });
+</script>
+{% endmacro %}

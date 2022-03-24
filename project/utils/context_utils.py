@@ -9,7 +9,7 @@ def get_current_context() -> str:
     """
     Get the current context from flask global variable.
     """
-    if not g.context:
+    if not hasattr(g, 'context'):
         for context_record in context_records:
             if context_record.default:
                 return context_record.code

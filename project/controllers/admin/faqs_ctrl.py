@@ -127,10 +127,12 @@ def delete_action(context: str, content_id: int) -> Any:
     )
 
 
-@blueprint.route('/duplicate/<content_id>/<to_context>', methods=['GET'])
+@blueprint.route('/duplicate/<content_id>/<to_context>/<new_name>',
+                 methods=['GET'])
 @login_required()
 @process_context()
-def duplicate_action(context: str, content_id: int, to_context: str) -> Any:
+def duplicate_action(context: str, content_id: int, to_context: str,
+                     new_name: str) -> Any:
     """
     Duplicate content.
     """
@@ -139,4 +141,5 @@ def duplicate_action(context: str, content_id: int, to_context: str) -> Any:
         LIST_NAME,
         content_id,
         to_context,
+        new_name,
     )

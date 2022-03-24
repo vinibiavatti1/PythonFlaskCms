@@ -24,12 +24,12 @@
             {{disabled}}
             {{required}}
             type="text"
-            pattern="^[a-z\_]$"
+            pattern="^[a-z\_0-9]$"
             class="prop form-control {{css_class}}"
             placeholder="{{prop_data.placeholder}}"
             value="{{value}}"
         />
-        <small>The value can only have small characters and "_"</small>
+        <small>The value can only have small characters, numbers and "_"</small>
     {% elif prop_data.property_type == 'password' %}
         <input
             {{name}}

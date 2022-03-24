@@ -31,6 +31,11 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         icon='bi-calendar-event',
     ),
     MenuItemModel(
+        title='News',
+        link='/news',
+        icon='bi-newspaper',
+    ),
+    MenuItemModel(
         title='Posts',
         link='/posts',
         icon='bi-pin-angle',
@@ -67,6 +72,11 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         title='Event List',
         link='/pages',
         icon='bi-file-earmark-medical',
+    ),
+    MenuItemModel(
+        title='News List',
+        link='/news_list',
+        icon='bi-file-earmark-easel',
     ),
     MenuItemModel(
         title='FAQ List',

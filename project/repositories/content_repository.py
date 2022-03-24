@@ -41,9 +41,9 @@ def insert(context: str, data: dict[str, Any]) -> Any:
     """
     sql = '''
         INSERT INTO contents
-        (context, name, type, published, data, private)
+        (context, name, type, published, data)
         VALUES
-        (?, ?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?)
     '''
     return database_utils.execute_update(sql, (
         context,
@@ -51,7 +51,6 @@ def insert(context: str, data: dict[str, Any]) -> Any:
         data['type'],
         data['published'],
         data['data'],
-        data['private'],
     ))
 
 
@@ -65,8 +64,7 @@ def update(context: str, content_id: int, data: dict[str, Any]) -> Any:
             name = ?,
             type = ?,
             published = ?,
-            data = ?,
-            private = ?
+            data = ?
         WHERE id = ?
     '''
     return database_utils.execute_update(sql, (
@@ -75,7 +73,6 @@ def update(context: str, content_id: int, data: dict[str, Any]) -> Any:
         data['type'],
         data['published'],
         data['data'],
-        data['private'],
         content_id
     ))
 

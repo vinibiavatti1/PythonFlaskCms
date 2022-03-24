@@ -2,6 +2,7 @@
 {% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
 {% from "macros/admin/property.html" import property with context %}
 {% from "macros/admin/history_list.html" import history_list with context %}
+{% from "macros/admin/duplicate_modal.html" import duplicate_modal with context %}
 {% extends 'admin/layout.html' %}
 {% block title %}{{ page_data.title }}{% endblock %}
 {% block content %}
@@ -28,7 +29,7 @@
                                 Back
                             </a>
                             {% if page_data.edit %}
-                                <button id="btn-duplicate" type="button" class="btn btn-secondary">
+                                <button id="btn-duplicate" type="button" class="btn btn-secondary duplicate-btn">
                                     <i class="bi bi-files"></i>
                                     Duplicate...
                                 </button>
@@ -117,6 +118,11 @@
     </div>
 </div>
 {% endblock %}
+{% block modals %}
+    {% if page_data.edit %}
+    {{ duplicate_modal(page_data.name) }}
+    {% endif %}
+{% endblock %}
 {% block script %}
 <script>
     jQuery(function() {
@@ -136,11 +142,18 @@
             }
         });
 
-        $("#btn-duplicate").on('click', function() {
-            // TODO - DO MODAL FOR IT
-            let context = prompt('Type the context to attach the duplicated record');
-            if (!context) return;
-            window.localtion.href = '{{page_data.root_url}}/duplicate/{{page_data.content_id}}/' + context;
+        $("#duplicate_action_btn").on('click', function() {
+            let context = $("#duplicate_context").val();
+            let new_name = $("#duplicate_name").val();
+            if (!new_name) {
+                alert('The name is required.');
+                return;
+            }
+            if (!/^[a-z\_0-9]+$/g.test(new_name)) {
+                alert('Invalid name. Must have only a-z, numbers and "_" characteres.');
+                return;
+            }
+            window.location.href = '{{page_data.root_url}}/duplicate/{{page_data.content_id}}/' + context + '/' + new_name;
         });
     });
 </script>

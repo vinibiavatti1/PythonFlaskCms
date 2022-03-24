@@ -1,22 +1,22 @@
 """
-Landing Pages controller.
+News controller.
 """
 from typing import Any
 from flask import Blueprint, request
 from project.enums import resource_type_enum
 from project.decorators.security_decorators import login_required
-from project.properties.landing_page_properties import landing_page_properties
+from project.properties.news_properties import news_properties
 from project.decorators.context_decorators import process_context
 from project.processors import content_ctrl_processor
 
 
 # Controller data
-CONTROLLER_NAME = 'admin_lading_pages_ctrl'
-URL_PREFIX = '/<context>/admin/landing_pages'
-PAGE_TITLE = 'Landing Pages'
-LIST_NAME = 'landing_pages'
-RESOURCE_TYPE = resource_type_enum.LANDING_PAGE
-PROPERTIES = landing_page_properties
+CONTROLLER_NAME = 'admin_news_ctrl'
+URL_PREFIX = '/<context>/admin/news'
+PAGE_TITLE = 'News'
+LIST_NAME = 'news'
+RESOURCE_TYPE = resource_type_enum.NEWS
+PROPERTIES = news_properties
 
 
 # Blueprint data
