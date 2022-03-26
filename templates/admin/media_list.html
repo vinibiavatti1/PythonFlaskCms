@@ -1,0 +1,102 @@
+{% from "macros/utils/alerts.html" import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% extends 'admin/layout.html' %}
+{% block title %}{{page_data.title}}{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', page_data.title]) }}
+            <div class="fs-3 text-white">{{page_data.title}}</div>
+            <div class="card">
+                <div class="card-body">
+                    <form
+                        id="upload-form"
+                        method="POST"
+                        action="{{ page_data.action_url }}"
+                        class="needs-validation"
+                        novalidate
+                    >
+                        {{ flash_alerts() }}
+                        <div class="mb-2">
+                            <label for="formFile" class="form-label">Upload files</label>
+                            <input class="form-control" type="file" name="files" required multiple>
+                        </div>
+                        <div class="mb-2">
+                            <input id="action-input" type="hidden" name="action" value="">
+                            <button
+                                id="upload-btn"
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="right"
+                                title="Upload and keep files with the same name.">
+                                Upload
+                            </button>
+                            <button
+                                id="upload-and-replace-btn"
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="right"
+                                title="Upload and replace files with the same name.">
+                                Upload and Replace
+                            </button>
+                        </div>
+                    </form>
+                    <div class="media-list">
+                        {% for media in page_data.medias %}
+                            <a href="{{media.path}}" class="text-decoration-none" target="_blank">
+                                {% if media.file_type == 'image' %}
+                                    <span class="">
+                                        <img src="{{media.path}}" class="img-thumbnail media-container mb-2" alt="Image tile">
+                                    </span>
+                                {% else %}
+                                    <span>
+                                        <span class="img-thumbnail media-container mb-2">
+                                            <div class="media-file text-dark">
+                                                {{media.extension.upper()}} File <br>
+                                                <i class="bi bi-filetype-{{media.extension}}"></i>
+                                            </div>
+                                        </span>
+                                    </span>
+                                {% endif %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                    <a href="{{page_data.first_page_url}}" class="btn btn-secondary" title="First page">
+                        <i class="bi bi-arrow-bar-left"></i>
+                    </a>
+                    {% if page_data.page != 0 %}
+                        <div class="btn-group">
+                            <a href="{{page_data.prev_page_url}}" class="btn btn-secondary" title="Previous page">
+                                <i class="bi bi-arrow-left"></i>
+                            </a>
+                            <a href="{{page_data.next_page_url}}" class="btn btn-secondary" title="Next page">
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                        <a href="{{page_data.all_page_url}}" class="btn btn-secondary" title="All page">
+                            All
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    jQuery(function() {
+        $('#upload-btn').on('click', function() {
+            $('#action-input').val('upload');
+            $('#upload-form').submit();
+        });
+        $('#upload-and-replace-btn').on('click', function() {
+            $('#action-input').val('replace');
+            $('#upload-form').submit();
+        });
+    });
+</script>
+{% endblock %}

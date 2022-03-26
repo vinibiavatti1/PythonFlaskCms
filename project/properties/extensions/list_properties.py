@@ -33,6 +33,12 @@ list_properties: list[Union[PropertyModel, HeaderModel]] = [
                     'cards.',
     ),
     PropertyModel(
+        label='Thumbnail Description',
+        name='list_thumbnail_alt',
+        property_type=prop_type.TEXT,
+        description='Thumbnail description (alt text)',
+    ),
+    PropertyModel(
         label='Show in lists?',
         name='list_show',
         property_type=prop_type.BOOL,

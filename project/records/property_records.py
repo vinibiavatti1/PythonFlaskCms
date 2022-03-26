@@ -41,7 +41,7 @@ property_records: list[Union[HeaderModel, PropertyModel]] = [
         description='Favicon URL that will be used for all pages',
         property_type=prop_type.STR,
         required=True,
-        default='/static/medias/favicon-32x32.png',
+        default='/static/favicons/favicon-32x32.png',
     ),
     PropertyModel(
         name='charset',
@@ -264,5 +264,21 @@ property_records: list[Union[HeaderModel, PropertyModel]] = [
         description='Enables cookie policy modal.',
         property_type=prop_type.BOOL,
         default=str_type.TRUE,
+    ),
+
+    ###########################################################################
+    # Media
+    ###########################################################################
+
+    HeaderModel(
+        title='Media'
+    ),
+    PropertyModel(
+        name='media_page_size',
+        label='Meida page size',
+        description='The size of the media list page.',
+        property_type=prop_type.INTEGER,
+        default='60',
+        required=True
     ),
 ]

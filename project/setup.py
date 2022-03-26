@@ -39,7 +39,7 @@ def __register_properties() -> None:
     Set properties into database.
     """
     for context_record in context_records:
-        context = context_record.name
+        context = context_record.code
         for prop in property_records:
             if isinstance(prop, PropertyModel):
                 val = property_repository.get_property(context, prop.name)

@@ -41,7 +41,7 @@ def process_list_view(context: str, list_name: str, title: str,
             f'<a href="{list_url}/edit/{id_}">Details</a>'
         ))
     return render_template(
-        '/admin/datatable.html',
+        '/admin/content_list.html',
         page_data=dict(
             headers=headers,
             data=data,

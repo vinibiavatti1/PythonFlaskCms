@@ -122,19 +122,9 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         title='Media'
     ),
     MenuItemModel(
-        title='Images',
-        link='/pages',
+        title='Media Files',
+        link='/medias',
         icon='bi-file-earmark-image',
-    ),
-    MenuItemModel(
-        title='Videos',
-        link='/pages',
-        icon='bi-file-earmark-play',
-    ),
-    MenuItemModel(
-        title='Files',
-        link='/pages',
-        icon='bi-file-earmark',
     ),
 
     ###########################################################################

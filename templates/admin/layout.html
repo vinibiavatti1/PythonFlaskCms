@@ -10,6 +10,7 @@
 {% from "macros/utils/noscript.html" import noscript with context %}
 {% from "macros/utils/form_validation.html" import form_validation_script with context %}
 {% from "macros/utils/richtext.html" import richtext_script with context %}
+{% from "macros/utils/tooltip.html" import tooltip_script with context %}
 
 <!DOCTYPE html>
 <html lang="en" class="bg-dark h-100">
@@ -54,4 +55,5 @@
 {{ form_validation_script() }}
 {{ richtext_script() }}
 {{ copy_clipboard_behavior() }}
+{{ tooltip_script() }}
 </html>

@@ -18,3 +18,16 @@
     max-height: 300px;
     overflow-y: scroll;
 }
+.media-container {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    text-align: center;
+    display: inline-block;
+    vertical-align: top;
+}
+.media-file {
+    background-color: #dee2e6;
+    height: 100%;
+    padding-top: 21px;
+}

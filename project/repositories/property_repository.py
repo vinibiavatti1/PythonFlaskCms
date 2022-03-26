@@ -35,7 +35,7 @@ def set_property(context: str, name: str, value: str) -> None:
     database_utils.execute_update(sql, (context, name, value))
 
 
-def get_property(context: str, name: str) -> Optional[str]:
+def get_property(context: str, name: str) -> Optional[dict[str, Any]]:
     """
     Get property value by name.
     """

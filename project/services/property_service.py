@@ -34,10 +34,10 @@ def get_property(context: str, name: str) -> str:
     """
     Get property value from database.
     """
-    value = property_repository.get_property(context, name)
-    if value is None:
+    prop = property_repository.get_property(context, name)
+    if prop is None:
         return ''
-    return value
+    return str(prop['value'])
 
 
 def select_all(context: str) -> dict[str, str]:

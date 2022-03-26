@@ -5,13 +5,13 @@ URL model.
 
 class UrlModel:
     """
-    Model of menu property.
+    Model of URL property.
     """
 
-    def __init__(self, title: str, link: str, icon: str) -> None:
+    def __init__(self, *, url: str, name: str, resource_type: str) -> None:
         """
-        Init menu object.
+        Init URL object.
         """
-        self.title = title
-        self.link = link
-        self.icon = icon
+        self.url = url
+        self.name = name
+        self.resource_type = resource_type
