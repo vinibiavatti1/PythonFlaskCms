@@ -115,15 +115,15 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
 
     ###########################################################################
-    # Media
+    # Assets
     ###########################################################################
 
     HeaderModel(
-        title='Media'
+        title='Assets'
     ),
     MenuItemModel(
-        title='Media Files',
-        link='/medias',
+        title='Files',
+        link='/files',
         icon='bi-file-earmark-image',
     ),
 

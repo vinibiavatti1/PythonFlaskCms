@@ -1,17 +1,17 @@
 """
-Media model.
+File model.
 """
 
 
-class MediaModel:
+class FileModel:
     """
-    Model of media.
+    Model of file.
     """
 
     def __init__(self, *, name: str, path: str, extension: str,
                  file_type: str) -> None:
         """
-        Init media object.
+        Init file object.
         """
         self.name = name
         self.path = path

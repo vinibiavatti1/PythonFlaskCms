@@ -104,7 +104,7 @@
             value="{{value}}"
         />
     {% elif prop_data.property_type == 'url' %}
-        <div class="input-group url-selector-behavior">
+        <div class="input-group">
             <input
                 {{name}}
                 {{disabled}}
@@ -115,6 +115,21 @@
                 value="{{value}}"
             />
             <button type="button" class="btn btn-secondary url-selector">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    {% elif prop_data.property_type == 'image' %}
+        <div class="input-group">
+            <input
+                {{name}}
+                {{disabled}}
+                {{required}}
+                type="text"
+                class="prop form-control {{css_class}}"
+                placeholder="{{prop_data.placeholder}}"
+                value="{{value}}"
+            />
+            <button type="button" class="btn btn-secondary image-selector">
                 <i class="bi bi-search"></i>
             </button>
         </div>

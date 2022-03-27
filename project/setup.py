@@ -12,6 +12,7 @@ from project.records.translation_records import translation_records
 from project.records.context_records import context_records
 from project.repositories import property_repository
 from project.repositories import translation_repository
+import os
 
 
 ###############################################################################
@@ -19,14 +20,21 @@ from project.repositories import translation_repository
 ###############################################################################
 
 
-def __register_secret_key(app: Flask) -> None:
+def register_upload_folder(app: Flask) -> None:
+    """
+    Register the folder to upload filder.
+    """
+    app.config['UPLOAD_FOLDER'] = os.path.join(str(app.static_folder), 'files')
+
+
+def register_secret_key(app: Flask) -> None:
     """
     Set secret key to flask app.
     """
     app.secret_key = SECRET
 
 
-def __register_blueprints(app: Flask) -> None:
+def register_blueprints(app: Flask) -> None:
     """
     Register all flask blueprints.
     """
@@ -34,7 +42,7 @@ def __register_blueprints(app: Flask) -> None:
         app.register_blueprint(blueprint)
 
 
-def __register_properties() -> None:
+def register_properties() -> None:
     """
     Set properties into database.
     """
@@ -51,7 +59,7 @@ def __register_properties() -> None:
                     )
 
 
-def __register_translations() -> None:
+def register_translations() -> None:
     """
     Add translations to database.
     """
@@ -67,7 +75,7 @@ def __register_translations() -> None:
                 translation_service.insert(translation.__dict__)
 
 
-def __register_users() -> None:
+def register_users() -> None:
     """
     Register default admin users.
     """
@@ -86,9 +94,10 @@ def setup(app: Flask) -> None:
     """
     Setup function.
     """
-    __register_secret_key(app)
-    __register_blueprints(app)
-    __register_properties()
+    register_upload_folder(app)
+    register_secret_key(app)
+    register_blueprints(app)
+    register_properties()
     # __register_translations()
-    __register_users()
+    register_users()
     # Add more actions...

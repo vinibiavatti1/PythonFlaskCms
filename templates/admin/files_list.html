@@ -16,14 +16,15 @@
                         action="{{ page_data.action_url }}"
                         class="needs-validation"
                         novalidate
+                        enctype="multipart/form-data"
                     >
                         {{ flash_alerts() }}
                         <div class="mb-2">
                             <label for="formFile" class="form-label">Upload files</label>
-                            <input class="form-control" type="file" name="files" required multiple>
+                            <input id="file-input" class="form-control" type="file" name="files" required multiple>
                         </div>
                         <div class="mb-2">
-                            <input id="action-input" type="hidden" name="action" value="">
+                            <input id="action-input" type="hidden" name="replace" value="">
                             <button
                                 id="upload-btn"
                                 type="button"
@@ -31,6 +32,7 @@
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
                                 title="Upload and keep files with the same name.">
+                                <i class="bi bi-upload"></i>
                                 Upload
                             </button>
                             <button
@@ -40,28 +42,31 @@
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
                                 title="Upload and replace files with the same name.">
-                                Upload and Replace
+                                <i class="bi bi-upload"></i>
+                                Upload and Replace...
                             </button>
                         </div>
                     </form>
-                    <div class="media-list">
-                        {% for media in page_data.medias %}
-                            <a href="{{media.path}}" class="text-decoration-none" target="_blank">
-                                {% if media.file_type == 'image' %}
-                                    <span class="">
-                                        <img src="{{media.path}}" class="img-thumbnail media-container mb-2" alt="Image tile">
-                                    </span>
-                                {% else %}
-                                    <span>
-                                        <span class="img-thumbnail media-container mb-2">
-                                            <div class="media-file text-dark">
-                                                {{media.extension.upper()}} File <br>
-                                                <i class="bi bi-filetype-{{media.extension}}"></i>
-                                            </div>
-                                        </span>
-                                    </span>
-                                {% endif %}
-                            </a>
+                    <div class="files-list">
+                        {% for file in page_data.files %}
+                            <div class="file-container">
+                                <a class="delete-icon delete-file-btn" href="javascript:void(0)" data-file-name="{{file.name}}">
+                                    <i class="bi bi-trash text-danger"></i>
+                                </a>
+                                <div class="file-name text-dark" title="{{file.name}}">
+                                    {{file.name}}
+                                </div>
+                                <a href="{{file.path}}" class="text-decoration-none" target="_blank">
+                                    {% if file.file_type == 'image' %}
+                                        <img src="{{file.path}}" class="file-img" alt="Image tile">
+                                    {% else %}
+                                        <div class="file-other text-dark">
+                                            {{file.extension.upper()}} File <br>
+                                            <i class="bi bi-filetype-{{file.extension}}"></i>
+                                        </div>
+                                    {% endif %}
+                                </a>
+                            </div>
                         {% endfor %}
                     </div>
                     <a href="{{page_data.first_page_url}}" class="btn btn-secondary" title="First page">
@@ -90,12 +95,31 @@
 <script>
     jQuery(function() {
         $('#upload-btn').on('click', function() {
-            $('#action-input').val('upload');
+            const file = $('#file-input').val();
+            if (!file) {
+                alert('Select at least one file to upload!')
+                return;
+            }
+            $('#action-input').val('false');
             $('#upload-form').submit();
         });
         $('#upload-and-replace-btn').on('click', function() {
-            $('#action-input').val('replace');
+            const file = $('#file-input').val();
+            if (!file) {
+                alert('Select at least one file to upload!')
+                return;
+            }
+            if(!confirm('Do you really want to replace the files?')) {
+                return;
+            }
+            $('#action-input').val('true');
             $('#upload-form').submit();
+        });
+        $('.delete-file-btn').on('click', function() {
+            const fileName = $(this).data('file-name');
+            if(confirm(`Do you really want to delete this file: ${fileName}?`)) {
+                window.location.href = `{{page_data.delete_url}}/${fileName}`;
+            }
         });
     });
 </script>

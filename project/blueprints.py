@@ -12,8 +12,8 @@ from project.controllers.admin import (
     auth_ctrl,
     cookie_policy_ctrl,
     faqs_ctrl,
+    files_ctrl,
     landing_pages_ctrl,
-    media_ctrl,
     menu_ctrl,
     properties_ctrl,
     seo_ctrl,
@@ -57,5 +57,5 @@ blueprints: list[Blueprint] = [
     landing_pages_ctrl.blueprint,
     faqs_ctrl.blueprint,
     news_ctrl.blueprint,
-    media_ctrl.blueprint,
+    files_ctrl.blueprint,
 ]

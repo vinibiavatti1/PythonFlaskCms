@@ -2,6 +2,7 @@
 {% from "macros/admin/sidenav.html" import admin_sidenav with context %}
 {% from "macros/admin/footer.html" import admin_footer with context %}
 {% from "macros/admin/url_modal.html" import url_modal with context %}
+{% from "macros/admin/images_modal.html" import images_modal with context %}
 {% from "macros/utils/datatables.html" import datatables_script with context %}
 {% from "macros/utils/clipboard.html" import copy_clipboard_behavior with context %}
 {% from "macros/utils/headers.html" import metas, links, scripts with context %}
@@ -55,5 +56,6 @@
 {{ form_validation_script() }}
 {{ richtext_script() }}
 {{ copy_clipboard_behavior() }}
+{{ images_modal() }}
 {{ tooltip_script() }}
 </html>

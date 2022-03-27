@@ -18,4 +18,6 @@ RICH_TEXT = 'rich_text'
 KEY = 'key'
 INFO = 'info'
 IMAGE = 'image'
+VIDEO = 'video'
+FILE = 'file'
 # NESTED

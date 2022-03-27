@@ -19,8 +19,8 @@
     overflow-y: scroll;
 }
 .media-container {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     object-fit: cover;
     text-align: center;
     display: inline-block;
@@ -30,4 +30,64 @@
     background-color: #dee2e6;
     height: 100%;
     padding-top: 21px;
+}
+
+.media-block {
+
+}
+
+.file-container {
+    border: 1px solid #dee2e6;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    display: inline-block;
+    position: relative;
+    border-radius: 4px;
+    transition: opacity .25s;
+}
+.file-container:hover {
+    opacity: .85;
+}
+.file-name {
+    font-size: 13px;
+    padding: 2px;
+    padding-right: 20px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: white;
+    border-top: 1px solid #dee2e6;
+    z-index: 999;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.file-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+.file-other {
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    padding-top: 35px;
+    background-color: #dee2e6;
+}
+.delete-icon {
+    position: absolute;
+    right: 2px;
+    bottom: 0px;
+    z-index: 1000;
+    font-size: 15px;
+}
+.image-modal-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.file-container.active .file-name {
+    background-color: #0d6efd;
+    color: white!important;
 }

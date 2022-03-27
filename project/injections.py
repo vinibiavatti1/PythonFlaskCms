@@ -8,11 +8,12 @@ from project.utils.cookie_utils import cookie_policy_consent
 from flask import Blueprint, g
 from project.records.menu_records import menu_records
 from project.records.context_records import context_records
-from project.services import property_service
+from project.services import property_service, file_service
 from project.utils import datetime_utils
 from project.utils import page_utils
 from project.utils import context_utils
 from project.services import content_service
+from project.enums import file_type_enum
 
 
 # Blueprint
@@ -108,5 +109,22 @@ def inject_urls() -> dict[str, Any]:
         urls=dict(
             content_urls=content_urls,
             page_urls=[]
+        )
+    )
+
+
+@blueprint.app_context_processor
+def inject_files() -> dict[str, Any]:
+    """
+    Inject the files.
+    """
+    images = file_service.select_all_by_type(file_type_enum.IMAGE)
+    videos = file_service.select_all_by_type(file_type_enum.VIDEO)
+    files = file_service.select_all_by_type(file_type_enum.FILE)
+    return dict(
+        files=dict(
+            images=images,
+            videos=videos,
+            files=files,
         )
     )

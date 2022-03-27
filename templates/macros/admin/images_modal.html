@@ -1,0 +1,133 @@
+{% macro images_modal() %}
+<div class="modal fade" id="images-modal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Images
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-9">
+                            <h6>Images</h6>
+                            <div class="mb-2">
+                                <label>Search</label>
+                                <input id="search-image-input" class="form-control" placeholder="Search some image..." type="search">
+                            </div>
+                            <div class="image-modal-container">
+                                {% for file in files.images %}
+                                <div class="file-container" role="button" data-file-name="{{file.name}}" data-file-url="{{file.url}}">
+                                    <div class="file-name text-dark" title="{{file.name}}">
+                                        {{file.name}}
+                                    </div>
+                                    <img src="{{file.path}}" class="file-img" alt="Image tile">
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <h6>Crop Properties</h6>
+                            <div class="mb-1">
+                                <label>Mode
+                                    <i
+                                        class="bi bi-question-circle"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="left"
+                                        title="fit - as large as possible while fitting within the given dimensions / crop - as large as possible while fitting into the given aspect ratio / pad - as large as possible while fitting within the given dimensions, and padding to the given dimensions with a background colour / none - resize to the specific dimensions without preserving aspect ratio">
+                                    </i>
+                                </label>
+                                <select id="crop-mode" class="form-select">
+                                    <option value="nocrop">No Crop</option>
+                                    <option value="none">None</option>
+                                    <option value="fit">Fit</option>
+                                    <option value="crop">Crop</option>
+                                    <option value="pad">Pad</option>
+                                </select>
+                            </div>
+                            <div class="mb-1">
+                                <label>Width</label>
+                                <input class="form-control crop-input" placeholder="Enter the width to crop" type="number" disabled>
+                            </div>
+                            <div class="mb-1">
+                                <label>Height</label>
+                                <input class="form-control crop-input" placeholder="Enter the height to crop" type="number" disabled>
+                            </div>
+                            <div class="mb-1">
+                                <label>Background Color</label>
+                                <select class="form-select crop-input" disabled>
+                                    <option value="none">Black (Default)</option>
+                                    <option value="fit">White</option>
+                                </select>
+                            </div>
+                            <div class="mb-1">
+                                <label>Quality (Default  75)</label>
+                                <input class="form-control crop-input" placeholder="Enter the image quality" type="number" value="75" disabled>
+                            </div>
+                            <div class="mb-1">
+                                <label>Enlarge</label>
+                                <select class="form-select crop-input" disabled>
+                                    <option value="false">False (Default)</option>
+                                    <option value="true">True</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0)" data-bs-dismiss="modal" class="btn btn-primary">
+                    Cancel
+                </a>
+                <a id="select_image_action_btn" href="javascript:void(0)" class="btn btn-success disabled">
+                    Select Image
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(function() {
+
+        let selectedImageUrl = null;
+        const url_modal = new bootstrap.Modal(
+            document.getElementById('images-modal')
+        );
+
+        $('#crop-mode').on('change', function() {
+            selectedValue = $(this).val();
+            $('.crop-input').removeAttr('disabled');
+            if(selectedValue == 'nocrop') {
+                $('.crop-input').attr('disabled', '');
+            }
+        });
+
+        $('.file-container').on('click', function() {
+            $('.file-container').removeClass('active');
+            $(this).addClass('active');
+            selectedImageUrl = $(this).data('file-url');
+            $('#select_image_action_btn').removeClass('disabled');
+        });
+
+        $('#search-image-input').on('keyup change', function() {
+            let search = $('#search-image-input').val();
+            $('.file-container').each(function() {
+                let current = $(this);
+                if (!search || current.data('file-name').toUpperCase().includes(search.toUpperCase())) {
+                    current.show();
+                } else {
+                    current.hide();
+                }
+            });
+        });
+
+        $(document).delegate('.image-selector', 'click', function() {
+            url_modal.show();
+            setTimeout(function() {
+                $("#search-image-input").focus();
+            }, 500);
+        });
+    });
+</script>
+{% endmacro %}

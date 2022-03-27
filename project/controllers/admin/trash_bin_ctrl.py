@@ -57,7 +57,7 @@ def list_view(context: str) -> str:
             f'<a href="{list_url}/restore/{id_}">Restore</a>'
         ))
     return render_template(
-        '/admin/datatable.html',
+        '/admin/content_list.html',
         page_data=dict(
             headers=headers,
             data=data,
