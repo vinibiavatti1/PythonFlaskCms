@@ -18,7 +18,7 @@
                             </div>
                             <div class="image-modal-container">
                                 {% for file in files.images %}
-                                <div class="file-container" role="button" data-file-name="{{file.name}}" data-file-url="{{file.url}}">
+                                <div class="file-container" role="button" data-file-name="{{file.name}}">
                                     <div class="file-name text-dark" title="{{file.name}}">
                                         {{file.name}}
                                     </div>
@@ -30,47 +30,28 @@
                         <div class="col-xs-12 col-sm-3">
                             <h6>Crop Properties</h6>
                             <div class="mb-1">
-                                <label>Mode
-                                    <i
-                                        class="bi bi-question-circle"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="left"
-                                        title="fit - as large as possible while fitting within the given dimensions / crop - as large as possible while fitting into the given aspect ratio / pad - as large as possible while fitting within the given dimensions, and padding to the given dimensions with a background colour / none - resize to the specific dimensions without preserving aspect ratio">
-                                    </i>
-                                </label>
-                                <select id="crop-mode" class="form-select">
-                                    <option value="nocrop">No Crop</option>
-                                    <option value="none">None</option>
-                                    <option value="fit">Fit</option>
-                                    <option value="crop">Crop</option>
-                                    <option value="pad">Pad</option>
-                                </select>
+                                <label>X</label>
+                                <input id="crop_x" class="form-control crop-input" placeholder="Enter the X coord to crop" type="number">
                             </div>
                             <div class="mb-1">
-                                <label>Width</label>
-                                <input class="form-control crop-input" placeholder="Enter the width to crop" type="number" disabled>
+                                <label>Y</label>
+                                <input id="crop_y" class="form-control crop-input" placeholder="Enter the Y coord amount to crop" type="number">
                             </div>
                             <div class="mb-1">
-                                <label>Height</label>
-                                <input class="form-control crop-input" placeholder="Enter the height to crop" type="number" disabled>
+                                <label>Crop Width</label>
+                                <input id="crop_width" class="form-control crop-input" placeholder="Enter the width to crop" type="number">
                             </div>
                             <div class="mb-1">
-                                <label>Background Color</label>
-                                <select class="form-select crop-input" disabled>
-                                    <option value="none">Black (Default)</option>
-                                    <option value="fit">White</option>
-                                </select>
+                                <label>Crop Height</label>
+                                <input id="crop_height" class="form-control crop-input" placeholder="Enter the height to crop" type="number">
                             </div>
                             <div class="mb-1">
-                                <label>Quality (Default  75)</label>
-                                <input class="form-control crop-input" placeholder="Enter the image quality" type="number" value="75" disabled>
+                                <label>Resize width</label>
+                                <input id="resize_width" class="form-control crop-input" placeholder="Enter the width to resize" type="number">
                             </div>
                             <div class="mb-1">
-                                <label>Enlarge</label>
-                                <select class="form-select crop-input" disabled>
-                                    <option value="false">False (Default)</option>
-                                    <option value="true">True</option>
-                                </select>
+                                <label>Resize height</label>
+                                <input id="resize_height" class="form-control crop-input" placeholder="Enter the height to resize" type="number">
                             </div>
                         </div>
                     </div>
@@ -89,27 +70,34 @@
 </div>
 <script>
     jQuery(function() {
-
-        let selectedImageUrl = null;
+        let target = null;
+        let selectedImageName = null;
         const url_modal = new bootstrap.Modal(
             document.getElementById('images-modal')
         );
-
-        $('#crop-mode').on('change', function() {
-            selectedValue = $(this).val();
-            $('.crop-input').removeAttr('disabled');
-            if(selectedValue == 'nocrop') {
-                $('.crop-input').attr('disabled', '');
-            }
-        });
-
         $('.file-container').on('click', function() {
             $('.file-container').removeClass('active');
             $(this).addClass('active');
-            selectedImageUrl = $(this).data('file-url');
+            selectedImageName = $(this).data('file-name');
             $('#select_image_action_btn').removeClass('disabled');
         });
-
+        $('#select_image_action_btn').on('click', function() {
+            let url = `/media/${selectedImageName}?`
+            let crop_x = $('#crop_x').val();
+            let crop_y = $('#crop_y').val();
+            let crop_width = $('#crop_width').val();
+            let crop_height = $('#crop_height').val();
+            let resize_width = $('#resize_width').val();
+            let resize_height = $('#resize_height').val();
+            if (crop_x && crop_y && crop_width && crop_height) {
+                url += `&x=${crop_x}&y=${crop_y}&width=${crop_width}&height=${crop_height}`;
+            }
+            if (resize_width && resize_height) {
+                url += `&rwidth=${resize_width}&rheight=${resize_height}`;
+            }
+            target.siblings('input').val(url).change();
+            url_modal.hide();
+        });
         $('#search-image-input').on('keyup change', function() {
             let search = $('#search-image-input').val();
             $('.file-container').each(function() {
@@ -121,8 +109,20 @@
                 }
             });
         });
-
+        $('.img-url-input').on('change keyup', function() {
+            let val = $(this).val();
+            let imgPreviewContainer = $(this).parent().siblings('.img-preview-container');
+            let imgPreview = imgPreviewContainer.children('img');
+            console.log(imgPreviewContainer, imgPreview);
+            if (val) {
+                imgPreview.attr('src', $(this).val());
+                imgPreviewContainer.show();
+            } else {
+                imgPreviewContainer.hide();
+            }
+        });
         $(document).delegate('.image-selector', 'click', function() {
+            target = $(this);
             url_modal.show();
             setTimeout(function() {
                 $("#search-image-input").focus();

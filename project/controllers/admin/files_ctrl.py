@@ -1,5 +1,5 @@
 """
-Media controller.
+Files controller.
 """
 from typing import Any
 from unicodedata import category

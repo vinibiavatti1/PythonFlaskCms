@@ -7,17 +7,17 @@ from project.handlers import blueprint as handlers
 from project.controllers.public import (
     homepage_ctrl,
     search_ctrl,
+    seo_ctrl,
+    cookie_policy_ctrl,
+    media_ctrl,
 )
 from project.controllers.admin import (
     auth_ctrl,
-    cookie_policy_ctrl,
     faqs_ctrl,
     files_ctrl,
     landing_pages_ctrl,
     menu_ctrl,
     properties_ctrl,
-    seo_ctrl,
-    sitemap_ctrl,
     translation_ctrl,
     redirect_ctrl,
     block_ctrl,
@@ -45,7 +45,6 @@ blueprints: list[Blueprint] = [
     properties_ctrl.blueprint,
     auth_ctrl.blueprint,
     menu_ctrl.blueprint,
-    sitemap_ctrl.blueprint,
     translation_ctrl.blueprint,
     redirect_ctrl.blueprint,
     block_ctrl.blueprint,
@@ -58,4 +57,5 @@ blueprints: list[Blueprint] = [
     faqs_ctrl.blueprint,
     news_ctrl.blueprint,
     files_ctrl.blueprint,
+    media_ctrl.blueprint,
 ]

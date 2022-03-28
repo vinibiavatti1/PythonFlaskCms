@@ -94,8 +94,8 @@ def setup(app: Flask) -> None:
     """
     Setup function.
     """
-    register_upload_folder(app)
     register_secret_key(app)
+    register_upload_folder(app)
     register_blueprints(app)
     register_properties()
     # __register_translations()

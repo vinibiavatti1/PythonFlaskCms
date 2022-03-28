@@ -119,19 +119,22 @@
             </button>
         </div>
     {% elif prop_data.property_type == 'image' %}
-        <div class="input-group">
+        <div class="input-group mb-2">
             <input
                 {{name}}
                 {{disabled}}
                 {{required}}
                 type="text"
-                class="prop form-control {{css_class}}"
+                class="prop form-control img-url-input {{css_class}}"
                 placeholder="{{prop_data.placeholder}}"
                 value="{{value}}"
             />
             <button type="button" class="btn btn-secondary image-selector">
                 <i class="bi bi-search"></i>
             </button>
+        </div>
+        <div class="img-preview-container" style="display: none;" title="Image preview">
+            <img class="img-preview" src="" alt="Image preview">
         </div>
     {% elif prop_data.property_type == 'code' %}
         <textarea
