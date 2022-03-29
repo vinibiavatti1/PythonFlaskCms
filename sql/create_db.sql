@@ -7,7 +7,8 @@ DROP TABLE IF EXISTS contents;
 DROP TABLE IF EXISTS pages;
 DROP TABLE IF EXISTS history;
 DROP TABLE IF EXISTS properties;
-DROP TABLE IF EXISTS translations;
+DROP TABLE IF EXISTS menus;
+DROP TABLE IF EXISTS footer;
 
 -------------------------------------------------------------------------------
 -- Creates
@@ -42,7 +43,7 @@ CREATE TABLE IF NOT EXISTS pages (
     `id` INTEGER PRIMARY KEY,
     `context` TEXT NOT NULL,
     `resource_type` TEXT NOT NULL,
-    `data` TEXT NOT NULL DEFAULT '{}',
+    `data` TEXT NOT NULL DEFAULT '{}'
 );
 
 -- History
@@ -68,12 +69,12 @@ CREATE TABLE IF NOT EXISTS properties (
 CREATE TABLE IF NOT EXISTS menus (
     `id` INTEGER PRIMARY KEY,
     `context` TEXT NOT NULL,
-    `data` TEXT NOT NULL DEFAULT '{}',
+    `data` TEXT NOT NULL DEFAULT '{}'
 );
 
 -- Footers
 CREATE TABLE IF NOT EXISTS footers (
     `id` INTEGER PRIMARY KEY,
     `context` TEXT NOT NULL,
-    `data` TEXT NOT NULL DEFAULT '{}',
+    `data` TEXT NOT NULL DEFAULT '{}'
 );

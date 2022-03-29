@@ -62,6 +62,7 @@ class ContentEntity:
         """
         Map dict to content.
         """
+        dct = dict(dct)
         return ContentEntity(
             id=dct.get('id', -1),
             context=dct.get('context', None),

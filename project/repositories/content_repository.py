@@ -33,6 +33,21 @@ def select_all(context: str) -> list[ContentEntity]:
     return ContentEntity.map_list_to_entity(result_set)
 
 
+def select_by_name(context: str, name: str) -> Optional[ContentEntity]:
+    """
+    Select all contents by name.
+    """
+    sql = '''
+        SELECT * FROM contents
+        WHERE deleted = 0 AND context = ? AND name = ?
+
+    '''
+    result_set = database_utils.execute_single_query(sql, (context, name))
+    if result_set is None:
+        return None
+    return ContentEntity.map_dict_to_entity(result_set)
+
+
 def select_all_deleted(context: str) -> list[ContentEntity]:
     """
     Select all deleted contents.

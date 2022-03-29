@@ -24,12 +24,23 @@ def select_all_deleted(context: str) -> list[ContentEntity]:
     return content_repository.select_all_deleted(context)
 
 
+def select_by_name(context: str, name: str) -> Optional[ContentEntity]:
+    """
+    Select all deleted contents.
+    """
+    return content_repository.select_by_name(context, name)
+
+
 def select_all_published(context: str) -> list[ContentEntity]:
     """
     Select all published content.
     """
     contents = content_repository.select_all(context)
-    return [c for c in contents if c.data['published'] == '1']
+    result = []
+    for content in contents:
+        if 'published' in content.data and content.data['published'] == '1':
+            result.append(content)
+    return result
 
 
 def select_by_id(content_id: int) -> Optional[ContentEntity]:
