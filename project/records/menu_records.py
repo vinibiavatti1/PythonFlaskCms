@@ -51,6 +51,16 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         icon='bi-filetype-html',
     ),
     MenuItemModel(
+        title='Translations',
+        link='/translations',
+        icon='bi-translate',
+    ),
+    MenuItemModel(
+        title='Redirects',
+        link='/redirects',
+        icon='bi-signpost-split',
+    ),
+    MenuItemModel(
         title='Trash Bin',
         link='/trash_bin',
         icon='bi-trash',
@@ -156,11 +166,6 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         title='Properties',
         link='/properties',
         icon='bi-gear',
-    ),
-    MenuItemModel(
-        title='Translations',
-        link='/translations',
-        icon='bi-translate',
     ),
     MenuItemModel(
         title='Users',

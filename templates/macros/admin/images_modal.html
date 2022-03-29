@@ -30,27 +30,27 @@
                         <div class="col-xs-12 col-sm-3">
                             <h6>Crop Properties</h6>
                             <div class="mb-1">
-                                <label>X</label>
+                                <label>X <span class="text-warning">*</span></label>
                                 <input id="crop_x" class="form-control crop-input" placeholder="Enter the X coord to crop" type="number">
                             </div>
                             <div class="mb-1">
-                                <label>Y</label>
+                                <label>Y <span class="text-warning">*</span></label>
                                 <input id="crop_y" class="form-control crop-input" placeholder="Enter the Y coord amount to crop" type="number">
                             </div>
                             <div class="mb-1">
-                                <label>Crop Width</label>
+                                <label>Crop width <span class="text-warning">*</span></label>
                                 <input id="crop_width" class="form-control crop-input" placeholder="Enter the width to crop" type="number">
                             </div>
                             <div class="mb-1">
-                                <label>Crop Height</label>
+                                <label>Crop height <span class="text-warning">*</span></label>
                                 <input id="crop_height" class="form-control crop-input" placeholder="Enter the height to crop" type="number">
                             </div>
                             <div class="mb-1">
-                                <label>Resize width</label>
+                                <label>Resize width <span class="text-warning">**</span></label>
                                 <input id="resize_width" class="form-control crop-input" placeholder="Enter the width to resize" type="number">
                             </div>
                             <div class="mb-1">
-                                <label>Resize height</label>
+                                <label>Resize height <span class="text-warning">**</span></label>
                                 <input id="resize_height" class="form-control crop-input" placeholder="Enter the height to resize" type="number">
                             </div>
                         </div>
@@ -111,15 +111,10 @@
         });
         $('.img-url-input').on('change keyup', function() {
             let val = $(this).val();
-            let imgPreviewContainer = $(this).parent().siblings('.img-preview-container');
-            let imgPreview = imgPreviewContainer.children('img');
-            console.log(imgPreviewContainer, imgPreview);
-            if (val) {
-                imgPreview.attr('src', $(this).val());
-                imgPreviewContainer.show();
-            } else {
-                imgPreviewContainer.hide();
-            }
+            let imgPreview = $(this)
+                .parent()
+                .siblings('.img-preview')
+                .attr('href', $(this).val());
         });
         $(document).delegate('.image-selector', 'click', function() {
             target = $(this);

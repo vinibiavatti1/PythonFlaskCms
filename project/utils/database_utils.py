@@ -21,7 +21,7 @@ def connect() -> sqlite3.Connection:
     env = os.environ.get('FLASK_ENV')
     db_name = 'database_' + str(env) + '.db'
     db_path = os.path.join(CURRENT_DIR, 'database', db_name)
-    connection = sqlite3.connect(db_path)
+    connection = sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES)
     if not connection:
         raise AppError('Could not connect to database')
     connection.row_factory = sqlite3.Row

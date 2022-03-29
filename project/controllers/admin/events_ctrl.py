@@ -13,7 +13,7 @@ from project.processors import content_ctrl_processor
 # Controller properties
 CONTROLLER_NAME = 'admin_events_ctrl'
 URL_PREFIX = '/<context>/admin/events'
-RESOURCE_TYPE = resource_type_enum.EVENT
+RESOURCE_TYPE = resource_type_enum.EVENT_CONTENT
 PAGE_TITLE = 'Events'
 LIST_NAME = 'events'
 PROPERTIES = event_properties
@@ -41,9 +41,9 @@ def list_view(context: str) -> Any:
     """
     return content_ctrl_processor.process_list_view(
         context,
+        RESOURCE_TYPE,
         LIST_NAME,
         PAGE_TITLE,
-        RESOURCE_TYPE,
     )
 
 
@@ -56,9 +56,9 @@ def create_view(context: str) -> Any:
     """
     return content_ctrl_processor.process_create_view(
         context,
+        RESOURCE_TYPE,
         LIST_NAME,
         PAGE_TITLE,
-        RESOURCE_TYPE,
         PROPERTIES,
     )
 
@@ -72,9 +72,9 @@ def edit_view(context: str, content_id: int) -> Any:
     """
     return content_ctrl_processor.process_edit_view(
         context,
+        RESOURCE_TYPE,
         LIST_NAME,
         PAGE_TITLE,
-        RESOURCE_TYPE,
         PROPERTIES,
         content_id,
     )
@@ -89,6 +89,7 @@ def create_action(context: str) -> Any:
     """
     return content_ctrl_processor.process_create_action(
         context,
+        RESOURCE_TYPE,
         request.form.to_dict(),
         LIST_NAME,
     )
@@ -103,6 +104,7 @@ def edit_action(context: str, content_id: int) -> Any:
     """
     return content_ctrl_processor.process_edit_action(
         context,
+        RESOURCE_TYPE,
         request.form.to_dict(),
         LIST_NAME,
         content_id,

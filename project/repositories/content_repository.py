@@ -3,111 +3,118 @@ Content repository.
 """
 from typing import Any, Optional
 from project.utils import database_utils
+from project.entities.content_entity import ContentEntity
+import json
 
 
 def select_all_by_type(context: str,
-                       content_type: str) -> list[dict[str, Any]]:
+                       resource_type: str) -> list[ContentEntity]:
     """
     Select all contents by content type.
     """
     sql = '''
-        SELECT * FROM contents WHERE deleted = 0 AND type = ? AND context = ?
+        SELECT * FROM contents
+        WHERE resource_type = ? AND context = ? AND deleted = 0
     '''
-    return database_utils.execute_query(sql, (content_type, context))
+    result_set = database_utils.execute_query(sql, (resource_type, context))
+    return ContentEntity.map_list_to_entity(result_set)
 
 
-def select_all(context: str, published: bool) -> list[dict[str, Any]]:
+def select_all(context: str) -> list[ContentEntity]:
     """
     Select all contents.
     """
     sql = '''
-        SELECT * FROM contents WHERE deleted = 0 AND published = ?
-        AND context = ?
+        SELECT * FROM contents
+        WHERE deleted = 0 AND context = ?
+
     '''
-    return database_utils.execute_query(sql, (published, context))
+    result_set = database_utils.execute_query(sql, (context,))
+    return ContentEntity.map_list_to_entity(result_set)
 
 
-def select_all_deleted(context: str) -> list[dict[str, Any]]:
+def select_all_deleted(context: str) -> list[ContentEntity]:
     """
     Select all deleted contents.
     """
     sql = '''
-        SELECT * FROM contents WHERE deleted = 1 AND context = ?
+        SELECT * FROM contents
+        WHERE deleted = 1 AND context = ?
     '''
-    return database_utils.execute_query(sql, (context,))
+    result_set = database_utils.execute_query(sql, (context,))
+    return ContentEntity.map_list_to_entity(result_set)
 
 
-def select_by_id(context: str, content_id: int) -> Optional[dict[str, Any]]:
+def select_by_id(content_id: int) -> Optional[ContentEntity]:
     """
     Select a content by id.
     """
     sql = '''
-        SELECT * FROM contents WHERE deleted = 0 AND id = ? AND context = ?
+        SELECT * FROM contents
+        WHERE deleted = 0 AND id = ?
     '''
-    return database_utils.execute_single_query(sql, (content_id, context))
+    result_set = database_utils.execute_single_query(sql, (content_id,))
+    if result_set is None:
+        return None
+    return ContentEntity.map_dict_to_entity(result_set)
 
 
-def insert(context: str, data: dict[str, Any]) -> Any:
+def insert(content: ContentEntity) -> Any:
     """
     Insert a new content to database.
     """
     sql = '''
-        INSERT INTO contents
-        (context, name, type, published, data)
-        VALUES
-        (?, ?, ?, ?, ?)
+        INSERT INTO contents (context, name, resource_type, data)
+        VALUES (?, ?, ?, ?)
     '''
     return database_utils.execute_update(sql, (
-        context,
-        data['name'],
-        data['type'],
-        data['published'],
-        data['data'],
+        content.context,
+        content.name,
+        content.resource_type,
+        json.dumps(content.data),
     ))
 
 
-def update(context: str, content_id: int, data: dict[str, Any]) -> Any:
+def update(content: ContentEntity) -> Any:
     """
     Update a content by id.
     """
     sql = '''
-        UPDATE contents SET
-            context = ?,
-            name = ?,
-            type = ?,
-            published = ?,
-            data = ?
+        UPDATE contents
+        SET context = ?, name = ?, resource_type = ?, data = ?
         WHERE id = ?
     '''
-    return database_utils.execute_update(sql, (
-        context,
-        data['name'],
-        data['type'],
-        data['published'],
-        data['data'],
-        content_id
+    database_utils.execute_update(sql, (
+        content.context,
+        content.name,
+        content.resource_type,
+        json.dumps(content.data),
+        content.id
     ))
+    return content.id
 
 
-def delete(context: str, content_id: int) -> None:
+def delete(content_id: int) -> Any:
     """
     Delete a content by id.
     """
     sql = '''
-        UPDATE contents SET deleted = 1,
-        deleted_on = CURRENT_TIMESTAMP, published = 0
-        WHERE id = ? AND context = ?
+        UPDATE contents
+        SET deleted = 1, deleted_on = CURRENT_TIMESTAMP
+        WHERE id = ?
     '''
-    database_utils.execute_update(sql, (content_id, context))
+    database_utils.execute_update(sql, (content_id,))
+    return content_id
 
 
-def restore(context: str, content_id: int) -> None:
+def restore(content_id: int) -> Any:
     """
     Restore a content by id.
     """
     sql = '''
-        UPDATE contents SET deleted = 0,
-        deleted_on = NULL
-        WHERE id = ? AND context = ?
+        UPDATE contents
+        SET deleted = 0, deleted_on = NULL
+        WHERE id = ?
     '''
-    database_utils.execute_update(sql, (content_id, context))
+    database_utils.execute_update(sql, (content_id,))
+    return content_id

@@ -1,155 +1,122 @@
 """
 Content service.
 """
-from flask import session
-from calendar import c
 from typing import Any, Optional
-from project.enums import session_enum
 from project.repositories import content_repository
 from project.services import history_service
-from project.utils import data_utils
-import json
+from project.entities.content_entity import ContentEntity
+from project.enums import history_messages_enum
+from copy import deepcopy
 
 
-def select_all(context: str, content_type: str) -> list[dict[str, Any]]:
+def select_all_by_type(context: str, resource_type: str
+                       ) -> list[ContentEntity]:
     """
     Select all contents by content type.
     """
-    contents = content_repository.select_all_by_type(context, content_type)
-    return data_utils.parse_list_json_data(contents)
+    return content_repository.select_all_by_type(context, resource_type)
 
 
-def select_all_deleted(context: str) -> list[dict[str, Any]]:
+def select_all_deleted(context: str) -> list[ContentEntity]:
     """
     Select all deleted contents.
     """
-    contents = content_repository.select_all_deleted(context)
-    return data_utils.parse_list_json_data(contents)
+    return content_repository.select_all_deleted(context)
 
 
-def select_all_urls(context: str,
-                    published: bool = True) -> list[dict[str, str]]:
+def select_all_published(context: str) -> list[ContentEntity]:
     """
-    Select all content urls.
+    Select all published content.
     """
-    urls = list()
-    contents = content_repository.select_all(context, published)
-    for content in contents:
-        urls.append(dict(
-            url=generate_content_url(
-                context,
-                content['type'],
-                content['name'],
-            ),
-            name=content['name'],
-            resource_type=content['type'],
-        ))
-    return urls
+    contents = content_repository.select_all(context)
+    return [c for c in contents if c.data['published'] == '1']
 
 
-def select_by_id(context: str, content_id: int) -> Optional[dict[str, Any]]:
+def select_by_id(content_id: int) -> Optional[ContentEntity]:
     """
     Select a content by id.
     """
-    content = content_repository.select_by_id(context, content_id)
-    if not content:
-        return None
-    return data_utils.parse_json_data(content)
+    return content_repository.select_by_id(content_id)
 
 
-def insert(context: str, data: dict[str, Any]) -> Any:
+def insert(resource: ContentEntity) -> Any:
     """
-    Insert a new content to database.
+    Insert a new content.
     """
-    data['url'] = generate_content_url(
-        context,
-        data['type'],
-        data['name'],
-    )
-    data['data'] = json.dumps(data)
-    content_id = content_repository.insert(context, data)
+    content_id = content_repository.insert(resource)
     history_service.insert(
         content_id,
-        'Content created'
+        resource.resource_type,
+        history_messages_enum.RESOURCE_CREATED,
     )
     return content_id
 
 
-def update(context: str, content_id: int, data: dict[str, Any]) -> Any:
+def update(resource: ContentEntity) -> Any:
     """
-    Update a content by id.
+    Update a content.
     """
-    data['url'] = generate_content_url(
-        context,
-        data['type'],
-        data['name'],
-    )
-    data['data'] = json.dumps(data)
-    content_id = content_repository.update(context, content_id, data)
+    content_id = content_repository.update(resource)
     history_service.insert(
         content_id,
-        'Content updated'
+        resource.resource_type,
+        history_messages_enum.RESOURCE_UPDATED,
     )
+    return content_id
 
 
-def delete(context: str, content_id: int) -> None:
+def delete(content_id: int) -> Any:
     """
     Delete a content by id.
     """
-    content = content_repository.select_by_id(context, content_id)
-    if not content:
+    resource = content_repository.select_by_id(content_id)
+    if not resource:
         return
-    content_repository.delete(context, content_id)
+    content_repository.delete(content_id)
     history_service.insert(
         content_id,
-        'Content deleted'
+        resource.resource_type,
+        history_messages_enum.RESOURCE_DELETED,
     )
+    return content_id
 
 
-def restore(context: str, content_id: int) -> None:
+def restore(content_id: int) -> Any:
     """
     Restore a content by id.
     """
-    content_repository.restore(context, content_id)
-    history_service.insert(
-        content_id,
-        'Content restored'
-    )
-
-
-def duplicate(context: str, content_id: int, to_context: str,
-              new_name: str) -> Any:
-    """
-    Delete a content by id.
-    """
-    content = content_repository.select_by_id(context, content_id)
+    content_repository.restore(content_id)
+    content = content_repository.select_by_id(content_id)
     if not content:
         return
-    content_dict = {
-        **content
-    }
-    content_dict['published'] = 0
-    content_dict['name'] = new_name
-    data = json.loads(content_dict['data'])
-    data['published'] = 0
-    data['name'] = new_name
-    data['url'] = generate_content_url(
-        to_context,
-        data['type'],
-        data['name'],
-    )
-    content_dict['data'] = json.dumps(data)
-    new_id = content_repository.insert(to_context, content_dict)
     history_service.insert(
         content_id,
-        f'Content duplicated (id={new_id})',
+        content.resource_type,
+        history_messages_enum.RESOURCE_RESTORED,
+    )
+
+
+def duplicate(content_id: int, to_context: str, new_name: str
+              ) -> Optional[Any]:
+    """
+    Duplicate content by id.
+    """
+    content = content_repository.select_by_id(content_id)
+    if not content:
+        return None
+    new_content = deepcopy(content)
+    new_content.name = new_name
+    new_content.context = to_context
+    new_content.data['published'] = 0
+    new_id = content_repository.insert(new_content)
+    history_service.insert(
+        new_id,
+        new_content.resource_type,
+        history_messages_enum.RESOURCE_DUPLICATED_FROM.format(content.id),
+    )
+    history_service.insert(
+        content.id,
+        new_content.resource_type,
+        history_messages_enum.RESOURCE_DUPLICATED_TO.format(new_id),
     )
     return new_id
-
-
-def generate_content_url(context: str, content_type: str,
-                         content_name: str) -> str:
-    """
-    Generate the content URL.
-    """
-    return f'/{context}/{content_type}/{content_name}'

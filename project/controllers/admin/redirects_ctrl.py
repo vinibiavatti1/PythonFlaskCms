@@ -1,22 +1,24 @@
 """
-Custom pages controller.
+Redirects controller.
 """
 from typing import Any
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 from project.enums import resource_type_enum
 from project.decorators.security_decorators import login_required
-from project.properties.custom_page_properties import custom_page_properties
+from project.properties.redirect_properties import redirect_properties
 from project.decorators.context_decorators import process_context
+from project.utils.ctrl_utils import get_admin_list_url
 from project.processors import content_ctrl_processor
+from project.services import content_service
 
 
 # Controller data
-CONTROLLER_NAME = 'admin_custom_pages_ctrl'
-URL_PREFIX = '/<context>/admin/custom_pages'
-PAGE_TITLE = 'Custom Pages'
-LIST_NAME = 'custom_pages'
-RESOURCE_TYPE = resource_type_enum.CUSTOM_PAGE_CONTENT
-PROPERTIES = custom_page_properties
+CONTROLLER_NAME = 'admin_redirects_ctrl'
+URL_PREFIX = '/<context>/admin/redirects'
+PAGE_TITLE = 'Redirects'
+LIST_NAME = 'redirects'
+RESOURCE_TYPE = resource_type_enum.REDIRECT_CONTENT
+PROPERTIES = redirect_properties
 
 
 # Blueprint data
@@ -39,11 +41,35 @@ def list_view(context: str) -> Any:
     """
     Render datatable with data.
     """
-    return content_ctrl_processor.process_list_view(
-        context,
-        RESOURCE_TYPE,
-        LIST_NAME,
-        PAGE_TITLE,
+    list_url = get_admin_list_url(context, LIST_NAME)
+    headers = [
+        '#',
+        'Name',
+        'Target',
+        'Destination',
+        'Active',
+        'Actions',
+    ]
+    data: list[Any] = list()
+    contents = content_service.select_all_by_type(context, RESOURCE_TYPE)
+    for content in contents:
+        id_ = content.id
+        active = content.data['active'] == '1'
+        data.append((
+            id_,
+            content.name,
+            '<i class="bi bi-broadcast"></i> True' if active else 'False',
+            content.created_on,
+            f'<a href="{list_url}/edit/{id_}">Details</a>'
+        ))
+    return render_template(
+        '/admin/content_list.html',
+        page_data=dict(
+            headers=headers,
+            data=data,
+            title=PAGE_TITLE,
+            btn_link=f'{list_url}/create',
+        )
     )
 
 

@@ -6,7 +6,9 @@ from project.models.header_model import HeaderModel
 from project.enums import property_types_enum as prop_type
 from project.enums import string_types_enum as str_type
 from project.properties.extensions.content_properties import content_properties
+from project.properties.extensions.publish_properties import publish_properties
 from typing import Union
+
 
 
 # Properties
@@ -42,3 +44,4 @@ faq_properties: list[Union[PropertyModel, HeaderModel]] = [
 
 # Extensions
 faq_properties.extend(content_properties)
+faq_properties.extend(publish_properties)

@@ -133,9 +133,7 @@
                 <i class="bi bi-search"></i>
             </button>
         </div>
-        <div class="img-preview-container" style="display: none;" title="Image preview">
-            <img class="img-preview" src="" alt="Image preview">
-        </div>
+        <a class="img-preview" href="{{value}}" target="_blank">Image Preview</a>
     {% elif prop_data.property_type == 'code' %}
         <textarea
             {{name}}

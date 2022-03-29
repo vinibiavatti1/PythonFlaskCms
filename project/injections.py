@@ -5,14 +5,16 @@ from typing import Any
 from project.models.menu_item_model import MenuItemModel
 from project.utils.security_utils import is_authenticated, has_permission
 from project.utils.cookie_utils import cookie_policy_consent
-from flask import Blueprint, g
+from flask import Blueprint
 from project.records.menu_records import menu_records
 from project.records.context_records import context_records
-from project.services import property_service, file_service
+from project.services import property_service
+from project.services import file_service
+from project.services import translation_service
+from project.services import content_service
 from project.utils import datetime_utils
 from project.utils import page_utils
 from project.utils import context_utils
-from project.services import content_service
 from project.enums import file_type_enum
 
 
@@ -34,6 +36,8 @@ def inject_records() -> dict[str, Any]:
     Inject records.
     """
     context = context_utils.get_current_context()
+    if not context:
+        return dict()
     for menu in menu_records:
         if isinstance(menu, MenuItemModel):
             menu.context = context
@@ -127,4 +131,18 @@ def inject_files() -> dict[str, Any]:
             videos=videos,
             files=files,
         )
+    )
+
+
+@blueprint.app_context_processor
+def inject_translations() -> dict[str, Any]:
+    """
+    Inject translations.
+    """
+    context = context_utils.get_current_context()
+    if not context:
+        return dict()
+    translations = translation_service.select_all(context)
+    return dict(
+        i18n={t['name']: t['value'] for t in translations}
     )

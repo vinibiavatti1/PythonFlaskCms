@@ -19,7 +19,6 @@ from project.controllers.admin import (
     menu_ctrl,
     properties_ctrl,
     translation_ctrl,
-    redirect_ctrl,
     block_ctrl,
     articles_ctrl,
     events_ctrl,
@@ -27,6 +26,7 @@ from project.controllers.admin import (
     custom_pages_ctrl,
     post_ctrl,
     news_ctrl,
+    redirects_ctrl,
 )
 
 
@@ -46,7 +46,6 @@ blueprints: list[Blueprint] = [
     auth_ctrl.blueprint,
     menu_ctrl.blueprint,
     translation_ctrl.blueprint,
-    redirect_ctrl.blueprint,
     block_ctrl.blueprint,
     articles_ctrl.blueprint,
     events_ctrl.blueprint,
@@ -58,4 +57,5 @@ blueprints: list[Blueprint] = [
     news_ctrl.blueprint,
     files_ctrl.blueprint,
     media_ctrl.blueprint,
+    redirects_ctrl.blueprint,
 ]

@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS contents;
 DROP TABLE IF EXISTS pages;
 DROP TABLE IF EXISTS history;
 DROP TABLE IF EXISTS properties;
+DROP TABLE IF EXISTS translations;
 
 -------------------------------------------------------------------------------
 -- Creates
@@ -29,31 +30,29 @@ CREATE TABLE IF NOT EXISTS contents (
     `id` INTEGER PRIMARY KEY,
     `context` TEXT NOT NULL,
     `name` TEXT NOT NULL,
-    `type` TEXT NOT NULL,
-    `published` INTEGER NOT NULL DEFAULT 1,
-    `deleted` INTEGER NOT NULL DEFAULT 0,
+    `resource_type` TEXT NOT NULL,
+    `data` TEXT NOT NULL DEFAULT '{}',
     `created_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `deleted_on` TEXT NULL DEFAULT NULL,
-    `data` TEXT NOT NULL DEFAULT '{}'
+    `deleted` INTEGER NOT NULL DEFAULT 0,
+    `deleted_on` TIMESTAMP NULL DEFAULT NULL
 );
 
 -- Pages
 CREATE TABLE IF NOT EXISTS pages (
     `id` INTEGER PRIMARY KEY,
     `context` TEXT NOT NULL,
-    `name` TEXT NOT NULL,
-    `published` INTEGER NOT NULL DEFAULT 1,
-    `deleted` INTEGER NOT NULL DEFAULT 0,
-    `data` TEXT NOT NULL DEFAULT '{}'
+    `resource_type` TEXT NOT NULL,
+    `data` TEXT NOT NULL DEFAULT '{}',
 );
 
 -- History
 CREATE TABLE IF NOT EXISTS history (
     `id` INTEGER PRIMARY KEY,
     `resource_id` INTEGER NOT NULL,
+    `resource_type` TEXT NOT NULL,
     `description` TEXT NOT NULL,
-    `created_by` INTEGER NOT NULL,
-    `created_on` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `created_by` INTEGER NULL,
+    `created_on` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `deleted` INTEGER NOT NULL DEFAULT 0
 );
 
@@ -63,4 +62,18 @@ CREATE TABLE IF NOT EXISTS properties (
     `context` TEXT NOT NULL,
     `name` TEXT NOT NULL,
     `value` TEXT NULL
+);
+
+-- Menus
+CREATE TABLE IF NOT EXISTS menus (
+    `id` INTEGER PRIMARY KEY,
+    `context` TEXT NOT NULL,
+    `data` TEXT NOT NULL DEFAULT '{}',
+);
+
+-- Footers
+CREATE TABLE IF NOT EXISTS footers (
+    `id` INTEGER PRIMARY KEY,
+    `context` TEXT NOT NULL,
+    `data` TEXT NOT NULL DEFAULT '{}',
 );

@@ -41,9 +41,7 @@ def set_properties_value(properties: list[Any],
     """
     Set properties value by name.
     """
-    if 'data' not in content:
-        return properties
     for prop in properties:
         if isinstance(prop, PropertyModel):
-            prop.value = content['data'].get(prop.name, '')
+            prop.value = content.get(prop.name, '')
     return properties

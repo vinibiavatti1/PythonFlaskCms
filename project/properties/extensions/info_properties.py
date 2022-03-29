@@ -8,7 +8,7 @@ from project.enums import string_types_enum as str_type
 from typing import Union
 
 
-information_properties: list[Union[PropertyModel, HeaderModel]] = [
+info_properties: list[Union[PropertyModel, HeaderModel]] = [
     HeaderModel(
         title='Information'
     ),

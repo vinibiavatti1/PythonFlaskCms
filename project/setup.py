@@ -10,8 +10,8 @@ from project.records.user_records import user_records
 from project.records.property_records import property_records
 from project.records.translation_records import translation_records
 from project.records.context_records import context_records
-from project.repositories import property_repository
-from project.repositories import translation_repository
+from project.services import property_service
+from project.services import translation_service
 import os
 
 
@@ -50,9 +50,9 @@ def register_properties() -> None:
         context = context_record.code
         for prop in property_records:
             if isinstance(prop, PropertyModel):
-                val = property_repository.get_property(context, prop.name)
+                val = property_service.get_property(context, prop.name)
                 if val is None:
-                    property_repository.set_property(
+                    property_service.set_property(
                         context,
                         prop.name,
                         prop.default
@@ -64,15 +64,14 @@ def register_translations() -> None:
     Add translations to database.
     """
     for context_record in context_records:
-        context = context_record.name
+        context = context_record.code
         for translation in translation_records:
-            translation_repository.s
-            found = translation_service.select_by_idiom_and_name(
-                translation.idiom,
+            found = translation_service.select_by_name(
+                context,
                 translation.name,
             )
             if found is None:
-                translation_service.insert(translation.__dict__)
+                translation_service.insert(context, translation.__dict__)
 
 
 def register_users() -> None:
@@ -98,6 +97,6 @@ def setup(app: Flask) -> None:
     register_upload_folder(app)
     register_blueprints(app)
     register_properties()
-    # __register_translations()
+    register_translations()
     register_users()
     # Add more actions...

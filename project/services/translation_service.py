@@ -8,11 +8,10 @@ from project.enums import resource_type_enum, session_enum
 from project.services import history_service
 
 
-def select_all() -> Any:
+def select_all(context: str) -> Any:
     """
     Select all translations.
     """
-    context = session[session_enum.CONTEXT]
     return translation_repository.select_all(context)
 
 
@@ -20,24 +19,21 @@ def select_by_id(translation_id: int) -> Any:
     """
     Select translation by id.
     """
-    context = session[session_enum.CONTEXT]
-    return translation_repository.select_by_id(context, translation_id)
+    return translation_repository.select_by_id(translation_id)
 
 
-def select_by_name(name: str) -> Any:
+def select_by_name(context: str, name: str) -> Any:
     """
-    Select translation by name.
+    Select translation by context and name.
     """
-    context = session[session_enum.CONTEXT]
-    return translation_repository.select_by_idiom_and_name(context, name)
+    return translation_repository.select_by_name(context, name)
 
 
-def insert(data: dict[str, Any]) -> Any:
+def insert(context: str, data: dict[str, Any]) -> Any:
     """
     Insert new translation.
     """
-    context = session[session_enum.CONTEXT]  # REPENSAR
-    new_id = translation_repository.insert(data)
+    new_id = translation_repository.insert(context, data)
     history_service.insert(
         new_id,
         resource_type_enum.TRANSLATION,

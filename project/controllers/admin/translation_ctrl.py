@@ -1,142 +1,169 @@
 """
-Translation Controller.
-
-This module provide the routes for tranlations.
+Translation controller.
 """
 from typing import Any
-from flask import Blueprint, redirect, render_template, flash, request, url_for
-from project.decorators.security_decorators import login_required
-from project.services import translation_service, history_service
+from flask import Blueprint, request, render_template, abort, redirect, flash
 from project.enums import resource_type_enum
+from project.decorators.security_decorators import login_required
+from project.properties.translation_properties import translation_properties
+from project.decorators.context_decorators import process_context
+from project.processors import content_ctrl_processor
+from project.services import content_service
+from project.utils.ctrl_utils import get_admin_list_url
 
 
-# Blueprint
+# Controller data
+CONTROLLER_NAME = 'admin_translation_ctrl'
+URL_PREFIX = '/<context>/admin/translations'
+PAGE_TITLE = 'Translations'
+LIST_NAME = 'translations'
+RESOURCE_TYPE = resource_type_enum.TRANSLATION_CONTENT
+PROPERTIES = translation_properties
+
+
+# Blueprint data
 blueprint = Blueprint(
-    'admin_translation_ctrl',
+    CONTROLLER_NAME,
     __name__,
-    url_prefix='/admin/translations'
+    url_prefix=URL_PREFIX
 )
 
 
 ###############################################################################
-# View Routes
+# Routes
 ###############################################################################
 
 
-@blueprint.route('/')
+@blueprint.route('/', methods=['GET'])
 @login_required()
-def index() -> str:
+@process_context()
+def list_view(context: str) -> Any:
     """
-    Index route to list of translations.
+    Render datatable with data.
     """
+    list_url = get_admin_list_url(context, LIST_NAME)
     headers = [
         '#',
         'Name',
         'Value',
         'Actions',
     ]
-    translations = translation_service.select_all()
-    data = []
-    for translation in translations:
-        translation_id = translation['id']
-        data.append(
-            (
-                translation_id,
-                translation['name'],
-                translation['value'],
-                f'<a href="/admin/translations/detail/{translation_id}"'
-                f'>Details</a>',
-            )
+    data: list[Any] = list()
+    contents = content_service.select_all_by_type(context, RESOURCE_TYPE)
+    for content in contents:
+        id_ = content.id
+        data.append((
+            id_,
+            content.name,
+            content.data['value'],
+            f'<a href="{list_url}/edit/{id_}">Details</a>'
+        ))
+    return render_template(
+        '/admin/content_list.html',
+        page_data=dict(
+            headers=headers,
+            data=data,
+            title=PAGE_TITLE,
+            btn_link=f'{list_url}/create',
         )
-    return render_template(
-        '/admin/translations.html',
-        headers=headers,
-        data=data,
-    )
-
-@blueprint.route('/create')
-@login_required()
-def create() -> str:
-    """
-    Translation create route.
-    """
-    return render_template(
-        '/admin/translation_detail.html',
-        edit=False,
-        data=dict()
     )
 
 
-@blueprint.route('/detail/<translation_id>')
+@blueprint.route('/create', methods=['GET'])
 @login_required()
-def detail(translation_id: int) -> Any:
+@process_context()
+def create_view(context: str) -> Any:
     """
-    Translation detail route.
+    Render create page.
     """
-    data = translation_service.select_by_id(translation_id)
-    if data is None:
-        flash('Translation not found', category='danger')
-        return redirect('/admin/transaltions')
-    history = history_service.select_by_resource(
-        translation_id,
-        resource_type_enum.TRANSLATION,
-    )
-    return render_template(
-        '/admin/translation_detail.html',
-        edit=True,
-        translation_id=translation_id,
-        data={
-            **data,
-            'history': history
-        }
+    return content_ctrl_processor.process_create_view(
+        context,
+        RESOURCE_TYPE,
+        LIST_NAME,
+        PAGE_TITLE,
+        PROPERTIES,
     )
 
 
-###############################################################################
-# Action Routes
-###############################################################################
-
-
-@blueprint.route('/insert', methods=['POST'])
+@blueprint.route('/edit/<content_id>', methods=['GET'])
 @login_required()
-def insert() -> Any:
+@process_context()
+def edit_view(context: str, content_id: int) -> Any:
     """
-    Insert translation route.
+    Render edit page.
     """
-    try:
-        translation_service.insert(request.form.to_dict())
-        flash('Translation created successfully!', category='success')
-        return redirect(f'/admin/translations')
-    except Exception as err:
-        flash(str(err), category='danger')
-        return redirect('/admin/translations/create')
+    return content_ctrl_processor.process_edit_view(
+        context,
+        RESOURCE_TYPE,
+        LIST_NAME,
+        PAGE_TITLE,
+        PROPERTIES,
+        content_id,
+    )
 
 
-@blueprint.route('/update/<translation_id>', methods=['POST'])
+@blueprint.route('/create', methods=['POST'])
 @login_required()
-def update(translation_id: int) -> Any:
+@process_context()
+def create_action(context: str) -> Any:
     """
-    Update translation route.
+    Insert content to database.
     """
-    try:
-        translation_service.update(translation_id, request.form.to_dict())
-        flash('Translation updated successfully!', category='success')
-        return redirect(f'/admin/translations')
-    except Exception as err:
-        flash(str(err), category='danger')
-        return redirect(f'/admin/translations/detail/{translation_id}')
+    data = request.form.to_dict()
+    data['private'] = '0'
+    return content_ctrl_processor.process_create_action(
+        context,
+        RESOURCE_TYPE,
+        data,
+        LIST_NAME,
+    )
 
 
-@blueprint.route('/delete/<translation_id>', methods=['GET'])
+@blueprint.route('/edit/<content_id>', methods=['POST'])
 @login_required()
-def delete(translation_id: int) -> Any:
+@process_context()
+def edit_action(context: str, content_id: int) -> Any:
     """
-    Delete translation route.
+    Update content in database.
     """
-    try:
-        translation_service.delete(translation_id)
-        flash('Translation deleted successfully!', category='success')
-        return redirect(f'/admin/translations')
-    except Exception as err:
-        flash(str(err), category='danger')
-        return redirect(f'/admin/translations/detail/{translation_id}')
+    data = request.form.to_dict()
+    data['private'] = '0'
+    return content_ctrl_processor.process_edit_action(
+        context,
+        RESOURCE_TYPE,
+        data,
+        LIST_NAME,
+        content_id,
+    )
+
+
+@blueprint.route('/delete/<content_id>', methods=['GET'])
+@login_required()
+@process_context()
+def delete_action(context: str, content_id: int) -> Any:
+    """
+    Delete content from database.
+    """
+    return content_ctrl_processor.process_delete_action(
+        context,
+        LIST_NAME,
+        content_id,
+    )
+
+
+@blueprint.route('/duplicate/<content_id>/<to_context>/<new_name>',
+                 methods=['GET'])
+@login_required()
+@process_context()
+def duplicate_action(context: str, content_id: int, to_context: str,
+                     new_name: str) -> Any:
+    """
+    Duplicate content.
+    """
+    return content_ctrl_processor.process_duplicate_action(
+        context,
+        LIST_NAME,
+        content_id,
+        to_context,
+        new_name,
+    )
