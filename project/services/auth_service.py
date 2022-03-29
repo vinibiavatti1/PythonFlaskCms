@@ -20,10 +20,10 @@ def validate_recaptcha(token: str) -> None:
     Validate the score of the ReCaptcha token. ReCaptcha v3 returns a score
     (1.0 is very likely a good interaction, 0.0 is very likely a bot).
     """
-    recaptcha_secret_key = property_service.get_property(
+    recaptcha_secret_key = property_service.get_property_value(
         'recaptcha_secret_key'
     )
-    recaptcha_threshold = property_service.get_property(
+    recaptcha_threshold = property_service.get_property_value(
         'recaptcha_threshold'
     )
     response = requests.post(
@@ -79,7 +79,8 @@ def process_login(login_data: dict[str, Any]) -> None:
     """
     Process login authentication.
     """
-    recaptcha_enabled = property_service.get_property('recaptcha_enabled')
+    recaptcha_enabled = \
+        property_service.get_property_value('recaptcha_enabled')
     if recaptcha_enabled == string_types_enum.TRUE:
         validate_recaptcha(str(login_data.get('recaptcha-token')))
     user = do_login(escape(login_data['email']), login_data['password'])

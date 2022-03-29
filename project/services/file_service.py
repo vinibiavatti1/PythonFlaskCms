@@ -20,7 +20,9 @@ def select_all(context: str, page: int) -> list[FileModel]:
     """
     Select all media files.
     """
-    media_page_size = property_service.get_property(context, 'media_page_size')
+    media_page_size = property_service.get_property_value(
+        context, 'media_page_size'
+    )
     if not media_page_size:
         media_page_size = '60'
     files = get_all_files()

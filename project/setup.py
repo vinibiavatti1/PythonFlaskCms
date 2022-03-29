@@ -26,6 +26,7 @@ def register_upload_folder(app: Flask) -> None:
     """
     Register the folder to upload filder.
     """
+    app.logger.info('Registering upload folder...')
     app.config['UPLOAD_FOLDER'] = os.path.join(str(app.static_folder), 'files')
 
 
@@ -33,6 +34,7 @@ def register_secret_key(app: Flask) -> None:
     """
     Set secret key to flask app.
     """
+    app.logger.info('Registering secret key...')
     app.secret_key = SECRET
 
 
@@ -40,20 +42,22 @@ def register_blueprints(app: Flask) -> None:
     """
     Register all flask blueprints.
     """
+    app.logger.info('Registering blueprints...')
     for blueprint in blueprints:
         app.register_blueprint(blueprint)
 
 
-def register_properties() -> None:
+def register_properties(app: Flask) -> None:
     """
     Set properties into database.
     """
+    app.logger.info('Registering properties...')
     for context_record in context_records:
         context = context_record.code
         for prop in property_records:
             if isinstance(prop, PropertyModel):
-                val = property_service.get_property(context, prop.name)
-                if val is None:
+                found = property_service.property_exists(context, prop.name)
+                if not found:
                     property_service.set_property(
                         context,
                         prop.name,
@@ -61,10 +65,11 @@ def register_properties() -> None:
                     )
 
 
-def register_translations() -> None:
+def register_translations(app: Flask) -> None:
     """
     Add translations to database.
     """
+    app.logger.info('Registering translations...')
     for context_record in context_records:
         context = context_record.code
         for translation in translation_records:
@@ -84,10 +89,11 @@ def register_translations() -> None:
                 content_service.insert(entity)
 
 
-def register_users() -> None:
+def register_users(app: Flask) -> None:
     """
     Register default admin users.
     """
+    app.logger.info('Registering users...')
     for user in user_records:
         found = user_service.select_by_email(user.email)
         if found is None:
@@ -106,7 +112,7 @@ def setup(app: Flask) -> None:
     register_secret_key(app)
     register_upload_folder(app)
     register_blueprints(app)
-    register_properties()
-    register_translations()
-    register_users()
+    register_properties(app)
+    register_translations(app)
+    register_users(app)
     # Add more actions...

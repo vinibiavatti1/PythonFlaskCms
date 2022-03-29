@@ -26,11 +26,11 @@ def property_exists(context: str, name: str) -> bool:
     """
     Return True if the property is set in database.
     """
-    property_value = property_repository.get_property(context, name)
-    return property_value is not None
+    prop = property_repository.get_property(context, name)
+    return prop is not None
 
 
-def get_property(context: str, name: str) -> str:
+def get_property_value(context: str, name: str) -> str:
     """
     Get property value from database.
     """

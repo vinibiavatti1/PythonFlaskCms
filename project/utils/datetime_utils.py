@@ -23,6 +23,7 @@ HTML_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S'
 def format_date_to_str(date_: date, *,
                        html_format: bool = False,
                        config_format: bool = False,
+                       context: Optional[str] = None,
                        custom_format: Optional[str] = None) -> str:
     """
     Format date to string.
@@ -36,7 +37,12 @@ def format_date_to_str(date_: date, *,
     if html_format:
         return date_.strftime(HTML_DATE_FORMAT)
     elif config_format:
-        date_format = property_service.get_property('date_format')
+        if context is None:
+            raise ValueError('Context must be set when config_format is True')
+        date_format = property_service.get_property_value(
+            context,
+            'date_format'
+        )
         return date_.strftime(date_format)
     elif custom_format:
         return date_.strftime(custom_format)
@@ -47,6 +53,7 @@ def format_date_to_str(date_: date, *,
 def format_datetime_to_str(datetime_: datetime, *,
                            html_format: bool = False,
                            config_format: bool = False,
+                           context: Optional[str] = None,
                            custom_format: Optional[str] = None) -> str:
     """
     Format datetime to string.
@@ -60,7 +67,12 @@ def format_datetime_to_str(datetime_: datetime, *,
     if html_format:
         return datetime_.strftime(HTML_DATETIME_FORMAT)
     elif config_format:
-        date_format = property_service.get_property('datetime_format')
+        if context is None:
+            raise ValueError('Context must be set when config_format is True')
+        date_format = property_service.get_property_value(
+            context,
+            'datetime_format'
+        )
         return datetime_.strftime(date_format)
     elif custom_format:
         return datetime_.strftime(custom_format)

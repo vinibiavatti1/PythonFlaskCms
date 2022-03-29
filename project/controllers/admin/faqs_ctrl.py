@@ -45,8 +45,9 @@ def list_view(context: str) -> Any:
     headers = [
         '#',
         'Name',
+        'Question',
+        'Answer',
         'Published',
-        'Created On',
         'Actions',
     ]
     data: list[Any] = list()
@@ -57,8 +58,9 @@ def list_view(context: str) -> Any:
         data.append((
             id_,
             content.name,
+            content.data['faq_question'],
+            content.data['faq_answer'],
             '<i class="bi bi-broadcast"></i> True' if published else 'False',
-            content.created_on,
             f'<a href="{list_url}/edit/{id_}">Details</a>'
         ))
     return render_template(

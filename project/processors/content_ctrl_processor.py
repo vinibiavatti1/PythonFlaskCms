@@ -82,7 +82,7 @@ def process_edit_view(context: str, resource_type: str, list_name: str,
     content = content_service.select_by_id(content_id)
     if not content:
         return abort(404)
-    props = set_properties_value(properties, content.data)
+    props = set_properties_value(properties, content)
     history = history_service.select_by_resource(content_id, resource_type)
     return render_template(
         '/admin/content.html',

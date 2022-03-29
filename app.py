@@ -13,3 +13,4 @@ from project.setup import setup
 # Init Flask application
 app = Flask(__name__)
 setup(app)
+app.logger.info('Application started!')
