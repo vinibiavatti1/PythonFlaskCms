@@ -41,14 +41,17 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         icon='bi-pin-angle',
     ),
     MenuItemModel(
-        title='FAQs',
-        link='/faqs',
-        icon='bi-question-circle',
-    ),
-    MenuItemModel(
         title='Custom Pages',
         link='/custom_pages',
         icon='bi-filetype-html',
+    ),
+
+    ###########################################################################
+    # Resources
+    ###########################################################################
+
+    HeaderModel(
+        title='Resources'
     ),
     MenuItemModel(
         title='Translations',
@@ -59,6 +62,19 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         title='Redirects',
         link='/redirects',
         icon='bi-signpost-split',
+    ),
+    MenuItemModel(
+        title='FAQs',
+        link='/faqs',
+        icon='bi-question-circle',
+    ),
+
+    ###########################################################################
+    # Trash Bin
+    ###########################################################################
+
+    HeaderModel(
+        title='Trash Bin'
     ),
     MenuItemModel(
         title='Trash Bin',

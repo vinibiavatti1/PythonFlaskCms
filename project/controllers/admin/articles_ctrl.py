@@ -3,7 +3,7 @@ Articles controller.
 """
 from typing import Any
 from flask import Blueprint, request
-from project.enums import resource_type_enum
+from project.enums import object_subtype_enum
 from project.decorators.security_decorators import login_required
 from project.properties.article_properties import article_properties
 from project.decorators.context_decorators import process_context
@@ -15,7 +15,7 @@ CONTROLLER_NAME = 'admin_articles_ctrl'
 URL_PREFIX = '/<context>/admin/articles'
 PAGE_TITLE = 'Articles'
 LIST_NAME = 'articles'
-RESOURCE_TYPE = resource_type_enum.ARTICLE_CONTENT
+RESOURCE_TYPE = object_subtype_enum.ARTICLE
 PROPERTIES = article_properties
 
 

@@ -2,7 +2,7 @@
 Setup app functions.
 """
 from flask import Flask
-from project.entities.content_entity import ContentEntity
+from project.entities.object_entity import ObjectEntity
 from project.models.property_model import PropertyModel
 from project.services import user_service
 from project.blueprints import blueprints
@@ -12,8 +12,8 @@ from project.records.property_records import property_records
 from project.records.translation_records import translation_records
 from project.records.context_records import context_records
 from project.services import property_service
-from project.services import content_service
-from project.enums import resource_type_enum
+from project.services import object_service
+from project.enums import object_subtype_enum
 import os
 
 
@@ -73,20 +73,20 @@ def register_translations(app: Flask) -> None:
     for context_record in context_records:
         context = context_record.code
         for translation in translation_records:
-            found = content_service.select_by_name(
+            found = object_service.select_by_name(
                 context,
                 translation.name,
             )
             if found is None:
-                entity = ContentEntity(
+                entity = ObjectEntity(
                     context=context,
                     name=translation.name,
-                    resource_type=resource_type_enum.TRANSLATION_CONTENT,
-                    data=dict(
+                    object_subtype=object_subtype_enum.TRANSLATION,
+                    properties=dict(
                         value=translation.value
                     )
                 )
-                content_service.insert(entity)
+                object_service.insert(entity)
 
 
 def register_users(app: Flask) -> None:

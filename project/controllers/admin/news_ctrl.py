@@ -3,7 +3,7 @@ News controller.
 """
 from typing import Any
 from flask import Blueprint, request
-from project.enums import resource_type_enum
+from project.enums import object_subtype_enum
 from project.decorators.security_decorators import login_required
 from project.properties.news_properties import news_properties
 from project.decorators.context_decorators import process_context
@@ -15,7 +15,7 @@ CONTROLLER_NAME = 'admin_news_ctrl'
 URL_PREFIX = '/<context>/admin/news'
 PAGE_TITLE = 'News'
 LIST_NAME = 'news'
-RESOURCE_TYPE = resource_type_enum.NEWS_CONTENT
+RESOURCE_TYPE = object_subtype_enum.NEWS
 PROPERTIES = news_properties
 
 

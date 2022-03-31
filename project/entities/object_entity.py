@@ -1,36 +1,39 @@
 """
-Content entity.
+Object entity.
 
-Model to map database content entity.
+Model to map database object entity.
 """
 from typing import Any, Optional
 from datetime import datetime
+from project.enums import object_type_enum
 import json
 
 
-class ContentEntity:
+class ObjectEntity:
     """
-    Content entity class.
+    Object entity class.
     """
 
     def __init__(self, *,
                  id: int = -1,
                  context: str,
                  name: str,
-                 resource_type: str,
-                 data: dict[str, Any] = dict(),
+                 object_type: str,
+                 object_subtype: str,
+                 properties: dict[str, Any] = dict(),
                  created_on: datetime = datetime.now(),
                  deleted: bool = False,
                  deleted_on: Optional[datetime] = None
                  ) -> None:
         """
-        Init content entity object.
+        Init object entity object.
         """
         self.id = id
         self.context = context
         self.name = name
-        self.resource_type = resource_type
-        self.data = data
+        self.object_type = object_type
+        self.object_subtype = object_subtype
+        self.properties = properties
         self.created_on = created_on
         self.deleted = deleted
         self.deleted_on = deleted_on
@@ -40,7 +43,10 @@ class ContentEntity:
         """
         Return the content URL.
         """
-        return f'/{self.context}/{self.resource_type}/{self.name}'
+        if self.object_type == object_type_enum.RESOURCE:
+            return ''
+        return f'/{self.context}/{self.object_type}/{self.object_subtype}' \
+               f'/{self.name}'
 
     def to_dict(self) -> dict[str, Any]:
         """
@@ -50,25 +56,38 @@ class ContentEntity:
             id=self.id,
             context=self.context,
             name=self.name,
-            resource_type=self.resource_type,
-            data=self.data,
+            resource_type=self.object_type,
+            data=self.properties,
             created_on=self.created_on,
             deleted=self.deleted,
             deleted_on=self.deleted_on
         )
 
+    def get_properties_as_json(self) -> str:
+        """
+        Return properties as json string.
+        """
+        return json.dumps(self.properties)
+
+    def set_properties_from_json(self, json_properties: str) -> None:
+        """
+        Set properties from json to dict.
+        """
+        self.properties = json.loads(json_properties)
+
     @classmethod
-    def map_dict_to_entity(cls, dct: dict[str, Any]) -> 'ContentEntity':
+    def map_dict_to_entity(cls, dct: dict[str, Any]) -> 'ObjectEntity':
         """
         Map dict to content.
         """
         dct = dict(dct)
-        return ContentEntity(
+        return ObjectEntity(
             id=dct.get('id', -1),
             context=dct.get('context', None),
             name=dct.get('name', None),
-            resource_type=dct.get('resource_type', None),
-            data=json.loads(dct.get('data', None)),
+            object_type=dct.get('object_type', None),
+            object_subtype=dct.get('object_subtype', None),
+            properties=json.loads(dct.get('data', None)),
             created_on=dct.get('created_on', None),
             deleted=str(dct.get('deleted')) == '1',
             deleted_on=dct.get('deleted_on'),
@@ -76,7 +95,7 @@ class ContentEntity:
 
     @classmethod
     def map_list_to_entity(cls, lst: list[dict[str, Any]]
-                           ) -> list['ContentEntity']:
+                           ) -> list['ObjectEntity']:
         """
         Map list of dics to entity.
         """

@@ -6,7 +6,7 @@ from project.models.header_model import HeaderModel
 from project.enums import property_types_enum as prop_type
 from project.enums import string_types_enum as str_type
 from typing import Union
-from project.properties.extensions.content_properties import content_properties
+from project.properties.bases.resource_properties import resource_properties
 
 
 # Properties
@@ -42,15 +42,7 @@ redirect_properties: list[Union[PropertyModel, HeaderModel]] = [
         description='Destination address.',
         required=True,
     ),
-    PropertyModel(
-        label='Active?',
-        name='active',
-        property_type=prop_type.BOOL,
-        description='Set to True to active this redirect.',
-        default=str_type.TRUE,
-        required=True,
-    ),
 ]
 
 # Extensions
-redirect_properties.extend(content_properties)
+redirect_properties.extend(resource_properties)

@@ -1,7 +1,7 @@
 """
 Page model.
 """
-from project.enums import resource_type_enum
+from project.enums import object_subtype_enum
 
 
 class PageModel:
@@ -14,5 +14,5 @@ class PageModel:
         Init Page object.
         """
         self.name = name
-        self.resource_type = resource_type_enum.PAGE
+        self.resource_type = object_subtype_enum.PAGE
         self.published = 1

@@ -5,12 +5,7 @@ from project.models.property_model import PropertyModel
 from project.models.header_model import HeaderModel
 from project.enums import property_types_enum as prop_type
 from typing import Union
-from project.properties.extensions.seo_properties import seo_properties
-from project.properties.extensions.sitemap_properties import sitemap_properties
-from project.properties.extensions.content_properties import content_properties
-from project.properties.extensions.list_properties import list_properties
-from project.properties.extensions.info_properties import info_properties
-from project.properties.extensions.publish_properties import publish_properties
+from project.properties.bases.content_properties import content_properties
 
 
 # Properties
@@ -38,8 +33,3 @@ post_properties: list[Union[PropertyModel, HeaderModel]] = [
 
 # Extensions
 post_properties.extend(content_properties)
-post_properties.extend(publish_properties)
-post_properties.extend(list_properties)
-post_properties.extend(info_properties)
-post_properties.extend(seo_properties)
-post_properties.extend(sitemap_properties)

@@ -4,7 +4,7 @@ Files controller.
 from typing import Any
 from unicodedata import category
 from flask import Blueprint, redirect, render_template, request, flash
-from project.enums import resource_type_enum
+from project.enums import object_subtype_enum
 from project.decorators.security_decorators import login_required
 from project.properties.article_properties import article_properties
 from project.decorators.context_decorators import process_context

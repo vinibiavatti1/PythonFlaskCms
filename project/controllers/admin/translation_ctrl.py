@@ -3,12 +3,12 @@ Translation controller.
 """
 from typing import Any
 from flask import Blueprint, request, render_template, abort, redirect, flash
-from project.enums import resource_type_enum
+from project.enums import object_subtype_enum
 from project.decorators.security_decorators import login_required
 from project.properties.translation_properties import translation_properties
 from project.decorators.context_decorators import process_context
 from project.processors import content_ctrl_processor
-from project.services import content_service
+from project.services import object_service
 from project.utils.ctrl_utils import get_admin_list_url
 
 
@@ -17,7 +17,7 @@ CONTROLLER_NAME = 'admin_translation_ctrl'
 URL_PREFIX = '/<context>/admin/translations'
 PAGE_TITLE = 'Translations'
 LIST_NAME = 'translations'
-RESOURCE_TYPE = resource_type_enum.TRANSLATION_CONTENT
+RESOURCE_TYPE = object_subtype_enum.TRANSLATION
 PROPERTIES = translation_properties
 
 
@@ -49,13 +49,13 @@ def list_view(context: str) -> Any:
         'Actions',
     ]
     data: list[Any] = list()
-    contents = content_service.select_all_by_type(context, RESOURCE_TYPE)
+    contents = object_service.select_all_by_type(context, RESOURCE_TYPE)
     for content in contents:
         id_ = content.id
         data.append((
             id_,
             content.name,
-            content.data['value'],
+            content.properties['value'],
             f'<a href="{list_url}/edit/{id_}">Details</a>'
         ))
     return render_template(

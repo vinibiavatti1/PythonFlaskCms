@@ -3,7 +3,7 @@ Events controller.
 """
 from typing import Any
 from flask import Blueprint, request
-from project.enums import resource_type_enum
+from project.enums import object_subtype_enum
 from project.decorators.security_decorators import login_required
 from project.properties.event_properties import event_properties
 from project.decorators.context_decorators import process_context
@@ -13,7 +13,7 @@ from project.processors import content_ctrl_processor
 # Controller properties
 CONTROLLER_NAME = 'admin_events_ctrl'
 URL_PREFIX = '/<context>/admin/events'
-RESOURCE_TYPE = resource_type_enum.EVENT_CONTENT
+RESOURCE_TYPE = object_subtype_enum.EVENT
 PAGE_TITLE = 'Events'
 LIST_NAME = 'events'
 PROPERTIES = event_properties

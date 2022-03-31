@@ -1,50 +1,51 @@
 """
 History repository.
 """
-from typing import Any, Optional
+from typing import Any
 from project.utils import database_utils
+from project.entities.history_entity import HistoryEntity
 
 
-def insert(data: dict[str, Any]) -> Any:
+def insert(entity: HistoryEntity) -> Any:
     """
-    Insert history.
+    Insert a new history and return its id.
     """
     sql = '''
-        INSERT INTO history (
-            resource_id,
-            description,
-            created_by,
-            resource_type
-        ) VALUES (?, ?, ?, ?)
+        INSERT INTO history
+        (context, table_name, target_id, descripton, created_by)
+        VALUES (?, ?, ?, ?, ?)
     '''
     return database_utils.execute_update(sql, (
-        data['resource_id'],
-        data['description'],
-        data['created_by'],
-        data['resource_type'],
+        entity.context,
+        entity.table_name,
+        entity.target_id,
+        entity.description,
+        entity.created_by
     ))
 
 
-def select_by_resource(resource_id: int, resource_type: str
-                      ) -> list[dict[str, Any]]:
+def select_by_target_id(context: str, table_name: str, target_id: int
+                        ) -> list[HistoryEntity]:
     """
-    Get all history records by resource id.
+    Select history records by target id from table.
     """
     sql = '''
         SELECT
-            h.id,
-            h.description,
-            h.created_by,
-            h.resource_type,
-            u.name as created_by_name,
-            h.created_on
-        FROM history h
-        LEFT JOIN users u
-        ON (h.created_by = u.id)
-        WHERE h.resource_id = ?
-        AND h.resource_type = ?
-        AND h.deleted = 0 ORDER BY h.id DESC'''
-    return database_utils.execute_query(sql, (
-        resource_id,
-        resource_type,
-    ))
+            history.id,
+            history.context,
+            history.description,
+            history.table_name,
+            history.created_by,
+            history.created_on,
+            users.name as user_name
+        FROM history
+        LEFT JOIN users
+        ON history.created_by = users.id
+        WHERE context = ? AND
+              history.table_name = ? AND
+              history.target_id = ?
+        AND history.resource_type = ?
+        AND history.deleted = 0 ORDER BY h.id DESC'''
+    parameters = (context, table_name, target_id)
+    result_set = database_utils.execute_query(sql, parameters)
+    return HistoryEntity.map_list_to_entity(result_set)

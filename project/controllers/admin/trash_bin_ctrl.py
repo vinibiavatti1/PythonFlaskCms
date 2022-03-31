@@ -4,7 +4,7 @@ Trash bin controller.
 from typing import Any
 from werkzeug.utils import redirect
 from flask import Blueprint, request, render_template, flash
-from project.services import content_service
+from project.services import object_service
 from project.decorators.security_decorators import login_required
 from project.utils.ctrl_utils import get_admin_list_url
 from project.decorators.context_decorators import process_context
@@ -46,13 +46,13 @@ def list_view(context: str) -> str:
         'Actions',
     ]
     data: list[Any] = list()
-    contents = content_service.select_all_deleted(context)
+    contents = object_service.select_all_deleted(context)
     for content in contents:
         id_ = content.id
         data.append((
             id_,
             content.name,
-            str(content.resource_type).replace('_', ' ').title(),
+            str(content.object_type).replace('_', ' ').title(),
             content.deleted_on,
             f'<a href="{list_url}/restore/{id_}">Restore</a>'
         ))
@@ -81,7 +81,7 @@ def restore_action(context: str, content_id: int) -> Any:
     """
     list_url = get_admin_list_url(context, LIST_NAME)
     try:
-        content_service.restore(content_id)
+        object_service.restore(content_id)
         flash('Content restored successfully!', category='success')
         return redirect(f'{list_url}')
     except Exception as err:

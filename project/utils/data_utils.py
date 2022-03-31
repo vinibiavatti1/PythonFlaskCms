@@ -3,7 +3,7 @@ Data utilities.
 """
 from typing import Any, Optional
 from project.models.property_model import PropertyModel
-from project.entities.content_entity import ContentEntity
+from project.entities.object_entity import ObjectEntity
 import json
 
 
@@ -38,7 +38,7 @@ def parse_list_json_data(data: list[dict[str, Any]], json_field: str = 'data'
 
 
 def set_properties_value(properties: list[Any],
-                         content: ContentEntity) -> list[Any]:
+                         content: ObjectEntity) -> list[Any]:
     """
     Set properties value by name.
     """
@@ -47,5 +47,5 @@ def set_properties_value(properties: list[Any],
             if hasattr(content, prop.name):
                 prop.value = getattr(content, prop.name)
             elif hasattr(content, 'data'):
-                prop.value = content.data.get(prop.name, '')
+                prop.value = content.properties.get(prop.name, '')
     return properties

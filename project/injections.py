@@ -10,11 +10,11 @@ from project.records.menu_records import menu_records
 from project.records.context_records import context_records
 from project.services import property_service
 from project.services import file_service
-from project.services import content_service
+from project.services import object_service
 from project.utils import datetime_utils
 from project.utils import page_utils
 from project.utils import context_utils
-from project.enums import resource_type_enum
+from project.enums import object_subtype_enum
 from project.enums import file_type_enum
 from project.models.url_model import UrlModel
 
@@ -109,7 +109,7 @@ def inject_urls() -> dict[str, Any]:
     context = context_utils.get_current_context()
     if not context:
         return dict()
-    contents = content_service.select_all_published(context)
+    contents = object_service.select_all_published(context)
     content_urls = [UrlModel.map_from_content(content) for content in contents]
     return dict(
         urls=dict(
@@ -144,10 +144,10 @@ def inject_translations() -> dict[str, Any]:
     context = context_utils.get_current_context()
     if not context:
         return dict()
-    translations = content_service.select_all_by_type(
+    translations = object_service.select_all_by_type(
         context,
-        resource_type_enum.TRANSLATION_CONTENT,
+        object_subtype_enum.TRANSLATION,
     )
     return dict(
-        i18n={t.name: t.data['value'] for t in translations}
+        i18n={t.name: t.properties['value'] for t in translations}
     )

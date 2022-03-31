@@ -3,7 +3,7 @@ URL model.
 """
 
 
-from project.entities.content_entity import ContentEntity
+from project.entities.object_entity import ObjectEntity
 
 
 class UrlModel:
@@ -20,12 +20,12 @@ class UrlModel:
         self.resource_type = resource_type
 
     @classmethod
-    def map_from_content(cls, content: ContentEntity) -> 'UrlModel':
+    def map_from_content(cls, content: ObjectEntity) -> 'UrlModel':
         """
         Create instance from ContentEntity.
         """
         return cls(
             url=content.url,
             name=content.name,
-            resource_type=content.resource_type,
+            resource_type=content.object_type,
         )

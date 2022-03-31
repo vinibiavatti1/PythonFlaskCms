@@ -1,9 +1,9 @@
 """
 Default history messages enumeration.
 """
-RESOURCE_CREATED = 'Resource created'
-RESOURCE_UPDATED = 'Resource updated'
-RESOURCE_DELETED = 'Resource deleted'
-RESOURCE_RESTORED = 'Resource restored'
-RESOURCE_DUPLICATED_FROM = 'Resource duplicated from: {0}'
-RESOURCE_DUPLICATED_TO = 'Resource duplicated to: {0}'
+OBJECT_CREATED = 'Object created'
+OBJECT_UPDATED = 'Object updated'
+OBJECT_DELETED = 'Object deleted'
+OBJECT_RESTORED = 'Object restored'
+OBJECT_DUPLICATED_FROM = 'Object duplicated from: {0}/{1}'
+OBJECT_DUPLICATED_TO = 'Object duplicated to: {0}/{1}'
