@@ -9,135 +9,31 @@ from project.models.menu_item_model import MenuItemModel
 menu_records: list[Union[MenuItemModel, HeaderModel]] = [
 
     ###########################################################################
-    # Content
+    # Objects
     ###########################################################################
 
     HeaderModel(
-        title='Content'
+        title='Objects'
     ),
     MenuItemModel(
-        title='Articles',
-        link='/articles',
+        title='Contents',
+        link='/object/contents',
         icon='bi-files',
     ),
     MenuItemModel(
-        title='Landing Pages',
-        link='/landing_pages',
-        icon='bi-layers',
+        title='Resources',
+        link='/object/resources',
+        icon='bi-box-seam',
     ),
     MenuItemModel(
-        title='Events',
-        link='/events',
-        icon='bi-calendar-event',
-    ),
-    MenuItemModel(
-        title='News',
-        link='/news',
-        icon='bi-newspaper',
-    ),
-    MenuItemModel(
-        title='Posts',
-        link='/posts',
-        icon='bi-pin-angle',
-    ),
-    MenuItemModel(
-        title='Custom Pages',
-        link='/custom_pages',
-        icon='bi-filetype-html',
-    ),
-
-    ###########################################################################
-    # Resources
-    ###########################################################################
-
-    HeaderModel(
-        title='Resources'
-    ),
-    MenuItemModel(
-        title='Translations',
-        link='/translations',
-        icon='bi-translate',
-    ),
-    MenuItemModel(
-        title='Redirects',
-        link='/redirects',
-        icon='bi-signpost-split',
-    ),
-    MenuItemModel(
-        title='FAQs',
-        link='/faqs',
-        icon='bi-question-circle',
-    ),
-
-    ###########################################################################
-    # Trash Bin
-    ###########################################################################
-
-    HeaderModel(
-        title='Trash Bin'
+        title='Pages',
+        link='/object/pages',
+        icon='bi-file-earmark-code',
     ),
     MenuItemModel(
         title='Trash Bin',
         link='/trash_bin',
         icon='bi-trash',
-    ),
-
-    ###########################################################################
-    # Pages
-    ###########################################################################
-
-    HeaderModel(
-        title='Pages'
-    ),
-    MenuItemModel(
-        title='Article List',
-        link='/pages',
-        icon='bi-file-earmark-post',
-    ),
-    MenuItemModel(
-        title='Event List',
-        link='/pages',
-        icon='bi-file-earmark-medical',
-    ),
-    MenuItemModel(
-        title='News List',
-        link='/news_list',
-        icon='bi-file-earmark-easel',
-    ),
-    MenuItemModel(
-        title='FAQ List',
-        link='/pages',
-        icon='bi-file-earmark-text',
-    ),
-    MenuItemModel(
-        title='Calendar',
-        link='/pages',
-        icon='bi-calendar',
-    ),
-    MenuItemModel(
-        title='Search',
-        link='/pages',
-        icon='bi-search',
-    ),
-    MenuItemModel(
-        title='Login',
-        link='/pages',
-        icon='bi-key',
-    ),
-    MenuItemModel(
-        title='Contact',
-        link='/pages',
-        icon='bi-file-earmark-person',
-    ),
-    MenuItemModel(
-        title='Sitemap',
-        link='/pages',
-        icon='bi-map',
-    ),
-    MenuItemModel(
-        title='Blog',
-        link='/pages',
-        icon='bi-postage',
     ),
 
     ###########################################################################

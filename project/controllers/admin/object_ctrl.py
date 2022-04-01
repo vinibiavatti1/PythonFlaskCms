@@ -6,7 +6,6 @@ from flask import Blueprint, request, abort, render_template, flash, redirect
 from project.enums import object_type_enum
 from project.decorators.security_decorators import login_required
 from project.decorators.record_decorators import validate_content_type
-from project.records.content_type_records import content_type_records
 from project.services import history_service
 from project.utils import record_utils
 from project.utils.data_utils import set_properties_value
@@ -15,6 +14,9 @@ from project.entities.object_entity import ObjectEntity
 from project.services import object_service
 from project.decorators.context_decorators import process_context
 from project.processors import content_ctrl_processor
+from project.records.content_type_records import content_type_records
+from project.records.page_type_records import page_type_records
+from project.records.resource_type_records import resource_type_records
 
 
 # Blueprint data
@@ -30,10 +32,10 @@ blueprint = Blueprint(
 ###############################################################################
 
 
-@blueprint.route('/content', methods=['GET'])
+@blueprint.route('/contents', methods=['GET'])
 @login_required()
 @process_context()
-def list_content_view(context: str) -> Any:
+def list_contents_view(context: str) -> Any:
     """
     List content view endpoint.
     """
@@ -41,6 +43,7 @@ def list_content_view(context: str) -> Any:
     headers = [
         '#',
         'Name',
+        'Type',
         'Private',
         'Published',
         'Created On',
@@ -52,9 +55,15 @@ def list_content_view(context: str) -> Any:
         id_ = entity.id
         private = entity.properties['private'] == '1'
         published = entity.properties['published'] == '1'
+        subtype = record_utils.get_record_by_name(
+            entity.object_subtype, content_type_records
+        )
+        icon = getattr(subtype, "icon")
+        label = getattr(subtype, "label")
         data.append((
             id_,
             entity.name,
+            f'<i class="bi {icon}"></i> {label}',
             'True' if private == '1' else 'False',
             '<i class="bi bi-broadcast"></i> True' if published else 'False',
             entity.created_on,
@@ -69,6 +78,104 @@ def list_content_view(context: str) -> Any:
             btn_link=f'{list_url}/create',
         )
     )
+
+
+@blueprint.route('/pages', methods=['GET'])
+@login_required()
+@process_context()
+def list_pages_view(context: str) -> Any:
+    """
+    List page view endpoint.
+    """
+    list_url = get_admin_list_url(context, object_type_enum.PAGE)
+    headers = [
+        '#',
+        'Name',
+        'Type',
+        'Private',
+        'Published',
+        'Created On',
+        'Actions',
+    ]
+    data: list[Any] = list()
+    objects = object_service.select_by_type(context, object_type_enum.PAGE)
+    for entity in objects:
+        id_ = entity.id
+        private = entity.properties['private'] == '1'
+        published = entity.properties['published'] == '1'
+        subtype = record_utils.get_record_by_name(
+            entity.object_subtype, page_type_records
+        )
+        icon = getattr(subtype, "icon")
+        label = getattr(subtype, "label")
+        data.append((
+            id_,
+            entity.name,
+            f'<i class="bi {icon}"></i> {label}',
+            'True' if private == '1' else 'False',
+            '<i class="bi bi-broadcast"></i> True' if published else 'False',
+            entity.created_on,
+            f'<a href="{list_url}/edit/{id_}">Details</a>'
+        ))
+    return render_template(
+        '/admin/content_list.html',
+        page_data=dict(
+            headers=headers,
+            data=data,
+            title=object_type_enum.PAGE.title(),
+            btn_link=f'{list_url}/create',
+        )
+    )
+
+
+@blueprint.route('/resources', methods=['GET'])
+@login_required()
+@process_context()
+def list_resources_view(context: str) -> Any:
+    """
+    List resource view endpoint.
+    """
+    list_url = get_admin_list_url(context, object_type_enum.RESOURCE)
+    headers = [
+        '#',
+        'Name',
+        'Type',
+        'Active',
+        'Created On',
+        'Actions',
+    ]
+    data: list[Any] = list()
+    objects = object_service.select_by_type(context, object_type_enum.RESOURCE)
+    for entity in objects:
+        id_ = entity.id
+        active = entity.properties['active'] == '1'
+        subtype = record_utils.get_record_by_name(
+            entity.object_subtype, resource_type_records
+        )
+        icon = getattr(subtype, "icon")
+        label = getattr(subtype, "label")
+        data.append((
+            id_,
+            entity.name,
+            f'<i class="bi {icon}"></i> {label}'
+            '<i class="bi bi-broadcast"></i> True' if active else 'False',
+            entity.created_on,
+            f'<a href="{list_url}/edit/{id_}">Details</a>'
+        ))
+    return render_template(
+        '/admin/content_list.html',
+        page_data=dict(
+            headers=headers,
+            data=data,
+            title=object_type_enum.RESOURCE.title(),
+            btn_link=f'{list_url}/create',
+        )
+    )
+
+
+
+
+
 
 
 @blueprint.route('/create', methods=['GET'])
