@@ -2,29 +2,32 @@
 Resource records module.
 """
 from project.models.resource_type_model import ResourceTypeModel
-from project.properties.contents.article_properties import article_properties
-from project.properties.contents.landing_properties import landing_properties
-from project.properties.contents.event_properties import event_properties
-from project.properties.contents.news_properties import news_properties
-from project.properties.contents.post_properties import post_properties
-from project.properties.contents.custom_properties import custom_properties
+from project.properties.resources.translation_properties import \
+    translation_properties
+from project.properties.resources.faq_properties import \
+    faq_properties
+from project.properties.resources.redirect_properties import \
+    redirect_properties
 
 
 resource_type_records: list[ResourceTypeModel] = [
     ResourceTypeModel(
-        name='translations',
+        label='Translation',
+        name='translation',
         icon='bi-translate',
-        properties=article_properties,
+        properties=translation_properties,
     ),
     ResourceTypeModel(
-        name='landing',
-        icon='bi-layers',
-        properties=landing_properties,
+        label='FAQ',
+        name='faq',
+        icon='bi-question-circle',
+        properties=faq_properties,
     ),
     ResourceTypeModel(
-        name='event',
-        icon='bi-calendar-event',
-        properties=event_properties,
+        label='Redirect',
+        name='redirect',
+        icon='bi-signpost-split',
+        properties=redirect_properties,
     ),
     # Add more...
 ]

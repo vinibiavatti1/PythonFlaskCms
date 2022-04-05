@@ -20,12 +20,12 @@ class UrlModel:
         self.resource_type = resource_type
 
     @classmethod
-    def map_from_content(cls, content: ObjectEntity) -> 'UrlModel':
+    def map_from_object_entity(cls, entity: ObjectEntity) -> 'UrlModel':
         """
         Create instance from ContentEntity.
         """
         return cls(
-            url=content.url,
-            name=content.name,
-            resource_type=content.object_type,
+            url=entity.url,
+            name=entity.name,
+            resource_type=entity.object_type,
         )

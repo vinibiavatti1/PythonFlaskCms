@@ -13,7 +13,7 @@ from project.records.translation_records import translation_records
 from project.records.context_records import context_records
 from project.services import property_service
 from project.services import object_service
-from project.enums import object_subtype_enum
+from project.enums import object_subtype_enum, object_type_enum
 import os
 
 
@@ -75,15 +75,19 @@ def register_translations(app: Flask) -> None:
         for translation in translation_records:
             found = object_service.select_by_name(
                 context,
+                object_type_enum.RESOURCE,
+                object_subtype_enum.TRANSLATION_RESOURCE,
                 translation.name,
             )
             if found is None:
                 entity = ObjectEntity(
                     context=context,
                     name=translation.name,
-                    object_subtype=object_subtype_enum.TRANSLATION,
+                    object_type=object_type_enum.RESOURCE,
+                    object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
                     properties=dict(
-                        value=translation.value
+                        value=translation.value,
+                        active=True,
                     )
                 )
                 object_service.insert(entity)

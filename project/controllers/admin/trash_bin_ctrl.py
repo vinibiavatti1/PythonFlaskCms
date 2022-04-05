@@ -6,7 +6,7 @@ from werkzeug.utils import redirect
 from flask import Blueprint, request, render_template, flash
 from project.services import object_service
 from project.decorators.security_decorators import login_required
-from project.utils.ctrl_utils import get_admin_list_url
+from project.utils.ctrl_utils import get_object_root_url
 from project.decorators.context_decorators import process_context
 
 
@@ -37,7 +37,7 @@ def list_view(context: str) -> str:
     """
     Render datatable with data.
     """
-    list_url = get_admin_list_url(context, LIST_NAME)
+    list_url = get_object_root_url(context, LIST_NAME)
     headers = [
         '#',
         'Name',
@@ -79,7 +79,7 @@ def restore_action(context: str, content_id: int) -> Any:
     """
     Restore content.
     """
-    list_url = get_admin_list_url(context, LIST_NAME)
+    list_url = get_object_root_url(context, LIST_NAME)
     try:
         object_service.restore(content_id)
         flash('Content restored successfully!', category='success')

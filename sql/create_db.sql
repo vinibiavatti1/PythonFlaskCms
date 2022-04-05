@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS objects (
     `context` TEXT NOT NULL,
     `name` TEXT NOT NULL,
     `object_type` TEXT NOT NULL,
-    `object_sub_type` TEXT NOT NULL,
+    `object_subtype` TEXT NOT NULL,
     `properties` TEXT NOT NULL DEFAULT '{}',
     `created_on` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `deleted_on` TIMESTAMP NULL DEFAULT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS history (
     `target_id` INTEGER NOT NULL,
     `description` TEXT NOT NULL,
     `created_by` INTEGER NULL,
-    `created_on` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `created_on` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Properties

@@ -9,7 +9,7 @@ from project.properties.translation_properties import translation_properties
 from project.decorators.context_decorators import process_context
 from project.processors import content_ctrl_processor
 from project.services import object_service
-from project.utils.ctrl_utils import get_admin_list_url
+from project.utils.ctrl_utils import get_object_root_url
 
 
 # Controller data
@@ -41,7 +41,7 @@ def list_view(context: str) -> Any:
     """
     Render datatable with data.
     """
-    list_url = get_admin_list_url(context, LIST_NAME)
+    list_url = get_object_root_url(context, LIST_NAME)
     headers = [
         '#',
         'Name',

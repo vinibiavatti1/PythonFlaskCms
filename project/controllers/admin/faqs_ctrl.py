@@ -7,7 +7,7 @@ from project.enums import object_subtype_enum
 from project.decorators.security_decorators import login_required
 from project.properties.faq_properties import faq_properties
 from project.decorators.context_decorators import process_context
-from project.utils.ctrl_utils import get_admin_list_url
+from project.utils.ctrl_utils import get_object_root_url
 from project.processors import content_ctrl_processor
 from project.services import object_service
 
@@ -41,7 +41,7 @@ def list_view(context: str) -> Any:
     """
     Render datatable with data.
     """
-    list_url = get_admin_list_url(context, LIST_NAME)
+    list_url = get_object_root_url(context, LIST_NAME)
     headers = [
         '#',
         'Name',

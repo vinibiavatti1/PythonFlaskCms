@@ -17,17 +17,17 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ),
     MenuItemModel(
         title='Contents',
-        link='/object/contents',
+        link='/objects/content',
         icon='bi-files',
     ),
     MenuItemModel(
         title='Resources',
-        link='/object/resources',
+        link='/objects/resource',
         icon='bi-box-seam',
     ),
     MenuItemModel(
         title='Pages',
-        link='/object/pages',
+        link='/objects/page',
         icon='bi-file-earmark-code',
     ),
     MenuItemModel(

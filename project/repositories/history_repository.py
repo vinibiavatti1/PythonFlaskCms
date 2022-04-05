@@ -12,7 +12,7 @@ def insert(entity: HistoryEntity) -> Any:
     """
     sql = '''
         INSERT INTO history
-        (context, table_name, target_id, descripton, created_by)
+        (context, table_name, target_id, description, created_by)
         VALUES (?, ?, ?, ?, ?)
     '''
     return database_utils.execute_update(sql, (

@@ -87,7 +87,7 @@ class ObjectEntity:
             name=dct.get('name', None),
             object_type=dct.get('object_type', None),
             object_subtype=dct.get('object_subtype', None),
-            properties=json.loads(dct.get('data', None)),
+            properties=json.loads(dct.get('properties', '{}')),
             created_on=dct.get('created_on', None),
             deleted=str(dct.get('deleted')) == '1',
             deleted_on=dct.get('deleted_on'),

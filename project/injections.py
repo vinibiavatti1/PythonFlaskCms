@@ -14,6 +14,7 @@ from project.services import object_service
 from project.utils import datetime_utils
 from project.utils import page_utils
 from project.utils import context_utils
+from project.enums import object_type_enum
 from project.enums import object_subtype_enum
 from project.enums import file_type_enum
 from project.models.url_model import UrlModel
@@ -109,12 +110,32 @@ def inject_urls() -> dict[str, Any]:
     context = context_utils.get_current_context()
     if not context:
         return dict()
-    contents = object_service.select_all_published(context)
-    content_urls = [UrlModel.map_from_content(content) for content in contents]
+    contents = object_service.select_by_type(
+        context,
+        object_type_enum.CONTENT
+    )
+    pages = object_service.select_by_type(
+        context,
+        object_type_enum.PAGE
+    )
+    resources = object_service.select_by_type(
+        context,
+        object_type_enum.RESOURCE
+    )
+    content_urls = [
+        UrlModel.map_from_object_entity(content) for content in contents
+    ]
+    page_urls = [
+        UrlModel.map_from_object_entity(page) for page in pages
+    ]
+    resource_urls = [
+        UrlModel.map_from_object_entity(resource) for resource in resources
+    ]
     return dict(
         urls=dict(
             content_urls=content_urls,
-            page_urls=[]
+            page_urls=page_urls,
+            resource_urls=resource_urls,
         )
     )
 
@@ -144,9 +165,10 @@ def inject_translations() -> dict[str, Any]:
     context = context_utils.get_current_context()
     if not context:
         return dict()
-    translations = object_service.select_all_by_type(
+    translations = object_service.select_by_type_and_subtype(
         context,
-        object_subtype_enum.TRANSLATION,
+        object_type_enum.RESOURCE,
+        object_subtype_enum.TRANSLATION_RESOURCE,
     )
     return dict(
         i18n={t.name: t.properties['value'] for t in translations}

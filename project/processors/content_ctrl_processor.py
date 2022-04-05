@@ -10,7 +10,7 @@ from flask import request, render_template, flash, abort
 from project.entities.object_entity import ObjectEntity
 from project.services import history_service, object_service
 from project.utils.data_utils import set_properties_value
-from project.utils.ctrl_utils import get_admin_list_url
+from project.utils.ctrl_utils import get_object_root_url
 
 
 def process_list_view(context: str, resource_type: str, list_name: str,
@@ -18,7 +18,7 @@ def process_list_view(context: str, resource_type: str, list_name: str,
     """
     List view wrapper.
     """
-    list_url = get_admin_list_url(context, list_name)
+    list_url = get_object_root_url(context, list_name)
     headers = [
         '#',
         'Name',
@@ -57,7 +57,7 @@ def process_create_view(context: str, resource_type: str, list_name: str,
     """
     Create view wrapper.
     """
-    list_url = get_admin_list_url(context, list_name)
+    list_url = get_object_root_url(context, list_name)
     return render_template(
         '/admin/content.html',
         page_data=dict(
@@ -78,7 +78,7 @@ def process_edit_view(context: str, resource_type: str, list_name: str,
     """
     Edit view wrapper.
     """
-    list_url = get_admin_list_url(context, list_name)
+    list_url = get_object_root_url(context, list_name)
     content = object_service.select_by_id(content_id)
     if not content:
         return abort(404)
@@ -105,7 +105,7 @@ def process_create_action(context: str, resource_type: str,
     """
     Create action wrapper.
     """
-    list_url = get_admin_list_url(context, list_name)
+    list_url = get_object_root_url(context, list_name)
     content = ObjectEntity(
         context=context,
         name=data['name'],
@@ -126,7 +126,7 @@ def process_edit_action(context: str, resource_type: str, data: dict[str, Any],
     """
     Edit action wrapper.
     """
-    list_url = get_admin_list_url(context, list_name)
+    list_url = get_object_root_url(context, list_name)
     content = ObjectEntity(
         context=context,
         id=content_id,
@@ -148,7 +148,7 @@ def process_delete_action(context: str, list_name: str, content_id: int
     """
     Delete action wrapper.
     """
-    list_url = get_admin_list_url(context, list_name)
+    list_url = get_object_root_url(context, list_name)
     try:
         object_service.delete(content_id)
         flash(f'Content {content_id} sent to trash bin', category='success')
@@ -163,7 +163,7 @@ def process_duplicate_action(context: str, list_name: str, content_id: int,
     """
     Duplicate action wrapper.
     """
-    list_url = get_admin_list_url(context, list_name)
+    list_url = get_object_root_url(context, list_name)
     try:
         object_service.duplicate(content_id, to_context, new_name)
         flash('Content duplicated successfully!', category='success')

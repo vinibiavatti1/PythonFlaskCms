@@ -31,8 +31,8 @@ def result_api_message(type: str, message: str) -> dict[str, Any]:
     }
 
 
-def get_admin_list_url(context: str, list_name: str) -> str:
+def get_object_root_url(context: str, object_type: str) -> str:
     """
     Get list url.
     """
-    return f'/{context}/admin/{list_name}'
+    return f'/{context}/admin/objects/{object_type}'

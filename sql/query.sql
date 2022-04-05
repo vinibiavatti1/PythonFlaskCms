@@ -1,4 +1,4 @@
-SELECT * FROM contents;
+SELECT * FROM objects;
 SELECT * FROM menus;
 SELECT * FROM users;
 SELECT * FROM properties;

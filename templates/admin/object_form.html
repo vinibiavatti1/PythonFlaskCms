@@ -4,13 +4,13 @@
 {% from "macros/admin/history_list.html" import history_list with context %}
 {% from "macros/admin/duplicate_modal.html" import duplicate_modal with context %}
 {% extends 'admin/layout.html' %}
-{% block title %}{{ page_data.title }}{% endblock %}
+{% block title %}{{ page_data.object_subtype.title() }}{% endblock %}
 {% block content %}
 <div class="container my-3">
     <div class="row">
         <div class="col">
-            {{ breadcrumb(['Admin', page_data.title]) }}
-            <div class="fs-3 text-white">{{ page_data.title }}</div>
+            {{ breadcrumb(['Admin', page_data.object_subtype.title() ]) }}
+            <div class="fs-3 text-white">{{ page_data.object_subtype.title() }}</div>
             <div class="card">
                 <div class="card-body">
                     <form
@@ -37,7 +37,7 @@
                                     <i class="bi bi-trash"></i>
                                     Delete...
                                 </button>
-                                {% if page_data.blocks_url %}
+                                {% if page_data.allow_blocks %}
                                 <a href="{{ page_data.context }}/admin/blocks/{{page_data.content_id}}" class="btn btn-primary">
                                     <i class="bi bi-layers"></i>
                                     Blocks

@@ -1,0 +1,82 @@
+{% from "macros/utils/alerts.html" import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% extends 'admin/layout.html' %}
+{% block title %}{{page_data.object_type.title()}}{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', page_data.object_type.title()]) }}
+            <div class="fs-3 text-white">{{page_data.object_type.title()}}</div>
+            <div class="card">
+                <div class="card-body">
+                    {{ flash_alerts() }}
+                    {% if page_data.object_type != 'page' %}
+                        <div class="mb-2">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-plus-circle"></i> New Object
+                                </button>
+                                <ul class="dropdown-menu">
+                                    {% for object_type in page_data.object_type_records %}
+                                        <li>
+                                            <a class="dropdown-item" href="{{page_data.root_url}}/{{object_type.name}}/create">
+                                                <i class="me-2 bi {{object_type.icon}}"></i>
+                                                {{object_type.label}}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-funnel"></i> Filter
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="{{page_data.root_url}}">
+                                            <i class="me-2 bi bi-funnel"></i>
+                                            All
+                                        </a>
+                                    </li>
+                                    {% for object_type in page_data.object_type_records %}
+                                        <li>
+                                            <a class="dropdown-item" href="{{page_data.root_url}}/{{object_type.name}}">
+                                                <i class="me-2 bi bi-funnel"></i>
+                                                {{object_type.label}}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% if page_data.object_sub_type %}
+                                <span class="ms-3 badge bg-warning text-dark">Filtered by: {{page_data.object_sub_type}}</span>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    <div class="table-responsive">
+                        <table class="datatable table table-striped w-100">
+                            <thead>
+                                <tr>
+                                    {% for header in page_data.headers %}
+                                        <th>{{header}}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in page_data.data %}
+                                    <tr>
+                                        {% for field in item %}
+                                            <td>{{field | safe}}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

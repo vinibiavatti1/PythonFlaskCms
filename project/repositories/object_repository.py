@@ -78,7 +78,7 @@ def select_by_name(context: str, object_type: str, object_subtype: str,
     '''
     parameters = (context, object_type, object_subtype, name,)
     result_set = database_utils.execute_single_query(sql, parameters)
-    if not result_set:
+    if result_set is None:
         return None
     return ObjectEntity.map_dict_to_entity(result_set)
 
@@ -91,7 +91,7 @@ def insert(entity: ObjectEntity) -> Any:
         INSERT INTO {TABLE_NAME}
         (context, name, object_type, object_subtype, properties)
         VALUES
-        (?, ?, ?, ?)
+        (?, ?, ?, ?, ?)
     '''
     parameters = (
         entity.context,

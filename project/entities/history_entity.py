@@ -3,7 +3,7 @@ History entity.
 
 Model to map database history entity.
 """
-from flask import request, session
+from flask import request, session, current_app, has_request_context
 from project.enums import session_enum
 from typing import Any, Optional
 from datetime import datetime
@@ -33,7 +33,7 @@ class HistoryEntity:
         self.description = description
         self.created_on = created_on
         self.created_by = created_by
-        if self.created_by is None and request is not None:
+        if has_request_context() and self.created_by is None:
             self.created_by = session.get(session_enum.USER_ID, None)
 
     @classmethod
