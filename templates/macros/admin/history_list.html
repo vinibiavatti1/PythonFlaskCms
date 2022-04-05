@@ -14,7 +14,7 @@
                 <tr>
                     <td>{{ len(history_data) - index }}</td>
                     <td>{{ history.description }}</td>
-                    <td>{{ history.created_by_name }}</td>
+                    <td>{{ history.created_by_name if history.created_by_name else 'System' }}</td>
                     <td>{{ history.created_on }}</td>
                 </tr>
             {% endfor %}

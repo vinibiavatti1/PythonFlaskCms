@@ -20,6 +20,7 @@ from project.processors import content_ctrl_processor
 from project.records.content_type_records import content_type_records
 from project.records.page_type_records import page_type_records
 from project.records.resource_type_records import resource_type_records
+from project.enums import table_enum
 
 
 # Blueprint data
@@ -31,7 +32,7 @@ blueprint = Blueprint(
 
 
 ###############################################################################
-# Routes
+# View Routes
 ###############################################################################
 
 
@@ -255,7 +256,7 @@ def create_view(context: str, object_type: str, object_subtype: str) -> Any:
         '/admin/object_form.html',
         page_data=dict(
             context=context,
-            content_id=None,
+            object_id=None,
             edit=False,
             object_type=object_type,
             object_subtype=object_subtype,
@@ -266,35 +267,51 @@ def create_view(context: str, object_type: str, object_subtype: str) -> Any:
     )
 
 
-@blueprint.route('/edit/<content_id>', methods=['GET'])
+@blueprint.route('/<object_type>/edit/<object_id>', methods=['GET'])
 @login_required()
 @process_context()
-@validate_content_type()
-def edit_view(context: str, content_type: str, content_id: int) -> Any:
+def edit_view(context: str, object_type: str, object_id: int) -> Any:
     """
     Render edit page.
     """
-    content_record = record_utils.get_content_record(content_type)
-    list_url = get_object_root_url(context, content_type)
-    content = object_service.select_by_id(content_id)
-    if not content:
-        return abort(404)
-    props = set_properties_value(content_record.properties, content)
-    history = history_service.select_by_resource(content_id, content_type)
+    record_list: list[Any] = []
+    if object_type == object_type_enum.CONTENT:
+        record_list = content_type_records
+    elif object_type == object_type_enum.RESOURCE:
+        record_list = resource_type_records
+    else:
+        return abort(400)
+    entity = object_service.select_by_id(object_id)
+    if not entity:
+        return abort(400)
+    record = record_utils.get_record_by_name(
+        entity.object_subtype,
+        record_list,
+    )
+    root_url = get_object_root_url(context, object_type)
+    props = set_properties_value(getattr(record, 'properties'), entity)
+    history = history_service.select_by_target_id(
+        context, table_enum.OBJECTS, object_id,
+    )
     return render_template(
-        '/admin/content.html',
+        '/admin/object_form.html',
         page_data=dict(
             context=context,
-            content_id=content_id,
+            object_id=object_id,
             edit=True,
-            title=content_type.title(),
-            root_url=list_url,
+            object_type=object_type,
+            object_subtype=entity.object_subtype,
+            root_url=root_url,
             properties=props,
-            resource_type=content_type,
             history=history,
-            name=content.name,
+            name=entity.name,
         )
     )
+
+
+###############################################################################
+# Action Routes
+###############################################################################
 
 
 @blueprint.route('/create', methods=['POST'])

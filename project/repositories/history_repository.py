@@ -44,8 +44,7 @@ def select_by_target_id(context: str, table_name: str, target_id: int
         WHERE context = ? AND
               history.table_name = ? AND
               history.target_id = ?
-        AND history.resource_type = ?
-        AND history.deleted = 0 ORDER BY h.id DESC'''
+        ORDER BY history.id DESC'''
     parameters = (context, table_name, target_id)
     result_set = database_utils.execute_query(sql, parameters)
     return HistoryEntity.map_list_to_entity(result_set)

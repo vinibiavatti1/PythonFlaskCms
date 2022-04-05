@@ -46,6 +46,6 @@ def set_properties_value(properties: list[Any],
         if isinstance(prop, PropertyModel):
             if hasattr(content, prop.name):
                 prop.value = getattr(content, prop.name)
-            elif hasattr(content, 'data'):
+            elif hasattr(content, 'properties'):
                 prop.value = content.properties.get(prop.name, '')
     return properties

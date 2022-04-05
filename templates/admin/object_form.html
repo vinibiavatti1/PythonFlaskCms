@@ -15,12 +15,13 @@
                 <div class="card-body">
                     <form
                         id="content-form"
-                        action="{{ page_data.root_url + '/edit/' + page_data.content_id if page_data.edit else page_data.root_url + '/create' }}"
+                        action="{{ page_data.root_url + '/edit/' + page_data.object_id if page_data.edit else page_data.root_url + '/create' }}"
                         method="POST"
                         class="needs-validation"
                         novalidate
                     >
-                        <input name="type" type="hidden" value="{{page_data.resource_type}}">
+                        <input name="object_type" type="hidden" value="{{page_data.object_type}}">
+                        <input name="object_subtype" type="hidden" value="{{page_data.object_subtype}}">
 
                         {{ flash_alerts() }}
                         <div class="mb-2">
@@ -38,7 +39,7 @@
                                     Delete...
                                 </button>
                                 {% if page_data.allow_blocks %}
-                                <a href="{{ page_data.context }}/admin/blocks/{{page_data.content_id}}" class="btn btn-primary">
+                                <a href="{{ page_data.context }}/admin/blocks/{{page_data.object_id}}" class="btn btn-primary">
                                     <i class="bi bi-layers"></i>
                                     Blocks
                                 </a>
@@ -138,7 +139,7 @@
 
         $("#btn-delete").on('click', function() {
             if(confirm('Do you really want to delete this record?')) {
-                window.location.href = '{{page_data.root_url}}/delete/{{page_data.content_id}}'
+                window.location.href = '{{page_data.root_url}}/delete/{{page_data.object_id}}'
             }
         });
 
@@ -153,7 +154,7 @@
                 alert('Invalid name. Must have only a-z, numbers and "_" characteres.');
                 return;
             }
-            window.location.href = '{{page_data.root_url}}/duplicate/{{page_data.content_id}}/' + context + '/' + new_name;
+            window.location.href = '{{page_data.root_url}}/duplicate/{{page_data.object_id}}/' + context + '/' + new_name;
         });
     });
 </script>
