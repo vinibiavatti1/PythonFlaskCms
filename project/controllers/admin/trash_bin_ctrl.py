@@ -4,13 +4,12 @@ Trash bin controller.
 from typing import Any, Optional
 from werkzeug.utils import redirect
 from flask import Blueprint, request, render_template, flash, abort
-from project.services import object_service
 from project.decorators.security_decorators import login_required
-from project.utils.ctrl_utils import generate_admin_url
 from project.decorators.context_decorators import process_context
 from project.records.content_type_records import content_type_records
-from project.records.page_type_records import page_type_records
 from project.records.resource_type_records import resource_type_records
+from project.services import object_service
+from project.utils.ctrl_utils import generate_admin_url
 from project.utils import record_utils
 from project.enums import object_type_enum
 
@@ -95,6 +94,7 @@ def list_view(context: str, object_type: Optional[str] = None) -> str:
             hide_new_action=True,
             title='Trash Bin',
             root_url=root_url,
+            object_type=object_type,
             object_type_records=[
                 object_type_enum.CONTENT,
                 object_type_enum.RESOURCE,
@@ -108,18 +108,17 @@ def list_view(context: str, object_type: Optional[str] = None) -> str:
 ###############################################################################
 
 
-@blueprint.route('/restore/<content_id>', methods=['GET'])
+@blueprint.route('/restore/<object_id>', methods=['GET'])
 @login_required()
 @process_context()
-def restore_action(context: str, content_id: int) -> Any:
+def restore_action(context: str, object_id: int) -> Any:
     """
     Restore content.
     """
-    list_url = get_object_root_url(context, LIST_NAME)
     try:
-        object_service.restore(content_id)
+        object_service.restore(object_id)
         flash('Content restored successfully!', category='success')
-        return redirect(f'{list_url}')
+        return redirect(request.referrer)
     except Exception as err:
         flash(str(err), category='danger')
         return redirect(request.referrer)

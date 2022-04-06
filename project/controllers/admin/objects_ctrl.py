@@ -1,25 +1,21 @@
 """
 Objects controller.
 """
-from typing import Any, Optional, Union
+from typing import Any, Optional
 from flask import Blueprint, request, abort, render_template, flash, redirect
-from project.enums import object_type_enum
-from project.enums import object_subtype_enum
 from project.decorators.security_decorators import login_required
-from project.decorators.record_decorators import validate_content_type
-from project.models.content_type_model import ContentTypeModel
-from project.models.resource_type_model import ResourceTypeModel
-from project.services import history_service
-from project.utils import record_utils
-from project.utils.data_utils import set_properties_value
-from project.utils.ctrl_utils import generate_admin_url
-from project.entities.object_entity import ObjectEntity
-from project.services import object_service
 from project.decorators.context_decorators import process_context
-from project.processors import content_ctrl_processor
+from project.entities.object_entity import ObjectEntity
 from project.records.content_type_records import content_type_records
 from project.records.page_type_records import page_type_records
 from project.records.resource_type_records import resource_type_records
+from project.utils import record_utils
+from project.utils.data_utils import set_properties_value
+from project.utils.ctrl_utils import generate_admin_url
+from project.services import history_service
+from project.services import object_service
+from project.processors import content_ctrl_processor
+from project.enums import object_type_enum
 from project.enums import table_enum
 
 
@@ -175,6 +171,7 @@ def list_pages_view(context: str, object_sub_type: Optional[str] = None
             object_type_records=page_type_records,
         )
     )
+
 
 @blueprint.route(
     rule='/resource',
@@ -333,7 +330,6 @@ def edit_view(context: str, object_type: str, object_id: int) -> Any:
 @blueprint.route('/create', methods=['POST'])
 @login_required()
 @process_context()
-@validate_content_type()
 def create_action(context: str, content_type: str) -> Any:
     """
     Insert content to database.
@@ -358,7 +354,6 @@ def create_action(context: str, content_type: str) -> Any:
 @blueprint.route('/edit/<content_id>', methods=['POST'])
 @login_required()
 @process_context()
-@validate_content_type()
 def edit_action(context: str, content_type: str, content_id: int) -> Any:
     """
     Update content in database.
@@ -384,7 +379,6 @@ def edit_action(context: str, content_type: str, content_id: int) -> Any:
 @blueprint.route('/delete/<content_id>', methods=['GET'])
 @login_required()
 @process_context()
-@validate_content_type()
 def delete_action(context: str, content_type: str, content_id: int) -> Any:
     """
     Delete content from database.
@@ -400,7 +394,6 @@ def delete_action(context: str, content_type: str, content_id: int) -> Any:
                  methods=['GET'])
 @login_required()
 @process_context()
-@validate_content_type()
 def duplicate_action(context: str, content_type: str, content_id: int,
                      to_context: str, new_name: str) -> Any:
     """

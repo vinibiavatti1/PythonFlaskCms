@@ -35,14 +35,14 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item" href="{{page_data.root_url}}">
+                                    <a class="dropdown-item {{'active' if page_data.object_sub_type is none else ''}}" href="{{page_data.root_url}}">
                                         <i class="me-2 bi bi-funnel"></i>
                                         All
                                     </a>
                                 </li>
                                 {% for object_type in page_data.object_type_records %}
                                     <li>
-                                        <a class="dropdown-item" href="{{page_data.root_url}}/{{object_type.name}}">
+                                        <a class="dropdown-item {{'active' if page_data.object_sub_type == object_type.name else ''}}" href="{{page_data.root_url}}/{{object_type.name}}">
                                             <i class="me-2 bi bi-funnel"></i>
                                             {{object_type.label}}
                                         </a>
