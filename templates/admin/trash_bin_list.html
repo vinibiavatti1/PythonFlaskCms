@@ -1,34 +1,17 @@
 {% from "macros/utils/alerts.html" import flash_alerts with context %}
 {% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
 {% extends 'admin/layout.html' %}
-{% block title %}{{page_data.title}}{% endblock %}
+{% block title %}Trash Bin{% endblock %}
 {% block content %}
 <div class="container my-3">
     <div class="row">
         <div class="col">
-            {{ breadcrumb(['Admin', page_data.title ]) }}
-            <div class="fs-3 text-white">{{page_data.title }}</div>
+            {{ breadcrumb(['Admin', 'Trash Bin' ]) }}
+            <div class="fs-3 text-white">Trash Bin</div>
             <div class="card">
                 <div class="card-body">
                     {{ flash_alerts() }}
                     <div class="mb-2">
-                        {% if not page_data.hide_new_action %}
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-plus-circle"></i> New Object
-                                </button>
-                                <ul class="dropdown-menu">
-                                    {% for object_type in page_data.object_type_records %}
-                                        <li>
-                                            <a class="dropdown-item" href="{{page_data.root_url}}/{{object_type.name}}/create">
-                                                <i class="me-2 bi {{object_type.icon}}"></i>
-                                                {{object_type.label}}
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endif %}
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-funnel"></i> Filter
@@ -42,9 +25,9 @@
                                 </li>
                                 {% for object_type in page_data.object_type_records %}
                                     <li>
-                                        <a class="dropdown-item" href="{{page_data.root_url}}/{{object_type.name}}">
+                                        <a class="dropdown-item" href="{{page_data.root_url}}/{{object_type}}">
                                             <i class="me-2 bi bi-funnel"></i>
-                                            {{object_type.label}}
+                                            {{object_type.title()}}
                                         </a>
                                     </li>
                                 {% endfor %}

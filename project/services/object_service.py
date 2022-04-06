@@ -35,6 +35,13 @@ def select_deleted_by_type(context: str, object_type: str
     return object_repository.select_deleted_by_type(context, object_type)
 
 
+def select_all_deleted(context: str) -> list[ObjectEntity]:
+    """
+    Select all deleted objects.
+    """
+    return object_repository.select_all_deleted(context)
+
+
 def select_by_id(object_id: int) -> Optional[ObjectEntity]:
     """
     Select objects by id.

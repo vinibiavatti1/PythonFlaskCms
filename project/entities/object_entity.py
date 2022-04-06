@@ -14,66 +14,9 @@ class ObjectEntity:
     Object entity class.
     """
 
-    def __init__(self, *,
-                 id: int = -1,
-                 context: str,
-                 name: str,
-                 object_type: str,
-                 object_subtype: str,
-                 properties: dict[str, Any] = dict(),
-                 created_on: datetime = datetime.now(),
-                 deleted: bool = False,
-                 deleted_on: Optional[datetime] = None
-                 ) -> None:
-        """
-        Init object entity object.
-        """
-        self.id = id
-        self.context = context
-        self.name = name
-        self.object_type = object_type
-        self.object_subtype = object_subtype
-        self.properties = properties
-        self.created_on = created_on
-        self.deleted = deleted
-        self.deleted_on = deleted_on
-
-    @property
-    def url(self) -> str:
-        """
-        Return the content URL.
-        """
-        if self.object_type == object_type_enum.RESOURCE:
-            return ''
-        return f'/{self.context}/{self.object_type}/{self.object_subtype}' \
-               f'/{self.name}'
-
-    def to_dict(self) -> dict[str, Any]:
-        """
-        Parse object to dict.
-        """
-        return dict(
-            id=self.id,
-            context=self.context,
-            name=self.name,
-            resource_type=self.object_type,
-            data=self.properties,
-            created_on=self.created_on,
-            deleted=self.deleted,
-            deleted_on=self.deleted_on
-        )
-
-    def get_properties_as_json(self) -> str:
-        """
-        Return properties as json string.
-        """
-        return json.dumps(self.properties)
-
-    def set_properties_from_json(self, json_properties: str) -> None:
-        """
-        Set properties from json to dict.
-        """
-        self.properties = json.loads(json_properties)
+    ###########################################################################
+    # Class Methods
+    ###########################################################################
 
     @classmethod
     def map_dict_to_entity(cls, dct: dict[str, Any]) -> 'ObjectEntity':
@@ -103,3 +46,90 @@ class ObjectEntity:
         for item in lst:
             result.append(cls.map_dict_to_entity(item))
         return result
+
+    ###########################################################################
+    # Magic methods
+    ###########################################################################
+
+    def __init__(self, *,
+                 id: int = -1,
+                 context: str,
+                 name: str,
+                 object_type: str,
+                 object_subtype: str,
+                 properties: dict[str, Any] = dict(),
+                 created_on: datetime = datetime.now(),
+                 deleted: bool = False,
+                 deleted_on: Optional[datetime] = None
+                 ) -> None:
+        """
+        Init object entity object.
+        """
+        self.id = id
+        self.context = context
+        self.name = name
+        self.object_type = object_type
+        self.object_subtype = object_subtype
+        self.properties = properties
+        self.created_on = created_on
+        self.deleted = deleted
+        self.deleted_on = deleted_on
+
+    ###########################################################################
+    # Public Instance Methods
+    ###########################################################################
+
+    def to_dict(self) -> dict[str, Any]:
+        """
+        Parse object to dict.
+        """
+        return dict(
+            id=self.id,
+            context=self.context,
+            name=self.name,
+            resource_type=self.object_type,
+            data=self.properties,
+            created_on=self.created_on,
+            deleted=self.deleted,
+            deleted_on=self.deleted_on
+        )
+
+    def get_properties_as_json(self) -> str:
+        """
+        Return properties as json string.
+        """
+        return json.dumps(self.properties)
+
+    def set_properties_from_json(self, json_properties: str) -> None:
+        """
+        Set properties from json to dict.
+        """
+        self.properties = json.loads(json_properties)
+
+    ###########################################################################
+    # Properties
+    ###########################################################################
+
+    @property
+    def url(self) -> str:
+        """
+        Return the content URL.
+        """
+        if self.object_type == object_type_enum.RESOURCE:
+            return ''
+        return f'/{self.context}/{self.object_type}/{self.object_subtype}' \
+               f'/{self.name}'
+
+    @property
+    def object_type_as_title(self) -> str:
+        """
+        Return object type name as title.
+        """
+        return self.object_type.replace('_', ' ').title()
+
+    @property
+    def object_subtype_as_title(self) -> str:
+        """
+        Return object subtype name as title.
+        """
+        return self.object_subtype.replace('_', ' ').title()

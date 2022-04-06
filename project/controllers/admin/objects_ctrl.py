@@ -12,7 +12,7 @@ from project.models.resource_type_model import ResourceTypeModel
 from project.services import history_service
 from project.utils import record_utils
 from project.utils.data_utils import set_properties_value
-from project.utils.ctrl_utils import get_object_root_url
+from project.utils.ctrl_utils import generate_admin_url
 from project.entities.object_entity import ObjectEntity
 from project.services import object_service
 from project.decorators.context_decorators import process_context
@@ -52,7 +52,9 @@ def list_contents_view(context: str, object_sub_type: Optional[str] = None
     """
     List content view endpoint.
     """
-    root_url = get_object_root_url(context, object_type_enum.CONTENT)
+    root_url = generate_admin_url(
+        context, 'objects', object_type_enum.CONTENT
+    )
     headers = [
         '#',
         'Name',
@@ -97,6 +99,7 @@ def list_contents_view(context: str, object_sub_type: Optional[str] = None
             data=data,
             object_type=object_type_enum.CONTENT,
             object_sub_type=object_sub_type,
+            title=object_type_enum.CONTENT.title(),
             root_url=root_url,
             object_type_records=content_type_records,
         )
@@ -119,7 +122,9 @@ def list_pages_view(context: str, object_sub_type: Optional[str] = None
     """
     List page view endpoint.
     """
-    root_url = get_object_root_url(context, object_type_enum.PAGE)
+    root_url = generate_admin_url(
+        context, 'objects', object_type_enum.PAGE
+    )
     headers = [
         '#',
         'Name',
@@ -163,6 +168,9 @@ def list_pages_view(context: str, object_sub_type: Optional[str] = None
             headers=headers,
             data=data,
             object_type=object_type_enum.PAGE,
+            object_sub_type=object_sub_type,
+            title=object_type_enum.PAGE.title(),
+            hide_new_action=True,
             root_url=root_url,
             object_type_records=page_type_records,
         )
@@ -184,7 +192,9 @@ def list_resources_view(context: str, object_sub_type: Optional[str] = None
     """
     List resource view endpoint.
     """
-    root_url = get_object_root_url(context, object_type_enum.RESOURCE)
+    root_url = generate_admin_url(
+        context, 'objects', object_type_enum.RESOURCE
+    )
     headers = [
         '#',
         'Name',
@@ -225,6 +235,8 @@ def list_resources_view(context: str, object_sub_type: Optional[str] = None
             headers=headers,
             data=data,
             object_type=object_type_enum.RESOURCE,
+            object_sub_type=object_sub_type,
+            title=object_type_enum.RESOURCE.title(),
             root_url=root_url,
             object_type_records=resource_type_records,
         )
@@ -251,7 +263,9 @@ def create_view(context: str, object_type: str, object_subtype: str) -> Any:
     record_data = record_utils.get_record_by_name(
         object_subtype, record_list
     )
-    list_url = get_object_root_url(context, object_type)
+    root_url = generate_admin_url(
+        context, 'objects', object_type,
+    )
     return render_template(
         '/admin/object_form.html',
         page_data=dict(
@@ -261,7 +275,7 @@ def create_view(context: str, object_type: str, object_subtype: str) -> Any:
             object_type=object_type,
             object_subtype=object_subtype,
             allow_blocks=getattr(record_data, 'allow_blocks', False),
-            root_url=list_url,
+            root_url=root_url,
             properties=getattr(record_data, 'properties'),
         )
     )
@@ -288,7 +302,9 @@ def edit_view(context: str, object_type: str, object_id: int) -> Any:
         entity.object_subtype,
         record_list,
     )
-    root_url = get_object_root_url(context, object_type)
+    root_url = generate_admin_url(
+        context, 'objects', object_type,
+    )
     props = set_properties_value(getattr(record, 'properties'), entity)
     history = history_service.select_by_target_id(
         context, table_enum.OBJECTS, object_id,
@@ -310,7 +326,7 @@ def edit_view(context: str, object_type: str, object_id: int) -> Any:
 
 
 ###############################################################################
-# Action Routes
+# Action Routes TODO
 ###############################################################################
 
 

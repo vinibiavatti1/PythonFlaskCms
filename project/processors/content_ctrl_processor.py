@@ -10,7 +10,6 @@ from flask import request, render_template, flash, abort
 from project.entities.object_entity import ObjectEntity
 from project.services import history_service, object_service
 from project.utils.data_utils import set_properties_value
-from project.utils.ctrl_utils import get_object_root_url
 
 
 def process_list_view(context: str, resource_type: str, list_name: str,

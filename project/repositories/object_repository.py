@@ -51,6 +51,19 @@ def select_deleted_by_type(context: str, object_type: str
     return ObjectEntity.map_list_to_entity(result_set)
 
 
+def select_all_deleted(context: str) -> list[ObjectEntity]:
+    """
+    Select all deleted objects.
+    """
+    sql = f'''
+        SELECT * FROM {TABLE_NAME}
+        WHERE context = ? AND deleted = 1
+    '''
+    parameters = (context,)
+    result_set = database_utils.execute_query(sql, parameters)
+    return ObjectEntity.map_list_to_entity(result_set)
+
+
 def select_by_id(object_id: int) -> Optional[ObjectEntity]:
     """
     Select objects by id.

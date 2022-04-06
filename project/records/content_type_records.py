@@ -8,12 +8,13 @@ from project.properties.contents.event_properties import event_properties
 from project.properties.contents.news_properties import news_properties
 from project.properties.contents.post_properties import post_properties
 from project.properties.contents.custom_properties import custom_properties
+from project.enums import object_subtype_enum
 
 
 content_type_records: list[ContentTypeModel] = [
     ContentTypeModel(
         label='Article',
-        name='article',
+        name=object_subtype_enum.ARTICLE_CONTENT,
         template='article.html',
         icon='bi-files',
         properties=article_properties,
@@ -21,7 +22,7 @@ content_type_records: list[ContentTypeModel] = [
     ),
     ContentTypeModel(
         label='Landing',
-        name='landing',
+        name=object_subtype_enum.LANDING_CONTENT,
         template='landing.html',
         icon='bi-layers',
         properties=landing_properties,
@@ -29,7 +30,7 @@ content_type_records: list[ContentTypeModel] = [
     ),
     ContentTypeModel(
         label='Event',
-        name='event',
+        name=object_subtype_enum.EVENT_CONTENT,
         template='event.html',
         icon='bi-calendar-event',
         properties=event_properties,
@@ -37,7 +38,7 @@ content_type_records: list[ContentTypeModel] = [
     ),
     ContentTypeModel(
         label='News',
-        name='news',
+        name=object_subtype_enum.NEWS_CONTENT,
         template='news.html',
         icon='bi-newspaper',
         properties=news_properties,
@@ -45,7 +46,7 @@ content_type_records: list[ContentTypeModel] = [
     ),
     ContentTypeModel(
         label='Post',
-        name='post',
+        name=object_subtype_enum.POST_CONTENT,
         template='post.html',
         icon='bi-pin-angle',
         properties=post_properties,
@@ -53,7 +54,7 @@ content_type_records: list[ContentTypeModel] = [
     ),
     ContentTypeModel(
         label='Custom',
-        name='custom',
+        name=object_subtype_enum.CUSTOM_CONTENT,
         template='custom.html',
         icon='bi-filetype-html',
         properties=custom_properties,

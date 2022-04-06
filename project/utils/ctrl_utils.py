@@ -31,8 +31,11 @@ def result_api_message(type: str, message: str) -> dict[str, Any]:
     }
 
 
-def get_object_root_url(context: str, object_type: str) -> str:
+def generate_admin_url(context: str, *sections: str) -> str:
     """
-    Get list url.
+    Get root url.
     """
-    return f'/{context}/admin/objects/{object_type}'
+    url = f'/{context}/admin'
+    for section in sections:
+        url += f'/{section}'
+    return url
