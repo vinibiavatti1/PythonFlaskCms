@@ -1,7 +1,7 @@
 """
 Page type module.
 """
-from typing import Union
+from typing import Any, Union
 from project.models.property_model import PropertyModel
 from project.models.header_model import HeaderModel
 from project.utils import validation_utils

@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS objects;
 DROP TABLE IF EXISTS properties;
 DROP TABLE IF EXISTS menus;
 DROP TABLE IF EXISTS footer;
+DROP TABLE IF EXISTS history;
 
 -------------------------------------------------------------------------------
 -- Creates

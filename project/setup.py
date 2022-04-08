@@ -9,8 +9,9 @@ from project.blueprints import blueprints
 from project.enums.security_enum import SECRET
 from project.records.user_records import user_records
 from project.records.property_records import property_records
-from project.records.translation_records import translation_records
+from project.records.builtin_object_records import builtin_object_records
 from project.records.context_records import context_records
+from project.records.page_type_records import page_type_records
 from project.services import property_service
 from project.services import object_service
 from project.enums import object_subtype_enum, object_type_enum
@@ -49,7 +50,7 @@ def register_blueprints(app: Flask) -> None:
 
 def register_properties(app: Flask) -> None:
     """
-    Set properties into database.
+    Register builtin properties.
     """
     app.logger.info('Registering properties...')
     for context_record in context_records:
@@ -65,37 +66,27 @@ def register_properties(app: Flask) -> None:
                     )
 
 
-def register_translations(app: Flask) -> None:
+def register_builtin_objects(app: Flask) -> None:
     """
-    Add translations to database.
+    Register builtin objects.
     """
-    app.logger.info('Registering translations...')
+    app.logger.info('Registering builtin objects...')
     for context_record in context_records:
         context = context_record.code
-        for translation in translation_records:
+        for builtin_object in builtin_object_records:
             found = object_service.select_by_name(
                 context,
-                object_type_enum.RESOURCE,
-                object_subtype_enum.TRANSLATION_RESOURCE,
-                translation.name,
+                builtin_object.object_type,
+                builtin_object.object_subtype,
+                builtin_object.name,
             )
             if found is None:
-                entity = ObjectEntity(
-                    context=context,
-                    name=translation.name,
-                    object_type=object_type_enum.RESOURCE,
-                    object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
-                    properties=dict(
-                        value=translation.value,
-                        active=True,
-                    )
-                )
-                object_service.insert(entity)
+                object_service.insert_builtin(context, builtin_object)
 
 
 def register_users(app: Flask) -> None:
     """
-    Register default admin users.
+    Register builtin admin users.
     """
     app.logger.info('Registering users...')
     for user in user_records:
@@ -117,6 +108,6 @@ def setup(app: Flask) -> None:
     register_upload_folder(app)
     register_blueprints(app)
     register_properties(app)
-    register_translations(app)
     register_users(app)
+    register_builtin_objects(app)
     # Add more actions...

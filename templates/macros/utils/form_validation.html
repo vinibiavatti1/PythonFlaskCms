@@ -2,19 +2,17 @@
 {% macro form_validation_script(selector = '.needs-validation') %}
 <script>
     $(document).ready(function () {
-        const forms = document.querySelectorAll("{{selector}}");
-        forms.forEach(function (form) {
-            form.addEventListener(
-                "submit",
-                function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add("was-validated");
-                },
-                false
-            );
+        $('{{selector}}').submit(function(event) {
+            let form = $(this);
+            message = $("#invalid-fields-message", form);
+            message.addClass('d-none');
+            if (!form.get(0).checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                message.removeClass('d-none');
+                $('.collapse_btn:not(.collapsed)').click();
+            }
+            form.addClass("was-validated");
         });
     });
 </script>

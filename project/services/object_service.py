@@ -2,6 +2,7 @@
 Object service.
 """
 from typing import Any, Optional
+from project.models.builtin_object_model import BuiltinObjectModel
 from project.repositories import object_repository
 from project.services import history_service
 from project.entities.object_entity import ObjectEntity
@@ -63,6 +64,27 @@ def insert(entity: ObjectEntity) -> Any:
     """
     Insert a new object and return the generated id.
     """
+    entity_id = object_repository.insert(entity)
+    history_service.insert(
+        entity.context,
+        table_enum.OBJECTS,
+        entity_id,
+        history_messages_enum.OBJECT_CREATED
+    )
+    return entity_id
+
+
+def insert_builtin(context: str, builtin_object: BuiltinObjectModel) -> Any:
+    """
+    Insert a builtin object and return the generated id.
+    """
+    entity = ObjectEntity(
+        context=context,
+        name=builtin_object.name,
+        object_type=builtin_object.object_type,
+        object_subtype=builtin_object.object_subtype,
+        properties=builtin_object.properties,
+    )
     entity_id = object_repository.insert(entity)
     history_service.insert(
         entity.context,

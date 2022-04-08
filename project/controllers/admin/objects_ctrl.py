@@ -14,8 +14,8 @@ from project.utils.data_utils import set_properties_value
 from project.utils.ctrl_utils import generate_admin_url
 from project.services import history_service
 from project.services import object_service
-from project.processors import content_ctrl_processor
 from project.enums import object_type_enum
+from project.enums import string_types_enum as str_type
 from project.enums import table_enum
 
 
@@ -72,8 +72,8 @@ def list_contents_view(context: str, object_sub_type: Optional[str] = None
         )
     for entity in objects:
         id_ = entity.id
-        private = entity.properties['private'] == '1'
-        published = entity.properties['published'] == '1'
+        private = entity.properties['private'] == str_type.TRUE
+        published = entity.properties['published'] == str_type.TRUE
         subtype = record_utils.get_record_by_name(
             entity.object_subtype, content_type_records
         )
@@ -83,7 +83,7 @@ def list_contents_view(context: str, object_sub_type: Optional[str] = None
             id_,
             entity.name,
             f'<i class="bi {icon}"></i> {label}',
-            'True' if private == '1' else 'False',
+            'True' if private else 'False',
             '<i class="bi bi-broadcast"></i> True' if published else 'False',
             entity.created_on,
             f'<a href="{root_url}/edit/{id_}">Details</a>'
@@ -142,8 +142,8 @@ def list_pages_view(context: str, object_sub_type: Optional[str] = None
         )
     for entity in objects:
         id_ = entity.id
-        private = entity.properties['private'] == '1'
-        published = entity.properties['published'] == '1'
+        private = entity.properties['private'] == str_type.TRUE
+        published = entity.properties['published'] == str_type.TRUE
         subtype = record_utils.get_record_by_name(
             entity.object_subtype, page_type_records
         )
@@ -153,7 +153,7 @@ def list_pages_view(context: str, object_sub_type: Optional[str] = None
             id_,
             entity.name,
             f'<i class="bi {icon}"></i> {label}',
-            'True' if private == '1' else 'False',
+            'True' if private else 'False',
             '<i class="bi bi-broadcast"></i> True' if published else 'False',
             entity.created_on,
             f'<a href="{root_url}/edit/{id_}">Details</a>'
@@ -212,7 +212,7 @@ def list_resources_view(context: str, object_sub_type: Optional[str] = None
         )
     for entity in objects:
         id_ = entity.id
-        active = entity.properties['active']
+        active = entity.properties['active'] == str_type.TRUE
         subtype = record_utils.get_record_by_name(
             entity.object_subtype, resource_type_records
         )
@@ -263,6 +263,9 @@ def create_view(context: str, object_type: str, object_subtype: str) -> Any:
     root_url = generate_admin_url(
         context, 'objects', object_type,
     )
+    action_url = generate_admin_url(
+        context, 'objects', object_type, object_subtype, 'create',
+    )
     return render_template(
         '/admin/object_form.html',
         page_data=dict(
@@ -273,12 +276,16 @@ def create_view(context: str, object_type: str, object_subtype: str) -> Any:
             object_subtype=object_subtype,
             allow_blocks=getattr(record_data, 'allow_blocks', False),
             root_url=root_url,
+            action_url=action_url,
             properties=getattr(record_data, 'properties'),
         )
     )
 
 
-@blueprint.route('/<object_type>/edit/<object_id>', methods=['GET'])
+@blueprint.route(
+    rule='/<object_type>/edit/<object_id>',
+    methods=['GET']
+)
 @login_required()
 @process_context()
 def edit_view(context: str, object_type: str, object_id: int) -> Any:
@@ -290,17 +297,23 @@ def edit_view(context: str, object_type: str, object_id: int) -> Any:
         record_list = content_type_records
     elif object_type == object_type_enum.RESOURCE:
         record_list = resource_type_records
+    elif object_type == object_type_enum.PAGE:
+        record_list = page_type_records
     else:
         return abort(400)
     entity = object_service.select_by_id(object_id)
     if not entity:
         return abort(400)
+    object_subtype = entity.object_subtype
     record = record_utils.get_record_by_name(
-        entity.object_subtype,
+        object_subtype,
         record_list,
     )
     root_url = generate_admin_url(
         context, 'objects', object_type,
+    )
+    action_url = generate_admin_url(
+        context, 'objects', object_type, object_subtype, 'edit', str(object_id)
     )
     props = set_properties_value(getattr(record, 'properties'), entity)
     history = history_service.select_by_target_id(
@@ -313,8 +326,9 @@ def edit_view(context: str, object_type: str, object_id: int) -> Any:
             object_id=object_id,
             edit=True,
             object_type=object_type,
-            object_subtype=entity.object_subtype,
+            object_subtype=object_subtype,
             root_url=root_url,
+            action_url=action_url,
             properties=props,
             history=history,
             name=entity.name,
@@ -323,86 +337,112 @@ def edit_view(context: str, object_type: str, object_id: int) -> Any:
 
 
 ###############################################################################
-# Action Routes TODO
+# Action Routes
 ###############################################################################
 
 
-@blueprint.route('/create', methods=['POST'])
+@blueprint.route(
+    rule='/<object_type>/<object_subtype>/create',
+    methods=['POST']
+)
 @login_required()
 @process_context()
-def create_action(context: str, content_type: str) -> Any:
+def create_action(context: str, object_type: str, object_subtype: str) -> Any:
     """
     Insert content to database.
     """
     data = request.form.to_dict()
-    list_url = get_object_root_url(context, content_type)
-    content = ObjectEntity(
+    root_url = generate_admin_url(
+        context, 'objects', object_type,
+    )
+    new_object = ObjectEntity(
         context=context,
         name=data['name'],
         properties=data,
-        object_subtype=content_type,
+        object_type=object_type,
+        object_subtype=object_subtype,
     )
     try:
-        content_id = object_service.insert(content)
+        entity_id = object_service.insert(new_object)
         flash('Content created successfully!', category='success')
-        return redirect(f'{list_url}/edit/{content_id}')
+        return redirect(f'{root_url}/edit/{entity_id}')
     except Exception as err:
         flash(str(err), category='danger')
         return redirect(request.referrer)
 
 
-@blueprint.route('/edit/<content_id>', methods=['POST'])
+@blueprint.route(
+    rule='/<object_type>/<object_subtype>/edit/<object_id>',
+    methods=['POST']
+)
 @login_required()
 @process_context()
-def edit_action(context: str, content_type: str, content_id: int) -> Any:
+def edit_action(context: str, object_type: str, object_subtype: str,
+                object_id: int) -> Any:
     """
     Update content in database.
     """
     data = request.form.to_dict()
-    list_url = get_object_root_url(context, content_type)
-    content = ObjectEntity(
+    root_url = generate_admin_url(
+        context, 'objects', object_type,
+    )
+    edit_object = ObjectEntity(
         context=context,
-        id=content_id,
+        id=object_id,
         name=data['name'],
         properties=data,
-        object_subtype=content_type,
+        object_type=object_type,
+        object_subtype=object_subtype,
     )
     try:
-        object_service.update(content)
+        object_service.update(edit_object)
         flash('Content updated successfully!', category='success')
-        return redirect(f'{list_url}/edit/{content_id}')
+        return redirect(f'{root_url}/edit/{object_id}')
     except Exception as err:
         flash(str(err), category='danger')
         return redirect(request.referrer)
 
 
-@blueprint.route('/delete/<content_id>', methods=['GET'])
+@blueprint.route(
+    rule='/<object_type>/delete/<object_id>',
+    methods=['GET']
+)
 @login_required()
 @process_context()
-def delete_action(context: str, content_type: str, content_id: int) -> Any:
+def delete_action(context: str, object_type: str, object_id: int) -> Any:
     """
     Delete content from database.
     """
-    return content_ctrl_processor.process_delete_action(
-        context,
-        LIST_NAME,
-        content_id,
+    root_url = generate_admin_url(
+        context, 'objects', object_type,
     )
+    try:
+        object_service.delete(object_id)
+        flash(f'Content {object_id} sent to trash bin', category='success')
+        return redirect(root_url)
+    except Exception as err:
+        flash(str(err), category='danger')
+        return redirect(request.referrer)
 
 
-@blueprint.route('/duplicate/<content_id>/<to_context>/<new_name>',
-                 methods=['GET'])
+@blueprint.route(
+    rule='/<object_type>/duplicate/<object_id>/<to_context>/<new_name>',
+    methods=['GET']
+)
 @login_required()
 @process_context()
-def duplicate_action(context: str, content_type: str, content_id: int,
+def duplicate_action(context: str, object_type: str, object_id: int,
                      to_context: str, new_name: str) -> Any:
     """
     Duplicate content.
     """
-    return content_ctrl_processor.process_duplicate_action(
-        context,
-        LIST_NAME,
-        content_id,
-        to_context,
-        new_name,
+    root_url = generate_admin_url(
+        context, 'objects', object_type,
     )
+    try:
+        object_service.duplicate(object_id, to_context, new_name)
+        flash('Content duplicated successfully!', category='success')
+        return redirect(root_url)
+    except Exception as err:
+        flash(str(err), category='danger')
+        return redirect(request.referrer)

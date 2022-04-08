@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <form
                         id="content-form"
-                        action="{{ page_data.root_url + '/edit/' + page_data.object_id if page_data.edit else page_data.root_url + '/create' }}"
+                        action="{{ page_data.action_url }}"
                         method="POST"
                         class="needs-validation"
                         novalidate
@@ -49,6 +49,7 @@
                                 <i class="bi bi-check-circle"></i>
                                 Save
                             </button>
+                            <span id="invalid-fields-message" class="ms-3 badge bg-danger d-none">There are some invalid field values. Please, check before submit.</span>
                         </div>
 
                         <ul class="nav nav-tabs mb-2" id="tabs" role="tablist">
@@ -132,8 +133,10 @@
             const rows = $(`tr[data-header='${header}']`);
             if(rows.is(':visible')) {
                 rows.addClass('d-none');
+                $(this).removeClass('collapsed');
             } else {
                 rows.removeClass('d-none');
+                $(this).addClass('collapsed');
             }
         });
 
