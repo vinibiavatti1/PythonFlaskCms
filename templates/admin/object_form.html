@@ -20,8 +20,9 @@
                         class="needs-validation"
                         novalidate
                     >
-                        <input name="object_type" type="hidden" value="{{page_data.object_type}}">
-                        <input name="object_subtype" type="hidden" value="{{page_data.object_subtype}}">
+                        <input id="object_type" name="object_type" type="hidden" value="{{page_data.object_type}}">
+                        <input id="object_subtype" name="object_subtype" type="hidden" value="{{page_data.object_subtype}}">
+                        <input id="context" name="context" type="hidden" value="{{page_data.context}}">
 
                         {{ flash_alerts() }}
                         <div class="mb-2">
@@ -45,11 +46,11 @@
                                 </a>
                                 {% endif %}
                             {% endif %}
-                            <button id="btn-submit" type="submit" class="btn btn-success">
+                            <button id="btn-submit" type="submit" class="btn btn-success" disabled>
                                 <i class="bi bi-check-circle"></i>
                                 Save
                             </button>
-                            <span id="invalid-fields-message" class="ms-3 badge bg-danger d-none">There are some invalid field values. Please, check before submit.</span>
+                            <span id="invalid-fields-message" class="ms-3 badge bg-danger d-none">There are some invalid field values. Please, check it before submit.</span>
                         </div>
 
                         <ul class="nav nav-tabs mb-2" id="tabs" role="tablist">
@@ -159,6 +160,46 @@
             }
             window.location.href = '{{page_data.root_url}}/duplicate/{{page_data.object_id}}/' + context + '/' + new_name;
         });
+
+        $('#key_field').on('change keyup', function() {
+            $('#btn-submit').attr('disabled', '');
+            $('#key_field_name_error').addClass('d-none');
+
+            let objectType = $('#object_type').val();
+            let objectSubType = $('#object_subtype').val();
+            let context = $('#context').val();
+            let name = $('#key_field').val();
+            if (!name) {
+                return;
+            }
+            name = name.trim();
+            objectExistsAjax(context, objectType, objectSubType, name).then(function(response) {
+                if (response.exists) {
+                    $('#key_field_name_error').removeClass('d-none');
+                    return;
+                }
+                $('#btn-submit').removeAttr('disabled');
+            });
+        });
+
+        $('#btn-submit').on('submit', function() {
+            let objectType = $('#object_type').val();
+            let objectSubType = $('#object_subtype').val();
+            let context = $('#context').val();
+            let name = $('#key_field').val();
+            if (!name) {
+                return;
+            }
+            objectExistsAjax()
+            $("#content-form").submit();
+        });
+
+        function objectExistsAjax(context, objectType, objectSubType, name) {
+            return $.ajax({
+                url: `/${context}/admin/objects/exists/${objectType}/${objectSubType}/${name}`,
+                type: 'GET',
+            });
+        }
     });
 </script>
 {% endblock %}

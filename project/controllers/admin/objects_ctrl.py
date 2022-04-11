@@ -446,3 +446,24 @@ def duplicate_action(context: str, object_type: str, object_id: int,
     except Exception as err:
         flash(str(err), category='danger')
         return redirect(request.referrer)
+
+
+###############################################################################
+# Ajax Routes
+###############################################################################
+
+
+@blueprint.route(
+    rule='/exists/<object_type>/<object_subtype>/<name>',
+    methods=['GET']
+)
+@login_required()
+def object_exists(context: str, object_type: str, object_subtype: str,
+                  name: str) -> Any:
+    """
+    Verify if object exists.
+    """
+    exists = object_service.object_exists(
+        context, object_type, object_subtype, name
+    )
+    return dict(exists=exists)

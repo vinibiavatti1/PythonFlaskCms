@@ -23,6 +23,7 @@
             {{name}}
             {{disabled}}
             {{required}}
+            id="key_field"
             type="text"
             pattern="^[a-z\_0-9]$"
             class="prop form-control {{css_class}}"
@@ -30,6 +31,8 @@
             value="{{value}}"
         />
         <small>The value can only have small characters, numbers and "_"</small>
+        <br>
+        <small id="key_field_name_error" class="text-danger d-none">This name already exists. Please, choose other name.</small>
     {% elif prop_data.property_type == 'password' %}
         <input
             {{name}}

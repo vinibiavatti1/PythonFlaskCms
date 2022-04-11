@@ -17,6 +17,7 @@ from project.controllers.admin import (
     properties_ctrl,
     trash_bin_ctrl,
     objects_ctrl,
+    import_export_ctrl,
 )
 
 
@@ -38,4 +39,5 @@ blueprints: list[Blueprint] = [
     files_ctrl.blueprint,
     media_ctrl.blueprint,
     objects_ctrl.blueprint,
+    import_export_ctrl.blueprint,
 ]

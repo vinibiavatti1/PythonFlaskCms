@@ -85,6 +85,11 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         icon='bi-people',
     ),
     MenuItemModel(
+        title='Import/Export',
+        link='/import_export',
+        icon='bi-arrow-left-right',
+    ),
+    MenuItemModel(
         title='Logout',
         link='/logout',
         icon='bi-box-arrow-left',

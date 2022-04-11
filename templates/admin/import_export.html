@@ -1,0 +1,156 @@
+{% from 'macros/utils/alerts.html' import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% from "macros/admin/property.html" import property with context %}
+{% from "macros/admin/history_list.html" import history_list with context %}
+{% from "macros/admin/duplicate_modal.html" import duplicate_modal with context %}
+{% extends 'admin/layout.html' %}
+{% block title %}Import/Export{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', 'Import/Export' ]) }}
+            <div class="fs-3 text-white">Import/Export</div>
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-tabs mb-2" id="tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button id="tab_detail" type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#export-tab">Export</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button id="tab_detail" type="button" class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#import-tab">Import</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="export-tab" role="tabpanel">
+                            <div id="datatype_input_container" class="mb-2">
+                                <label>Data type</label>
+                                <select id="datatype_input" name="datatype" class="form-select">
+                                    <option value="objects">Objects</option>
+                                    <option value="components">Components</option>
+                                    <option value="properties">Properties</option>
+                                    <option value="users">Users</option>
+                                    <option value="files">Files</option>
+                                </select>
+                            </div>
+                            <div id="object_type_input_container" class="mb-2">
+                                <label>Object Type</label>
+                                <select id="object_type_input" name="object_type" class="form-select">
+                                    <option value="all">all</option>
+                                    <option value="contents">Contents</option>
+                                    <option value="pages">Pages</option>
+                                    <option value="resources">Resources</option>
+                                </select>
+                            </div>
+                            <div id="object_subtype_input_container" class="mb-2">
+                                <label>Object Subtype</label>
+                                <select id="object_subtype_input" name="object_subtype" class="form-select">
+                                    <option value="all">all</option>
+                                    {% for element in page_data.content_types %}
+                                        <option value="{{element}}" class="content_option">{{element}}</option>
+                                    {% endfor %}
+                                    {% for element in page_data.page_types %}
+                                        <option value="{{element}}" class="page_option">{{element}}</option>
+                                    {% endfor %}
+                                    {% for element in page_data.resource_types %}
+                                        <option value="{{element}}" class="resource_option">{{element}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div id="component_type_input_container" class="mb-2 d-none">
+                                <label>Component Type</label>
+                                <select id="component_type_input" name="component_type" class="form-select">
+                                    <option value="navbar">Navbar</option>
+                                    <option value="footer">Footer</option>
+                                </select>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary">Export</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="import-tab" role="tabpanel">
+                            <div id="object_input_import_container" class="mb-2">
+                                <label>Data type</label>
+                                <select id="object_input_import" class="form-select">
+                                    <option value="objects">Objects</option>
+                                    <option value="navbar">Navbar</option>
+                                    <option value="footer">Footer</option>
+                                    <option value="properties">Properties</option>
+                                    <option value="users">Users</option>
+                                </select>
+                            </div>
+                            <div id="import_action_container" class="mb-2">
+                                <label>Import action</label>
+                                <select id="import_action_import" class="form-select">
+                                    <option value="replace">Import and replace duplicates</option>
+                                    <option value="replace">Import and ignore duplicates</option>
+                                    <option value="replace">Import and keep duplicates</option>
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <label>JSON</label>
+                                <textarea id="json_import" class="form-control font-monospace" rows="10" placeholder="Enter the JSON data to import"></textarea>
+                            </div>
+                            <div>
+                                <button id="import_btn" class="btn btn-primary" disabled>Import</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    jQuery(function() {
+        $('#datatype_input').on('change', function() {
+            let datatype = $(this).val();
+
+            // Hide inputs
+            $('#object_type_input_container').addClass('d-none');
+            $('#object_subtype_input_container').addClass('d-none');
+            $('#component_type_input_container').addClass('d-none');
+
+            // Show inputs
+            if (datatype == 'objects') {
+                $('#object_type_input_container').removeClass('d-none');
+            } else if (datatype == 'components') {
+                $('#component_type_input_container').removeClass('d-none');
+            }
+        });
+        $('#object_type_input').on('change', function() {
+            let datatype = $(this).val();
+
+            // Hide inputs
+            $('#object_subtype_input_container').addClass('d-none');
+            $('.content_option').addClass('d-none');
+            $('.page_option').addClass('d-none');
+            $('.resource_option').addClass('d-none');
+            if (datatype == 'all') {
+                return;
+            }
+
+            // Show inputs
+            $('#object_subtype_input_container').removeClass('d-none');
+            $('#object_subtype_input').val('all');
+            if (datatype == 'contents') {
+                $('.content_option').removeClass('d-none');
+            } else if (datatype == 'pages') {
+                $('.page_option').removeClass('d-none');
+            } else if (datatype == 'resources') {
+                $('.resource_option').removeClass('d-none');
+            }
+        });
+
+        $('#json_import').on('change keyup', function() {
+            let json = $(this).val().trim();
+            $('#import_btn').attr('disabled', '');
+            if (json) {
+                $('#import_btn').removeAttr('disabled');
+            }
+        });
+    });
+</script>
+{% endblock %}

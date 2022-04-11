@@ -43,11 +43,28 @@ def select_all_deleted(context: str) -> list[ObjectEntity]:
     return object_repository.select_all_deleted(context)
 
 
+def select_all(context: str) -> list[ObjectEntity]:
+    """
+    Select all objects.
+    """
+    return object_repository.select_all(context)
+
+
 def select_by_id(object_id: int) -> Optional[ObjectEntity]:
     """
     Select objects by id.
     """
     return object_repository.select_by_id(object_id)
+
+
+def object_exists(context: str, object_type: str, object_subtype: str,
+                  name: str) -> bool:
+    """
+    Return True if the object exist.
+    """
+    return object_repository.select_by_name(
+        context, object_type, object_subtype, name
+    ) is not None
 
 
 def select_by_name(context: str, object_type: str, object_subtype: str,
