@@ -23,50 +23,55 @@
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="export-tab" role="tabpanel">
-                            <div id="datatype_input_container" class="mb-2">
-                                <label>Data type</label>
-                                <select id="datatype_input" name="datatype" class="form-select">
-                                    <option value="objects">Objects</option>
-                                    <option value="components">Components</option>
-                                    <option value="properties">Properties</option>
-                                    <option value="users">Users</option>
-                                    <option value="files">Files</option>
-                                </select>
-                            </div>
-                            <div id="object_type_input_container" class="mb-2">
-                                <label>Object Type</label>
-                                <select id="object_type_input" name="object_type" class="form-select">
-                                    <option value="all">all</option>
-                                    <option value="contents">Contents</option>
-                                    <option value="pages">Pages</option>
-                                    <option value="resources">Resources</option>
-                                </select>
-                            </div>
-                            <div id="object_subtype_input_container" class="mb-2">
-                                <label>Object Subtype</label>
-                                <select id="object_subtype_input" name="object_subtype" class="form-select">
-                                    <option value="all">all</option>
-                                    {% for element in page_data.content_types %}
-                                        <option value="{{element}}" class="content_option">{{element}}</option>
-                                    {% endfor %}
-                                    {% for element in page_data.page_types %}
-                                        <option value="{{element}}" class="page_option">{{element}}</option>
-                                    {% endfor %}
-                                    {% for element in page_data.resource_types %}
-                                        <option value="{{element}}" class="resource_option">{{element}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div id="component_type_input_container" class="mb-2 d-none">
-                                <label>Component Type</label>
-                                <select id="component_type_input" name="component_type" class="form-select">
-                                    <option value="navbar">Navbar</option>
-                                    <option value="footer">Footer</option>
-                                </select>
-                            </div>
-                            <div>
-                                <button class="btn btn-primary">Export</button>
-                            </div>
+                            <form action="{{page_data.action_url}}" method="POST">
+                                <div id="datatype_input_container" class="mb-2">
+                                    <label>Data type</label>
+                                    <select id="datatype_input" name="datatype" class="form-select">
+                                        <option value="objects">Objects</option>
+                                        <option value="components">Components</option>
+                                        <option value="properties">Properties</option>
+                                        <option value="users">Users</option>
+                                        <option value="files">Files</option>
+                                    </select>
+                                </div>
+                                <div id="object_type_input_container" class="mb-2">
+                                    <label>Object Type</label>
+                                    <select id="object_type_input" name="object_type" class="form-select">
+                                        <option value="all">All</option>
+                                        <option value="content">Contents</option>
+                                        <option value="page">Pages</option>
+                                        <option value="resource">Resources</option>
+                                    </select>
+                                </div>
+                                <div id="object_subtype_input_container" class="mb-2 d-none">
+                                    <label>Object Subtype</label>
+                                    <select id="object_subtype_input" name="object_subtype" class="form-select">
+                                        <option value="all">All</option>
+                                        {% for element in page_data.content_types %}
+                                            <option value="{{element}}" class="content_option">{{element.title()}}</option>
+                                        {% endfor %}
+                                        {% for element in page_data.page_types %}
+                                            <option value="{{element}}" class="page_option">{{element.title()}}</option>
+                                        {% endfor %}
+                                        {% for element in page_data.resource_types %}
+                                            <option value="{{element}}" class="resource_option">{{element.title()}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="component_type_input_container" class="mb-2 d-none">
+                                    <label>Component Type</label>
+                                    <select id="component_type_input" name="component_type" class="form-select">
+                                        <option value="navbar">Navbar</option>
+                                        <option value="footer">Footer</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-download"></i>
+                                        Export
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                         <div class="tab-pane fade show" id="import-tab" role="tabpanel">
                             <div id="object_input_import_container" class="mb-2">
@@ -92,7 +97,10 @@
                                 <textarea id="json_import" class="form-control font-monospace" rows="10" placeholder="Enter the JSON data to import"></textarea>
                             </div>
                             <div>
-                                <button id="import_btn" class="btn btn-primary" disabled>Import</button>
+                                <button id="import_btn" class="btn btn-primary" disabled>
+                                    <i class="bi bi-upload"></i>
+                                    Import
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -135,11 +143,11 @@
             // Show inputs
             $('#object_subtype_input_container').removeClass('d-none');
             $('#object_subtype_input').val('all');
-            if (datatype == 'contents') {
+            if (datatype == 'content') {
                 $('.content_option').removeClass('d-none');
-            } else if (datatype == 'pages') {
+            } else if (datatype == 'page') {
                 $('.page_option').removeClass('d-none');
-            } else if (datatype == 'resources') {
+            } else if (datatype == 'resource') {
                 $('.resource_option').removeClass('d-none');
             }
         });

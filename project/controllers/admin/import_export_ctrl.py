@@ -1,6 +1,7 @@
 """
 Import/Export controller.
 """
+from datetime import datetime
 from typing import Any
 from flask import Blueprint, request, abort, render_template, flash, \
     redirect,  Response
@@ -10,6 +11,9 @@ from project.records.content_type_records import content_type_records
 from project.records.page_type_records import page_type_records
 from project.records.resource_type_records import resource_type_records
 from project.services import import_export_service
+from project.utils import datetime_utils
+from project.utils import ctrl_utils
+import json
 
 
 # Blueprint data
@@ -35,6 +39,9 @@ def import_export_view(context: str) -> Any:
     """
     Import/Export view.
     """
+    action_url = ctrl_utils.generate_admin_url(
+        context, 'import_export', 'export'
+    )
     content_types = [e.name for e in content_type_records]
     page_types = [e.name for e in page_type_records]
     resource_types = [e.name for e in resource_type_records]
@@ -45,6 +52,7 @@ def import_export_view(context: str) -> Any:
             content_types=content_types,
             page_types=page_types,
             resource_types=resource_types,
+            action_url=action_url
         )
     )
 
@@ -70,25 +78,36 @@ def export_action(context: str) -> Any:
     object_subtype = data['object_subtype']
     component_type = data['component_type']
     if datatype == 'objects':
-        json = import_export_service.export_objects(
+        data_to_export = import_export_service.export_objects(
+            context,
             None if object_type == 'all' else object_type,
             None if object_subtype == 'all' else object_subtype,
         )
     elif datatype == 'components':
-        json = import_export_service.export_component(
-            None if component_type == 'all' else component_type,
+        data_to_export = import_export_service.export_component(
+            context,
+            component_type,
         )
     elif datatype == 'properties':
-        json = import_export_service.export_properties()
+        data_to_export = import_export_service.export_properties(
+            context
+        )
     elif datatype == 'users':
-        json = import_export_service.export_users()
+        data_to_export = import_export_service.export_users()
     elif datatype == 'files':
-        json = import_export_service.export_files()
+        data_to_export = import_export_service.export_files()
     else:
         flash(f'Invalid datatype: {datatype}', category='danger')
         return redirect(request.referrer)
+    data_to_export = datetime_utils.convert_list_datetime_to_timestamp(
+        data_to_export
+    )
+    current_datetime = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+    filename = f'export_{current_datetime}.json'
     return Response(
-        json,
+        json.dumps(data_to_export),
         mimetype="text/plain",
-        headers={"Content-Disposition": "attachment;filename=export.json"}
+        headers={
+            "Content-Disposition": f"attachment;filename={filename}"
+        }
     )

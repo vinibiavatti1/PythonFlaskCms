@@ -31,14 +31,16 @@
                                 Back
                             </a>
                             {% if page_data.edit %}
-                                <button id="btn-duplicate" type="button" class="btn btn-secondary duplicate-btn">
-                                    <i class="bi bi-files"></i>
-                                    Duplicate...
-                                </button>
-                                <button id="btn-delete" type="button" class="btn btn-danger">
-                                    <i class="bi bi-trash"></i>
-                                    Delete...
-                                </button>
+                                {% if page_data.object_type != 'page' %}
+                                    <button id="btn-duplicate" type="button" class="btn btn-secondary duplicate-btn">
+                                        <i class="bi bi-files"></i>
+                                        Duplicate...
+                                    </button>
+                                    <button id="btn-delete" type="button" class="btn btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                        Delete...
+                                    </button>
+                                {% endif %}
                                 {% if page_data.allow_blocks %}
                                 <a href="{{ page_data.context }}/admin/blocks/{{page_data.object_id}}" class="btn btn-primary">
                                     <i class="bi bi-layers"></i>
@@ -46,11 +48,12 @@
                                 </a>
                                 {% endif %}
                             {% endif %}
-                            <button id="btn-submit" type="submit" class="btn btn-success" disabled>
+                            <button id="btn-submit" type="submit" class="btn btn-success">
                                 <i class="bi bi-check-circle"></i>
                                 Save
                             </button>
                             <span id="invalid-fields-message" class="ms-3 badge bg-danger d-none">There are some invalid field values. Please, check it before submit.</span>
+                            <span id="invalid-name-message" class="ms-3 badge bg-danger d-none">The name is invalid. Please, choose other one.</span>
                         </div>
 
                         <ul class="nav nav-tabs mb-2" id="tabs" role="tablist">
@@ -129,6 +132,9 @@
 {% block script %}
 <script>
     jQuery(function() {
+        const current_name = '{{page_data.name}}';
+        let valid_name = true;
+
         $(".collapse_btn").click(function() {
             const header = $(this).data('header-name');
             const rows = $(`tr[data-header='${header}']`);
@@ -154,15 +160,23 @@
                 alert('The name is required.');
                 return;
             }
-            if (!/^[a-z\_0-9]+$/g.test(new_name)) {
+            if (!/^[a-z_0-9]+$/g.test(new_name)) {
                 alert('Invalid name. Must have only a-z, numbers and "_" characteres.');
                 return;
             }
             window.location.href = '{{page_data.root_url}}/duplicate/{{page_data.object_id}}/' + context + '/' + new_name;
         });
 
+        $('#content-form').on('submit', function(event) {
+            $('#invalid-name-message').addClass('d-none');
+            if(!valid_name) {
+                event.preventDefault();
+                event.stopPropagation();
+                $('#invalid-name-message').removeClass('d-none');
+            }
+        });
+
         $('#key_field').on('change keyup', function() {
-            $('#btn-submit').attr('disabled', '');
             $('#key_field_name_error').addClass('d-none');
 
             let objectType = $('#object_type').val();
@@ -172,26 +186,18 @@
             if (!name) {
                 return;
             }
+            if (name == current_name) {
+                return;
+            }
             name = name.trim();
             objectExistsAjax(context, objectType, objectSubType, name).then(function(response) {
                 if (response.exists) {
                     $('#key_field_name_error').removeClass('d-none');
+                    valid_name = false;
                     return;
                 }
-                $('#btn-submit').removeAttr('disabled');
+                valid_name = true;
             });
-        });
-
-        $('#btn-submit').on('submit', function() {
-            let objectType = $('#object_type').val();
-            let objectSubType = $('#object_subtype').val();
-            let context = $('#context').val();
-            let name = $('#key_field').val();
-            if (!name) {
-                return;
-            }
-            objectExistsAjax()
-            $("#content-form").submit();
         });
 
         function objectExistsAjax(context, objectType, objectSubType, name) {

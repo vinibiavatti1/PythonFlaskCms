@@ -42,6 +42,16 @@ def select(id_user: int) -> Optional[Any]:
     return database_utils.execute_single_query(sql, (id_user,))
 
 
+def select_all() -> list[dict[str, Any]]:
+    """
+    Return all users.
+    """
+    sql = '''
+        SELECT * FROM users WHERE deleted = 0
+    '''
+    return database_utils.execute_query(sql)
+
+
 def insert(data: dict[str, Any]) -> Any:
     """
     Add a new user.

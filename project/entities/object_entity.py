@@ -87,8 +87,9 @@ class ObjectEntity:
             id=self.id,
             context=self.context,
             name=self.name,
-            resource_type=self.object_type,
-            data=self.properties,
+            object_type=self.object_type,
+            object_subtype=self.object_subtype,
+            properties=self.properties,
             created_on=self.created_on,
             deleted=self.deleted,
             deleted_on=self.deleted_on

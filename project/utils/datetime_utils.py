@@ -1,7 +1,7 @@
 """
 Date and Datetime utils module.
 """
-from typing import Optional
+from typing import Any, Optional
 from datetime import date, datetime
 from project.services import property_service
 
@@ -78,3 +78,23 @@ def format_datetime_to_str(datetime_: datetime, *,
         return datetime_.strftime(custom_format)
     else:
         raise ValueError('A format must be selected to format the date')
+
+
+def convert_datetime_to_timestamp(data: dict[str, Any]) -> dict[str, Any]:
+    """
+    Convert datetime values to timestamp.
+    """
+    for key in data.keys():
+        if isinstance(data[key], (datetime, date)):
+            data[key] = data[key].timestamp()
+    return data
+
+
+def convert_list_datetime_to_timestamp(data: list[dict[str, Any]]
+                                       ) -> list[dict[str, Any]]:
+    """
+    Convert datetime values to timestamp in list.
+    """
+    for index in range(len(data)):
+        data[index] = convert_datetime_to_timestamp(data[index])
+    return data

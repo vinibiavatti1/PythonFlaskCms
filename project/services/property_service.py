@@ -49,3 +49,10 @@ def select_all(context: str) -> dict[str, str]:
     for prop in properties:
         result[prop['name']] = prop['value']
     return result
+
+
+def select_all_as_list(context: str) -> list[dict[str, Any]]:
+    """
+    Get all properties as list from database.
+    """
+    return property_repository.select_all(context)

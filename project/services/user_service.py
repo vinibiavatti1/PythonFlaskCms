@@ -38,3 +38,10 @@ def insert(data: dict[str, Any]) -> Any:
     """
     data['password'] = security_utils.generate_hash(data['password'])
     return user_repository.insert(data)
+
+
+def select_all() -> list[dict[str, Any]]:
+    """
+    Select all users.
+    """
+    return user_repository.select_all()
