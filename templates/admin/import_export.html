@@ -13,6 +13,7 @@
             <div class="fs-3 text-white">Import/Export</div>
             <div class="card">
                 <div class="card-body">
+                    {{ flash_alerts() }}
                     <ul class="nav nav-tabs mb-2" id="tabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button id="tab_detail" type="button" class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#export-tab">Export</button>
@@ -23,7 +24,7 @@
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="export-tab" role="tabpanel">
-                            <form action="{{page_data.action_url}}" method="POST">
+                            <form action="{{page_data.export_action_url}}" method="POST">
                                 <div id="datatype_input_container" class="mb-2">
                                     <label>Data type</label>
                                     <select id="datatype_input" name="datatype" class="form-select">
@@ -74,34 +75,36 @@
                             </form>
                         </div>
                         <div class="tab-pane fade show" id="import-tab" role="tabpanel">
-                            <div id="object_input_import_container" class="mb-2">
-                                <label>Data type</label>
-                                <select id="object_input_import" class="form-select">
-                                    <option value="objects">Objects</option>
-                                    <option value="navbar">Navbar</option>
-                                    <option value="footer">Footer</option>
-                                    <option value="properties">Properties</option>
-                                    <option value="users">Users</option>
-                                </select>
-                            </div>
-                            <div id="import_action_container" class="mb-2">
-                                <label>Import action</label>
-                                <select id="import_action_import" class="form-select">
-                                    <option value="replace">Import and replace duplicates</option>
-                                    <option value="replace">Import and ignore duplicates</option>
-                                    <option value="replace">Import and keep duplicates</option>
-                                </select>
-                            </div>
-                            <div class="mb-2">
-                                <label>JSON</label>
-                                <textarea id="json_import" class="form-control font-monospace" rows="10" placeholder="Enter the JSON data to import"></textarea>
-                            </div>
-                            <div>
-                                <button id="import_btn" class="btn btn-primary" disabled>
-                                    <i class="bi bi-upload"></i>
-                                    Import
-                                </button>
-                            </div>
+                            <form action="{{page_data.import_action_url}}" method="POST">
+                                <div id="object_input_import_container" class="mb-2">
+                                    <label>Data type</label>
+                                    <select id="object_input_import" name="datatype" class="form-select">
+                                        <option value="objects">Objects</option>
+                                        <option value="navbar">Navbar</option>
+                                        <option value="footer">Footer</option>
+                                        <option value="properties">Properties</option>
+                                        <option value="users">Users</option>
+                                    </select>
+                                </div>
+                                <div id="import_action_container" class="mb-2">
+                                    <label>Import action</label>
+                                    <select id="import_action_import" name="import_action" class="form-select">
+                                        <option value="replace">Import and replace duplicates</option>
+                                        <option value="ignore">Import and ignore duplicates</option>
+                                        <option value="keep">Import and keep duplicates</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label>JSON</label>
+                                    <textarea id="json_data" name="json_data" class="form-control font-monospace" rows="10" placeholder="Enter the JSON data to import"></textarea>
+                                </div>
+                                <div>
+                                    <button id="import_btn" class="btn btn-primary" disabled>
+                                        <i class="bi bi-upload"></i>
+                                        Import
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -152,7 +155,7 @@
             }
         });
 
-        $('#json_import').on('change keyup', function() {
+        $('#json_data').on('change keyup', function() {
             let json = $(this).val().trim();
             $('#import_btn').attr('disabled', '');
             if (json) {

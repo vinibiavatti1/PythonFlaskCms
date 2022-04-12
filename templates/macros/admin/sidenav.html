@@ -22,7 +22,13 @@
                         class="nav-link text-white"
                         href="/{{item.context}}/admin{{item.link}}"
                     >
-                        <i class="bi {{item.icon}} me-2"></i>
+                        <i class="bi {{item.icon}} me-2 position-relative">
+                            {% if item.badge_id %}
+                                <span id="{{item.badge_id}}" class="position-absolute top-0 start-100 translate-middle p-1 bg-warning border border-dark rounded-circle">
+                                    <span class="visually-hidden">Notification</span>
+                                </span>
+                            {% endif %}
+                        </i>
                         {{ item.title }}
                     </a>
                 </li>

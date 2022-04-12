@@ -16,6 +16,11 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         title='Objects'
     ),
     MenuItemModel(
+        title='Pages',
+        link='/objects/page',
+        icon='bi-file-earmark-code',
+    ),
+    MenuItemModel(
         title='Contents',
         link='/objects/content',
         icon='bi-files',
@@ -26,27 +31,9 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         icon='bi-box-seam',
     ),
     MenuItemModel(
-        title='Pages',
-        link='/objects/page',
-        icon='bi-file-earmark-code',
-    ),
-    MenuItemModel(
         title='Trash Bin',
         link='/trash_bin',
         icon='bi-trash',
-    ),
-
-    ###########################################################################
-    # Assets
-    ###########################################################################
-
-    HeaderModel(
-        title='Assets'
-    ),
-    MenuItemModel(
-        title='Files',
-        link='/files',
-        icon='bi-file-earmark-image',
     ),
 
     ###########################################################################
@@ -65,6 +52,33 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         title='Footer',
         link='/footer',
         icon='bi-window-desktop',
+    ),
+
+    ###########################################################################
+    # Assets
+    ###########################################################################
+
+    HeaderModel(
+        title='Assets'
+    ),
+    MenuItemModel(
+        title='Files',
+        link='/files',
+        icon='bi-file-earmark-image',
+    ),
+
+    ###########################################################################
+    # Forms
+    ###########################################################################
+
+    HeaderModel(
+        title='Forms'
+    ),
+    MenuItemModel(
+        title='Entries',
+        link='/entries',
+        icon='bi-inbox-fill',
+        badge_id='entries_badge'
     ),
 
     ###########################################################################
