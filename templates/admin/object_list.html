@@ -12,46 +12,29 @@
                 <div class="card-body">
                     {{ flash_alerts() }}
                     <div class="mb-2">
-                        {% if not page_data.hide_new_action %}
+                        {% if page_data.object_name %}
+                            <a type="button" class="btn btn-secondary" href="{{ page_data.back_url }}">
+                                <i class="bi bi-arrow-left"></i>
+                                Back
+                            </a>
+                        {% endif %}
+
+                        {% if page_data.children %}
                             <div class="btn-group">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-plus-circle"></i> New Object
                                 </button>
                                 <ul class="dropdown-menu">
-                                    {% for object_type in page_data.object_type_records %}
+                                    {% for child in page_data.children %}
                                         <li>
-                                            <a class="dropdown-item" href="{{page_data.root_url}}/{{object_type.name}}/create">
-                                                <i class="me-2 bi {{object_type.icon}}"></i>
-                                                {{object_type.label}}
+                                            <a class="dropdown-item" href="{{page_data.root_url}}/{{child.name}}/create">
+                                                <i class="me-2 bi {{child.icon}}"></i>
+                                                {{child.name}}
                                             </a>
                                         </li>
                                     {% endfor %}
                                 </ul>
                             </div>
-                        {% endif %}
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-funnel"></i> Filter
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item {{'active' if page_data.object_sub_type is none else ''}}" href="{{page_data.root_url}}">
-                                        <i class="me-2 bi bi-funnel"></i>
-                                        All
-                                    </a>
-                                </li>
-                                {% for object_type in page_data.object_type_records %}
-                                    <li>
-                                        <a class="dropdown-item {{'active' if page_data.object_sub_type == object_type.name else ''}}" href="{{page_data.root_url}}/{{object_type.name}}">
-                                            <i class="me-2 bi bi-funnel"></i>
-                                            {{object_type.label}}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        {% if page_data.object_sub_type %}
-                            <span class="ms-3 badge bg-warning text-dark">Filtered by: {{page_data.object_sub_type}}</span>
                         {% endif %}
                     </div>
                     <div class="table-responsive">

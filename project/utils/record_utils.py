@@ -2,36 +2,41 @@
 Record utilities.
 """
 from typing import Optional
+from project.models.object_model import ObjectModel
 from project.models.record_type_model import RecordTypeModel
-from project.enums import object_type_enum
-from project.records.content_type_records import content_type_records
-from project.records.page_type_records import page_type_records
-from project.records.resource_type_records import resource_type_records
-from project.records.component_type_records import component_type_records
+from project.enums import object_enum
+from project.records.object_records import object_records
 
 
-def get_record_by_name(name: str, record_list: list[RecordTypeModel]
-                       ) -> Optional[RecordTypeModel]:
+def get_record_by_name(name: str) -> Optional[ObjectModel]:
     """
-    Generic function to get record by name.
+    Get object record by name.
     """
-    for record in record_list:
-        if hasattr(record, 'name') and getattr(record, 'name') == name:
+    for record in object_records:
+        if record.name == name:
             return record
     return None
 
 
-def get_record_list_by_object_type(object_type: str
-                                   ) -> Optional[list[RecordTypeModel]]:
+def get_records_by_names(names: list[str]) -> list[ObjectModel]:
     """
-    Return object type record list by object type name.
+    Get objects by list of names.
     """
-    if object_type == object_type_enum.CONTENT:
-        return content_type_records
-    elif object_type == object_type_enum.RESOURCE:
-        return resource_type_records
-    elif object_type == object_type_enum.COMPONENT:
-        return component_type_records
-    elif object_type == object_type_enum.PAGE:
-        return page_type_records
-    return None
+    records = []
+    for name in names:
+        record = get_record_by_name(name)
+        if record:
+            records.append(record)
+    return records
+
+
+def get_root_records() -> list[ObjectModel]:
+    """
+    Get root records.
+    """
+    result = []
+    for record in object_records:
+        if record.is_root:
+            result.append(record)
+    return result
+

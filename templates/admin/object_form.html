@@ -28,38 +28,17 @@
                         <div class="mb-2">
 
                             <!-- Back -->
-                            <a class="btn btn-secondary" href="{{ page_data.root_url }}">
+                            <a class="btn btn-secondary" href="{{ page_data.back_url }}">
                                 <i class="bi bi-arrow-left"></i>
                                 Back
                             </a>
 
-                            <!-- Nested Objects -->
-                            {% if page_data.edit and len(page_data.nested_objects) %}
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-layers"></i> Nested Objects
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        {% for nested in page_data.nested_objects %}
-                                            <li>
-                                                <a class="dropdown-item" href="/{{ page_data.context }}/admin/nested_objects/{{nested}}/{{page_data.object_id}}">
-                                                    <i class="bi bi-layers"></i>
-                                                    {{ utils.title(nested.title()) }}
-                                                </a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
-
                             <!-- Actions -->
-                            {% if page_data.edit and page_data.allow_duplicated %}
+                            {% if page_data.edit and page_data.allow_actions %}
                                 <button id="btn-duplicate" type="button" class="btn btn-primary duplicate-btn">
                                     <i class="bi bi-files"></i>
                                     Duplicate...
                                 </button>
-                            {% endif %}
-                            {% if page_data.edit and page_data.allow_deleted %}
                                 <button id="btn-delete" type="button" class="btn btn-danger">
                                     <i class="bi bi-trash"></i>
                                     Delete...

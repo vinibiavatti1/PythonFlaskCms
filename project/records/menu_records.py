@@ -13,26 +13,11 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
     ###########################################################################
 
     HeaderModel(
-        title='Objects'
+        title='Structure'
     ),
     MenuItemModel(
-        title='Pages',
-        link='/objects/page',
-        icon='bi-file-earmark-code',
-    ),
-    MenuItemModel(
-        title='Contents',
-        link='/objects/content',
-        icon='bi-files',
-    ),
-    MenuItemModel(
-        title='Resources',
-        link='/objects/resource',
-        icon='bi-box-seam',
-    ),
-    MenuItemModel(
-        title='Components',
-        link='/objects/component',
+        title='Objects',
+        link='/objects',
         icon='bi-boxes',
     ),
     MenuItemModel(

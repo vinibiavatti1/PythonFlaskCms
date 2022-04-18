@@ -37,5 +37,6 @@ def generate_admin_url(context: str, *sections: str) -> str:
     """
     url = f'/{context}/admin'
     for section in sections:
-        url += f'/{section}'
+        if section:
+            url += f'/{section}'
     return url

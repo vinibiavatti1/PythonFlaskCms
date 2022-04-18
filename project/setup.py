@@ -14,7 +14,7 @@ from project.records.context_records import context_records
 from project.records.page_type_records import page_type_records
 from project.services import property_service
 from project.services import object_service
-from project.enums import object_subtype_enum, object_type_enum
+from project.enums import object_enum, object_subtype_enum
 import os
 
 
@@ -76,8 +76,6 @@ def register_builtin_objects(app: Flask) -> None:
         for builtin_object in builtin_object_records:
             found = object_service.select_by_name(
                 context,
-                builtin_object.object_type,
-                builtin_object.object_subtype,
                 builtin_object.name,
             )
             if found is None:

@@ -25,3 +25,9 @@ class AuthError(AppError):
     """
     Authentication errors.
     """
+
+
+class EntityError(AppError):
+    """
+    Entity errors.
+    """

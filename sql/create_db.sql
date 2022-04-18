@@ -19,20 +19,8 @@ CREATE TABLE IF NOT EXISTS objects (
     `context` TEXT NOT NULL,
     `name` TEXT NOT NULL,
     `object_type` TEXT NOT NULL,
-    `object_subtype` TEXT NOT NULL,
-    `properties` TEXT NOT NULL DEFAULT '{}',
-    `created_on` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `deleted_on` TIMESTAMP NULL DEFAULT NULL,
-    `deleted` INTEGER NOT NULL DEFAULT 0
-);
-
--- Nested Objects
-CREATE TABLE IF NOT EXISTS nested_objects (
-    `id` INTEGER PRIMARY KEY,
-    `object_id` INTEGER NOT NULL,
-    `nested_object_type` TEXT NOT NULL,
-    `name` TEXT NOT NULL,
-    `item_order` INTEGER NOT NULL,
+    `object_order` INTEGER NOT NULL,
+    `reference_id` INTEGER NULL,
     `properties` TEXT NOT NULL DEFAULT '{}',
     `created_on` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `deleted_on` TIMESTAMP NULL DEFAULT NULL,

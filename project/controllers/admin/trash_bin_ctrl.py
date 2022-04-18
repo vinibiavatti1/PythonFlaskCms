@@ -11,7 +11,7 @@ from project.records.resource_type_records import resource_type_records
 from project.services import object_service
 from project.utils.ctrl_utils import generate_admin_url
 from project.utils import record_utils
-from project.enums import object_type_enum
+from project.enums import object_enum
 
 
 # Controller properties
@@ -66,9 +66,9 @@ def list_view(context: str, object_type: Optional[str] = None) -> str:
     for entity in entities:
         object_type = entity.object_type
         record_list: list[Any] = []
-        if object_type == object_type_enum.CONTENT:
+        if object_type == object_enum.CONTENT:
             record_list = content_type_records
-        elif object_type == object_type_enum.RESOURCE:
+        elif object_type == object_enum.RESOURCE:
             record_list = resource_type_records
         else:
             return abort(400)
@@ -96,8 +96,8 @@ def list_view(context: str, object_type: Optional[str] = None) -> str:
             root_url=root_url,
             object_type=object_type,
             object_type_records=[
-                object_type_enum.CONTENT,
-                object_type_enum.RESOURCE,
+                object_enum.CONTENT,
+                object_enum.RESOURCE,
             ],
         )
     )

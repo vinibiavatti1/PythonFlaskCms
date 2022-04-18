@@ -2,6 +2,7 @@
 Object repository.
 """
 from typing import Any, Optional
+
 from project.utils import database_utils
 from project.entities.object_entity import ObjectEntity
 
@@ -35,6 +36,36 @@ def select_by_type(context: str, object_type: str) -> list[ObjectEntity]:
     parameters = (context, object_type,)
     result_set = database_utils.execute_query(sql, parameters)
     return ObjectEntity.map_list_to_entity(result_set)
+
+
+def select_next_order_by_reference(reference_id: int) -> int:
+    """
+    Select next order by reference id.
+    """
+    sql = f'''
+        SELECT MAX(object_order) + 1 as `result` FROM {TABLE_NAME}
+        WHERE reference_id = ?
+    '''
+    parameters = (reference_id,)
+    result_set = database_utils.execute_single_query(sql, parameters)
+    if result_set is None or result_set['result'] is None:
+        return 1
+    return int(result_set['result'])
+
+
+def select_next_root_order(context: str) -> int:
+    """
+    Select next root order.
+    """
+    sql = f'''
+        SELECT MAX(object_order) + 1 as `result` FROM {TABLE_NAME}
+        WHERE reference_id IS NULL AND context = ?
+    '''
+    parameters = (context,)
+    result_set = database_utils.execute_single_query(sql, parameters)
+    if result_set is None or result_set['result'] is None:
+        return 1
+    return int(result_set['result'])
 
 
 def select_deleted_by_type(context: str, object_type: str
@@ -77,6 +108,32 @@ def select_all(context: str) -> list[ObjectEntity]:
     return ObjectEntity.map_list_to_entity(result_set)
 
 
+def select_by_reference(reference_id: int) -> list[ObjectEntity]:
+    """
+    Select objects by reference.
+    """
+    sql = f'''
+        SELECT * FROM {TABLE_NAME}
+        WHERE reference_id = ? AND deleted = 0
+    '''
+    parameters = (reference_id,)
+    result_set = database_utils.execute_query(sql, parameters)
+    return ObjectEntity.map_list_to_entity(result_set)
+
+
+def select_root_objects(context: str) -> list[ObjectEntity]:
+    """
+    Select roots objects.
+    """
+    sql = f'''
+        SELECT * FROM {TABLE_NAME}
+        WHERE reference_id is NULL AND context = ? AND deleted = 0
+    '''
+    parameters = (context,)
+    result_set = database_utils.execute_query(sql, parameters)
+    return ObjectEntity.map_list_to_entity(result_set)
+
+
 def select_by_id(object_id: int) -> Optional[ObjectEntity]:
     """
     Select objects by id.
@@ -92,17 +149,15 @@ def select_by_id(object_id: int) -> Optional[ObjectEntity]:
     return ObjectEntity.map_dict_to_entity(result_set)
 
 
-def select_by_name(context: str, object_type: str, object_subtype: str,
-                   name: str) -> Optional[ObjectEntity]:
+def select_by_name(context: str, name: str) -> Optional[ObjectEntity]:
     """
-    Select objects by name.
+    Select object by name.
     """
     sql = f'''
         SELECT * FROM {TABLE_NAME}
-        WHERE context = ? AND object_type = ? AND object_subtype = ? AND
-              name = ? AND deleted = 0
+        WHERE context = ? AND name = ? AND deleted = 0
     '''
-    parameters = (context, object_type, object_subtype, name,)
+    parameters = (context, name)
     result_set = database_utils.execute_single_query(sql, parameters)
     if result_set is None:
         return None
@@ -115,15 +170,21 @@ def insert(entity: ObjectEntity) -> Any:
     """
     sql = f'''
         INSERT INTO {TABLE_NAME}
-        (context, name, object_type, object_subtype, properties)
+        (context, name, object_type, reference_id, object_order, properties)
         VALUES
-        (?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?, ?)
     '''
+    object_order = None
+    if entity.reference_id is None:
+        object_order = select_next_root_order(entity.context)
+    else:
+        object_order = select_next_order_by_reference(entity.reference_id)
     parameters = (
         entity.context,
         entity.name,
         entity.object_type,
-        entity.object_subtype,
+        entity.reference_id,
+        object_order,
         entity.get_properties_as_json(),
     )
     entity_id = database_utils.execute_update(sql, parameters)
@@ -136,15 +197,13 @@ def update(entity: ObjectEntity) -> Any:
     """
     sql = f'''
         UPDATE {TABLE_NAME}
-        SET context = ?, name = ?, object_type = ?, object_subtype = ?,
-            properties = ?
+        SET context = ?, name = ?, object_type = ?, properties = ?
         WHERE id = ?
     '''
     parameters = (
         entity.context,
         entity.name,
         entity.object_type,
-        entity.object_subtype,
         entity.get_properties_as_json(),
         entity.id,
     )

@@ -27,10 +27,10 @@
                     </div>
                     <div class="tab-pane fade show" id="contents" role="tabpanel">
                         <div id="url-list" class="list-group url-list">
-                            {% for content_url in urls.content_urls %}
-                                <a href="javascript:void(0)" data-url="{{content_url.url}}" class="list-group-item list-group-item-action url-item" style="line-height: 20px;">
-                                    {{content_url.url}}<br>
-                                    <span style="font-size: 12px;">{{content_url.name}} / {{content_url.resource_type}}</span>
+                            {% for url in urls %}
+                                <a href="javascript:void(0)" data-url="{{url.url}}" class="list-group-item list-group-item-action url-item" style="line-height: 20px;">
+                                    {{url.url}}<br>
+                                    <span style="font-size: 12px;">{{url.name}} / {{url.resource_type}}</span>
                                 </a>
                             {% endfor %}
                         </div>

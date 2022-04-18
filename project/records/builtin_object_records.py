@@ -3,20 +3,70 @@ Builtin object records.
 """
 from project.models.builtin_object_model import BuiltinObjectModel
 from project.enums import string_types_enum as str_type
-from project.enums import object_type_enum
-from project.enums import object_subtype_enum
+from project.enums import object_enum
+from project.enums import object_enum
 
 
 builtin_object_records: list[BuiltinObjectModel] = [
+
+    ###########################################################################
+    # Folders
+    ###########################################################################
+
+    BuiltinObjectModel(
+        name='Pages',
+        object_type=object_enum.PAGES_FOLDER,
+        properties={},
+    ),
+    BuiltinObjectModel(
+        name='Components',
+        object_type=object_enum.COMPONENTS_FOLDER,
+        properties={},
+    ),
+    BuiltinObjectModel(
+        name='Resources',
+        object_type=object_enum.RESOURCES_FOLDER,
+        properties={},
+    ),
+    BuiltinObjectModel(
+        name='Translations',
+        parent_name='Resources',
+        object_type=object_enum.TRANSLATIONS_FOLDER,
+        properties={},
+    ),
+    BuiltinObjectModel(
+        name='Redirects',
+        parent_name='Resources',
+        object_type=object_enum.REDIRECTS_FOLDER,
+        properties={},
+    ),
 
     ###########################################################################
     # Pages
     ###########################################################################
 
     BuiltinObjectModel(
-        name='articles',
-        object_type=object_type_enum.PAGE,
-        object_subtype=object_subtype_enum.ARTICLE_PAGE,
+        name='Homepage',
+        parent_name='Pages',
+        object_type=object_enum.HOME_PAGE,
+        properties={
+            'published': str_type.TRUE,
+            'private': str_type.FALSE,
+            'header_title': 'Homepage',
+            'seo_title': 'Homepage',
+            'seo_author': 'System',
+            'seo_description': 'Homepage',
+            'seo_keywords': 'homepage',
+            'seo_canonical_url': '',
+            'sitemap_active': str_type.TRUE,
+            'sitemap_priority': '0.5',
+            'sitemap_change_frequently': 'daily',
+        },
+    ),
+    BuiltinObjectModel(
+        name='Articles',
+        parent_name='Pages',
+        object_type=object_enum.ARTICLE_PAGE,
         properties={
             'published': str_type.TRUE,
             'private': str_type.FALSE,
@@ -32,9 +82,9 @@ builtin_object_records: list[BuiltinObjectModel] = [
         },
     ),
     BuiltinObjectModel(
-        name='events',
-        object_type=object_type_enum.PAGE,
-        object_subtype=object_subtype_enum.EVENT_PAGE,
+        name='Events',
+        parent_name='Pages',
+        object_type=object_enum.EVENT_PAGE,
         properties={
             'published': str_type.TRUE,
             'private': str_type.FALSE,
@@ -50,9 +100,9 @@ builtin_object_records: list[BuiltinObjectModel] = [
         },
     ),
     BuiltinObjectModel(
-        name='news',
-        object_type=object_type_enum.PAGE,
-        object_subtype=object_subtype_enum.NEWS_PAGE,
+        name='News',
+        parent_name='Pages',
+        object_type=object_enum.NEWS_PAGE,
         properties={
             'published': str_type.TRUE,
             'private': str_type.FALSE,
@@ -68,9 +118,9 @@ builtin_object_records: list[BuiltinObjectModel] = [
         },
     ),
     BuiltinObjectModel(
-        name='faqs',
-        object_type=object_type_enum.PAGE,
-        object_subtype=object_subtype_enum.FAQ_PAGE,
+        name='Faqs',
+        parent_name='Pages',
+        object_type=object_enum.FAQ_PAGE,
         properties={
             'published': str_type.TRUE,
             'private': str_type.FALSE,
@@ -86,9 +136,9 @@ builtin_object_records: list[BuiltinObjectModel] = [
         },
     ),
     BuiltinObjectModel(
-        name='calendar',
-        object_type=object_type_enum.PAGE,
-        object_subtype=object_subtype_enum.CALENDAR_PAGE,
+        name='Calendar',
+        parent_name='Pages',
+        object_type=object_enum.CALENDAR_PAGE,
         properties={
             'published': str_type.TRUE,
             'private': str_type.FALSE,
@@ -104,9 +154,9 @@ builtin_object_records: list[BuiltinObjectModel] = [
         },
     ),
     BuiltinObjectModel(
-        name='search',
-        object_type=object_type_enum.PAGE,
-        object_subtype=object_subtype_enum.SEARCH_PAGE,
+        name='Search',
+        parent_name='Pages',
+        object_type=object_enum.SEARCH_PAGE,
         properties={
             'published': str_type.TRUE,
             'private': str_type.FALSE,
@@ -122,9 +172,9 @@ builtin_object_records: list[BuiltinObjectModel] = [
         },
     ),
     BuiltinObjectModel(
-        name='login',
-        object_type=object_type_enum.PAGE,
-        object_subtype=object_subtype_enum.LOGIN_PAGE,
+        name='Login',
+        parent_name='Pages',
+        object_type=object_enum.LOGIN_PAGE,
         properties={
             'published': str_type.TRUE,
             'private': str_type.FALSE,
@@ -140,9 +190,9 @@ builtin_object_records: list[BuiltinObjectModel] = [
         },
     ),
     BuiltinObjectModel(
-        name='contact',
-        object_type=object_type_enum.PAGE,
-        object_subtype=object_subtype_enum.CONTACT_PAGE,
+        name='Contact',
+        parent_name='Pages',
+        object_type=object_enum.CONTACT_PAGE,
         properties={
             'published': str_type.TRUE,
             'private': str_type.FALSE,
@@ -158,9 +208,9 @@ builtin_object_records: list[BuiltinObjectModel] = [
         },
     ),
     BuiltinObjectModel(
-        name='blog',
-        object_type=object_type_enum.PAGE,
-        object_subtype=object_subtype_enum.BLOG_PAGE,
+        name='Blog',
+        parent_name='Pages',
+        object_type=object_enum.BLOG_PAGE,
         properties={
             'published': str_type.TRUE,
             'private': str_type.FALSE,
@@ -182,14 +232,14 @@ builtin_object_records: list[BuiltinObjectModel] = [
 
     BuiltinObjectModel(
         name='navbar',
-        object_type=object_type_enum.COMPONENT,
-        object_subtype=object_subtype_enum.NAVBAR_COMPONENT,
+        parent_name='Components',
+        object_type=object_enum.NAVBAR_COMPONENT,
         properties={},
     ),
     BuiltinObjectModel(
         name='footer',
-        object_type=object_type_enum.COMPONENT,
-        object_subtype=object_subtype_enum.FOOTER_COMPONENT,
+        parent_name='Components',
+        object_type=object_enum.FOOTER_COMPONENT,
         properties={},
     ),
 
@@ -199,8 +249,8 @@ builtin_object_records: list[BuiltinObjectModel] = [
 
     BuiltinObjectModel(
         name='cookie_policy_title',
-        object_type=object_type_enum.RESOURCE,
-        object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
+        parent_name='Translations',
+        object_type=object_enum.TRANSLATION_RESOURCE,
         properties={
             'value': 'Cookie Policy',
             'active': str_type.TRUE,
@@ -208,8 +258,8 @@ builtin_object_records: list[BuiltinObjectModel] = [
     ),
     BuiltinObjectModel(
         name='cookie_policy_content',
-        object_type=object_type_enum.RESOURCE,
-        object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
+        parent_name='Translations',
+        object_type=object_enum.TRANSLATION_RESOURCE,
         properties={
             'value': 'We use cookies to improve user experience, and analyze '
                      'website traffic. For these reasons, we may share your '
@@ -221,8 +271,8 @@ builtin_object_records: list[BuiltinObjectModel] = [
     ),
     BuiltinObjectModel(
         name='cookie_policy_agree',
-        object_type=object_type_enum.RESOURCE,
-        object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
+        parent_name='Translations',
+        object_type=object_enum.TRANSLATION_RESOURCE,
         properties={
             'value': 'Agree',
             'active': str_type.TRUE,
@@ -230,8 +280,8 @@ builtin_object_records: list[BuiltinObjectModel] = [
     ),
     BuiltinObjectModel(
         name='cookie_policy_disagree',
-        object_type=object_type_enum.RESOURCE,
-        object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
+        parent_name='Translations',
+        object_type=object_enum.TRANSLATION_RESOURCE,
         properties={
             'value': 'Disagree',
             'active': str_type.TRUE,
@@ -239,8 +289,8 @@ builtin_object_records: list[BuiltinObjectModel] = [
     ),
     BuiltinObjectModel(
         name='cookie_policy_cancel',
-        object_type=object_type_enum.RESOURCE,
-        object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
+        parent_name='Translations',
+        object_type=object_enum.TRANSLATION_RESOURCE,
         properties={
             'value': 'Cancel',
             'active': str_type.TRUE,
@@ -248,8 +298,8 @@ builtin_object_records: list[BuiltinObjectModel] = [
     ),
     BuiltinObjectModel(
         name='error_not_found',
-        object_type=object_type_enum.RESOURCE,
-        object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
+        parent_name='Translations',
+        object_type=object_enum.TRANSLATION_RESOURCE,
         properties={
             'value': 'The page was not found',
             'active': str_type.TRUE,
@@ -257,8 +307,8 @@ builtin_object_records: list[BuiltinObjectModel] = [
     ),
     BuiltinObjectModel(
         name='error_unauthorized',
-        object_type=object_type_enum.RESOURCE,
-        object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
+        parent_name='Translations',
+        object_type=object_enum.TRANSLATION_RESOURCE,
         properties={
             'value': 'You must authenticate to access this resource',
             'active': str_type.TRUE,
@@ -266,8 +316,8 @@ builtin_object_records: list[BuiltinObjectModel] = [
     ),
     BuiltinObjectModel(
         name='error_bad_request',
-        object_type=object_type_enum.RESOURCE,
-        object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
+        parent_name='Translations',
+        object_type=object_enum.TRANSLATION_RESOURCE,
         properties={
             'value': 'Error to process the request. Please, try again.',
             'active': str_type.TRUE,
@@ -275,8 +325,8 @@ builtin_object_records: list[BuiltinObjectModel] = [
     ),
     BuiltinObjectModel(
         name='error_forbidden',
-        object_type=object_type_enum.RESOURCE,
-        object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
+        parent_name='Translations',
+        object_type=object_enum.TRANSLATION_RESOURCE,
         properties={
             'value': 'You don\'t have access rights to access this content',
             'active': str_type.TRUE,
@@ -284,8 +334,8 @@ builtin_object_records: list[BuiltinObjectModel] = [
     ),
     BuiltinObjectModel(
         name='error_internal_server',
-        object_type=object_type_enum.RESOURCE,
-        object_subtype=object_subtype_enum.TRANSLATION_RESOURCE,
+        parent_name='Translations',
+        object_type=object_enum.TRANSLATION_RESOURCE,
         properties={
             'value': 'An internal server error occurred. Please, try again. '
                      'If the same error continues, contact the administrator.',

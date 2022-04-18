@@ -2,6 +2,7 @@
 Object service.
 """
 from typing import Any, Optional
+from project.errors import EntityError
 from project.models.builtin_object_model import BuiltinObjectModel
 from project.repositories import object_repository
 from project.services import history_service
@@ -26,6 +27,20 @@ def select_by_type(context: str, object_type: str) -> list[ObjectEntity]:
     Select objects by type.
     """
     return object_repository.select_by_type(context, object_type)
+
+
+def select_by_reference(reference_id: int) -> list[ObjectEntity]:
+    """
+    Select objects by reference.
+    """
+    return object_repository.select_by_reference(reference_id)
+
+
+def select_root_objects(context: str) -> list[ObjectEntity]:
+    """
+    Select root objects.
+    """
+    return object_repository.select_root_objects(context)
 
 
 def select_deleted_by_type(context: str, object_type: str
@@ -57,23 +72,21 @@ def select_by_id(object_id: int) -> Optional[ObjectEntity]:
     return object_repository.select_by_id(object_id)
 
 
-def object_exists(context: str, object_type: str, object_subtype: str,
-                  name: str) -> bool:
+def object_exists(context: str, name: str) -> bool:
     """
     Return True if the object exist.
     """
     return object_repository.select_by_name(
-        context, object_type, object_subtype, name
+        context, name
     ) is not None
 
 
-def select_by_name(context: str, object_type: str, object_subtype: str,
-                   name: str) -> Optional[ObjectEntity]:
+def select_by_name(context: str, name: str) -> Optional[ObjectEntity]:
     """
-    Select objects by name.
+    Select object by name.
     """
     return object_repository.select_by_name(
-        context, object_type, object_subtype, name
+        context, name
     )
 
 
@@ -81,6 +94,8 @@ def insert(entity: ObjectEntity) -> Any:
     """
     Insert a new object and return the generated id.
     """
+    if select_by_name(entity.context, entity.name) is not None:
+        raise EntityError(f'The name "{entity.name}" already exists')
     entity_id = object_repository.insert(entity)
     history_service.insert(
         entity.context,
@@ -95,13 +110,24 @@ def insert_builtin(context: str, builtin_object: BuiltinObjectModel) -> Any:
     """
     Insert a builtin object and return the generated id.
     """
+    reference_id = None
+    if builtin_object.parent_name is not None:
+        parent = select_by_name(
+            context,
+            builtin_object.parent_name
+        )
+        if not parent:
+            raise ValueError(f'Parent not found: {builtin_object.parent_name}')
+        reference_id = parent.id
     entity = ObjectEntity(
         context=context,
         name=builtin_object.name,
         object_type=builtin_object.object_type,
-        object_subtype=builtin_object.object_subtype,
         properties=builtin_object.properties,
+        reference_id=reference_id,
     )
+    if select_by_name(entity.context, entity.name) is not None:
+        raise EntityError(f'The name "{entity.name}" already exists')
     entity_id = object_repository.insert(entity)
     history_service.insert(
         entity.context,
@@ -116,6 +142,9 @@ def update(entity: ObjectEntity) -> Any:
     """
     Update an object and returin its id.
     """
+    found = select_by_name(entity.context, entity.name)
+    if found is not None and found.id != entity.id:
+        raise EntityError(f'The name "{entity.name}" already exists')
     entity_id = object_repository.update(entity)
     history_service.insert(
         entity.context,

@@ -5,7 +5,7 @@ Model to map database object entity.
 """
 from typing import Any, Optional
 from datetime import datetime
-from project.enums import object_type_enum
+from project.enums import object_enum
 import json
 
 
@@ -29,11 +29,11 @@ class ObjectEntity:
             context=dct.get('context', None),
             name=dct.get('name', None),
             object_type=dct.get('object_type', None),
-            object_subtype=dct.get('object_subtype', None),
             properties=json.loads(dct.get('properties', '{}')),
             created_on=dct.get('created_on', None),
             deleted=str(dct.get('deleted')) == '1',
             deleted_on=dct.get('deleted_on'),
+            reference_id=dct.get('reference_id', None),
         )
 
     @classmethod
@@ -56,11 +56,11 @@ class ObjectEntity:
                  context: str,
                  name: str,
                  object_type: str,
-                 object_subtype: str,
                  properties: dict[str, Any] = dict(),
                  created_on: datetime = datetime.now(),
                  deleted: bool = False,
-                 deleted_on: Optional[datetime] = None
+                 deleted_on: Optional[datetime] = None,
+                 reference_id: Optional[int] = None,
                  ) -> None:
         """
         Init object entity object.
@@ -69,11 +69,11 @@ class ObjectEntity:
         self.context = context
         self.name = name
         self.object_type = object_type
-        self.object_subtype = object_subtype
         self.properties = properties
         self.created_on = created_on
         self.deleted = deleted
         self.deleted_on = deleted_on
+        self.reference_id = reference_id
 
     ###########################################################################
     # Public Instance Methods
@@ -88,11 +88,11 @@ class ObjectEntity:
             context=self.context,
             name=self.name,
             object_type=self.object_type,
-            object_subtype=self.object_subtype,
             properties=self.properties,
             created_on=self.created_on,
             deleted=self.deleted,
-            deleted_on=self.deleted_on
+            deleted_on=self.deleted_on,
+            reference_id=self.reference_id,
         )
 
     def get_properties_as_json(self) -> str:
@@ -116,21 +116,4 @@ class ObjectEntity:
         """
         Return the content URL.
         """
-        if self.object_type == object_type_enum.RESOURCE:
-            return ''
-        return f'/{self.context}/{self.object_type}/{self.object_subtype}' \
-               f'/{self.name}'
-
-    @property
-    def object_type_as_title(self) -> str:
-        """
-        Return object type name as title.
-        """
-        return self.object_type.replace('_', ' ').title()
-
-    @property
-    def object_subtype_as_title(self) -> str:
-        """
-        Return object subtype name as title.
-        """
-        return self.object_subtype.replace('_', ' ').title()
+        return f'/{self.context}/content/{self.name}'
