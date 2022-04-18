@@ -1,7 +1,16 @@
 {% macro datatables_script(selector = '.datatable') %}
     <script>
+        let element = $("{{selector}}");
+        let orderIndex = element.data('onder-index');
+        let orderType = element.data('order-type');
+        if (!orderIndex) {
+            orderIndex = 0;
+        }
+        if (!orderType) {
+            orderType = 'asc';
+        }
         $("{{selector}}").dataTable({
-            'order': [[0, 'desc']],
+            'order': [[orderIndex, orderType]],
             'language': {
                 'searchPlaceholder': "Search records"
             }

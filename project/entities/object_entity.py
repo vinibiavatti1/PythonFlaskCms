@@ -34,6 +34,7 @@ class ObjectEntity:
             deleted=str(dct.get('deleted')) == '1',
             deleted_on=dct.get('deleted_on'),
             reference_id=dct.get('reference_id', None),
+            object_order=dct.get('object_order', None),
         )
 
     @classmethod
@@ -61,6 +62,7 @@ class ObjectEntity:
                  deleted: bool = False,
                  deleted_on: Optional[datetime] = None,
                  reference_id: Optional[int] = None,
+                 object_order: Optional[int] = None,
                  ) -> None:
         """
         Init object entity object.
@@ -74,6 +76,7 @@ class ObjectEntity:
         self.deleted = deleted
         self.deleted_on = deleted_on
         self.reference_id = reference_id
+        self.object_order = object_order
 
     ###########################################################################
     # Public Instance Methods
@@ -93,6 +96,7 @@ class ObjectEntity:
             deleted=self.deleted,
             deleted_on=self.deleted_on,
             reference_id=self.reference_id,
+            object_order=self.object_order,
         )
 
     def get_properties_as_json(self) -> str:

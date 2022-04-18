@@ -20,6 +20,7 @@ from project.services import object_service
 from project.enums import object_enum
 from project.enums import string_types_enum as str_type
 from project.enums import table_enum
+import json
 
 
 # Blueprint data
@@ -46,7 +47,7 @@ blueprint = Blueprint(
 )
 @login_required()
 @process_context()
-def list_contents_view(context: str, object_name: Optional[str] = None
+def list_objects_view(context: str, object_name: Optional[str] = None
                        ) -> Any:
     """
     List content view endpoint.
@@ -55,19 +56,24 @@ def list_contents_view(context: str, object_name: Optional[str] = None
     back_url = generate_admin_url(
         context, 'objects'
     )
+    change_order_url = generate_admin_url(
+        context, 'objects', 'change_order', object_name if object_name else '',
+    )
     referrer_url = request.referrer
     headers = [
+        '#',
         'Name',
         'Type',
         'Published',
         'Created On',
-        'Actions',
-        'Navigate',
+        'Edit',
+        'Children',
     ]
     objects: list[ObjectEntity] = list()
     children: list[ObjectModel] = list()
     data: list[Any] = list()
     title = 'Root'
+    parent_name = None
 
     # Get record and data
     if object_name is not None:
@@ -81,6 +87,7 @@ def list_contents_view(context: str, object_name: Optional[str] = None
             parent = object_service.select_by_id(entity.reference_id)
             if not parent:
                 return abort(400)
+            parent_name = parent.name
             back_url = generate_admin_url(
                 context, 'objects', parent.name,
             )
@@ -104,6 +111,7 @@ def list_contents_view(context: str, object_name: Optional[str] = None
         if not object_type:
             continue
         data.append((
+            entity.object_order,
             f'<i class="bi {object_type.icon}"></i> '
             f'{entity.name}',
             f'{object_type.name}',
@@ -126,6 +134,83 @@ def list_contents_view(context: str, object_name: Optional[str] = None
             title=title,
             children=children,
             back_url=back_url,
+            parent_name=parent_name,
+            change_order_url=change_order_url,
+        )
+    )
+
+
+@blueprint.route(
+    rule='/change_order',
+    methods=['GET'],
+    defaults={'object_name': None}
+)
+@blueprint.route(
+    rule='/change_order/<object_name>',
+    methods=['GET']
+)
+@login_required()
+@process_context()
+def change_order_view(context: str, object_name: Optional[str] = None
+                      ) -> Any:
+    """
+    Change order view endpoint.
+    """
+    back_url = generate_admin_url(
+        context, 'objects'
+    )
+    action_url = generate_admin_url(
+        context, 'objects', 'save_order'
+    )
+    referrer_url = request.referrer
+    objects: list[ObjectEntity] = list()
+    data: list[Any] = list()
+    title = 'Root'
+
+    # Get record and data
+    if object_name is not None:
+        entity = object_service.select_by_name(context, object_name)
+        if not entity:
+            return abort(400)
+        record = record_utils.get_record_by_name(entity.object_type)
+        if not record:
+            return abort(400)
+        if entity.reference_id:
+            parent = object_service.select_by_id(entity.reference_id)
+            if not parent:
+                return abort(400)
+            back_url = generate_admin_url(
+                context, 'objects', parent.name,
+            )
+        title = entity.name
+        objects = object_service.select_by_reference(entity.id)
+    else:
+        objects = object_service.select_root_objects(context)
+
+    # Parse entities
+    for entity in objects:
+        object_type = record_utils.get_record_by_name(
+            entity.object_type
+        )
+        if not object_type:
+            continue
+        data.append({
+            "id": entity.id,
+            "order": entity.object_order,
+            "name": f'<i class="bi {object_type.icon}"></i> {entity.name}',
+            "type": object_type.name
+        })
+
+    # Render template
+    return render_template(
+        '/admin/object_order_list.html',
+        page_data=dict(
+            object_name=object_name,
+            data=data,
+            referrer_url=referrer_url,
+            title=title,
+            back_url=back_url,
+            action_url=action_url,
         )
     )
 
@@ -343,6 +428,30 @@ def duplicate_action(context: str, object_type: str, object_id: int,
         object_service.duplicate(object_id, to_context, new_name)
         flash('Content duplicated successfully!', category='success')
         return redirect(root_url)
+    except Exception as err:
+        flash(str(err), category='danger')
+        return redirect(request.referrer)
+
+
+@blueprint.route(
+    rule='/save_order',
+    methods=['POST']
+)
+@login_required()
+@process_context()
+def save_order_action(context: str) -> Any:
+    """
+    Save order endpoint.
+    """
+    data = request.form.to_dict()
+    json_data: list[dict[str, Any]] = json.loads(data['json_data'])
+    try:
+        for item in json_data:
+            object_service.update_order(
+                int(item['id']), int(item['object_order'])
+            )
+        flash('Order updated successfully!', category='success')
+        return redirect(data['back_url'])
     except Exception as err:
         flash(str(err), category='danger')
         return redirect(request.referrer)

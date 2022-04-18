@@ -1,0 +1,107 @@
+{% from "macros/utils/alerts.html" import flash_alerts with context %}
+{% from "macros/utils/breadcrumb.html" import breadcrumb with context %}
+{% extends 'admin/layout.html' %}
+{% block title %}{{page_data.title}}{% endblock %}
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            {{ breadcrumb(['Admin', page_data.parent_name, page_data.title ]) }}
+            <div class="fs-3 text-white">{{ page_data.title }}</div>
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" action="{{ page_data.action_url }}">
+                        <input name="json_data" id="json_data" value="{}" type="hidden">
+                        <input name="back_url" id="back_url" value="{{ page_data.back_url }}" type="hidden">
+
+                        {{ flash_alerts() }}
+                        <div class="mb-2">
+                            <a type="button" class="btn btn-danger" href="{{ page_data.back_url }}">
+                                <i class="bi bi-arrow-left"></i>
+                                Cancel
+                            </a>
+                            <button id="change_order" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i>
+                                Save Order
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="table" class="table table-striped w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Index</th>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in page_data.data %}
+                                        <tr class="object_item" data-id="{{item.id}}" style="vertical-align: middle;">
+                                            <td>{{ item.order }}</td>
+                                            <td>{{ item.name | safe }}</td>
+                                            <td>{{ item.type }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-secondary btn_up" title="Send to up">
+                                                    <i class="bi bi-arrow-up"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-secondary btn_down" title="Send to down">
+                                                    <i class="bi bi-arrow-down"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    jQuery(function() {
+        init();
+
+        function init() {
+            refresh();
+        }
+
+        function refresh() {
+            $('.btn_up').removeAttr('disabled');
+            $('.btn_down').removeAttr('disabled');
+            $('.btn_up:first').attr('disabled', '');
+            $('.btn_down:last').attr('disabled', '');
+            generateJson();
+        }
+
+        function generateJson() {
+            let jsonData = []
+            $('.object_item').each(function(index) {
+                let object_order = index + 1;
+                let id = $(this).data('id');
+                jsonData.push({
+                    id: id,
+                    object_order: object_order
+                });
+                $('#json_data').val(JSON.stringify(jsonData));
+            });
+        }
+
+        $('.btn_up').on('click', function() {
+            const current_row = $(this).closest('tr');
+            current_row.insertBefore(current_row.prev());
+            refresh();
+        });
+
+        $('.btn_down').on('click', function() {
+            const current_row = $(this).closest('tr');
+            current_row.next().insertBefore(current_row);
+            refresh();
+        });
+    });
+</script>
+{% endblock %}

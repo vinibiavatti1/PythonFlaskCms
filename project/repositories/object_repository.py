@@ -10,21 +10,6 @@ from project.entities.object_entity import ObjectEntity
 TABLE_NAME = 'objects'
 
 
-def select_by_type_and_subtype(context: str, object_type: str,
-                               object_subtype: str) -> list[ObjectEntity]:
-    """
-    Select objects by type and subtype.
-    """
-    sql = f'''
-        SELECT * FROM {TABLE_NAME}
-        WHERE context = ? AND object_type = ? AND object_subtype = ? AND
-              deleted = 0
-    '''
-    parameters = (context, object_type, object_subtype,)
-    result_set = database_utils.execute_query(sql, parameters)
-    return ObjectEntity.map_list_to_entity(result_set)
-
-
 def select_by_type(context: str, object_type: str) -> list[ObjectEntity]:
     """
     Select objects by type.
@@ -32,6 +17,7 @@ def select_by_type(context: str, object_type: str) -> list[ObjectEntity]:
     sql = f'''
         SELECT * FROM {TABLE_NAME}
         WHERE context = ? AND object_type = ? AND deleted = 0
+        ORDER BY object_order
     '''
     parameters = (context, object_type,)
     result_set = database_utils.execute_query(sql, parameters)
@@ -76,6 +62,7 @@ def select_deleted_by_type(context: str, object_type: str
     sql = f'''
         SELECT * FROM {TABLE_NAME}
         WHERE context = ? AND object_type = ? AND deleted = 1
+        ORDER BY object_order
     '''
     parameters = (context, object_type,)
     result_set = database_utils.execute_query(sql, parameters)
@@ -89,6 +76,7 @@ def select_all_deleted(context: str) -> list[ObjectEntity]:
     sql = f'''
         SELECT * FROM {TABLE_NAME}
         WHERE context = ? AND deleted = 1
+        ORDER BY object_order
     '''
     parameters = (context,)
     result_set = database_utils.execute_query(sql, parameters)
@@ -102,6 +90,7 @@ def select_all(context: str) -> list[ObjectEntity]:
     sql = f'''
         SELECT * FROM {TABLE_NAME}
         WHERE context = ? AND deleted = 0
+        ORDER BY object_order
     '''
     parameters = (context,)
     result_set = database_utils.execute_query(sql, parameters)
@@ -115,6 +104,7 @@ def select_by_reference(reference_id: int) -> list[ObjectEntity]:
     sql = f'''
         SELECT * FROM {TABLE_NAME}
         WHERE reference_id = ? AND deleted = 0
+        ORDER BY object_order
     '''
     parameters = (reference_id,)
     result_set = database_utils.execute_query(sql, parameters)
@@ -128,6 +118,7 @@ def select_root_objects(context: str) -> list[ObjectEntity]:
     sql = f'''
         SELECT * FROM {TABLE_NAME}
         WHERE reference_id is NULL AND context = ? AND deleted = 0
+        ORDER BY object_order
     '''
     parameters = (context,)
     result_set = database_utils.execute_query(sql, parameters)
@@ -209,6 +200,23 @@ def update(entity: ObjectEntity) -> Any:
     )
     database_utils.execute_update(sql, parameters)
     return entity.id
+
+
+def update_order(object_id: int, object_order: int) -> Any:
+    """
+    Update object order by id.
+    """
+    sql = f'''
+        UPDATE {TABLE_NAME}
+        SET object_order = ?
+        WHERE id = ?
+    '''
+    parameters = (
+        object_order,
+        object_id,
+    )
+    database_utils.execute_update(sql, parameters)
+    return object_id
 
 
 def delete(object_id: int) -> Any:

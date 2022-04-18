@@ -155,6 +155,13 @@ def update(entity: ObjectEntity) -> Any:
     return entity_id
 
 
+def update_order(object_id: int, object_order: int) -> None:
+    """
+    Update object order by id.
+    """
+    object_repository.update_order(object_id, object_order)
+
+
 def delete(object_id: int) -> Any:
     """
     Delete an object and return its id.
