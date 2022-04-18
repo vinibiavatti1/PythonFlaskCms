@@ -26,6 +26,19 @@ CREATE TABLE IF NOT EXISTS objects (
     `deleted` INTEGER NOT NULL DEFAULT 0
 );
 
+-- Nested Objects
+CREATE TABLE IF NOT EXISTS nested_objects (
+    `id` INTEGER PRIMARY KEY,
+    `object_id` INTEGER NOT NULL,
+    `nested_object_type` TEXT NOT NULL,
+    `name` TEXT NOT NULL,
+    `item_order` INTEGER NOT NULL,
+    `properties` TEXT NOT NULL DEFAULT '{}',
+    `created_on` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `deleted_on` TIMESTAMP NULL DEFAULT NULL,
+    `deleted` INTEGER NOT NULL DEFAULT 0
+);
+
 -- History
 CREATE TABLE IF NOT EXISTS history (
     `id` INTEGER PRIMARY KEY,
@@ -43,20 +56,6 @@ CREATE TABLE IF NOT EXISTS properties (
     `context` TEXT NOT NULL,
     `name` TEXT NOT NULL,
     `value` TEXT NULL
-);
-
--- Menus
-CREATE TABLE IF NOT EXISTS menus (
-    `id` INTEGER PRIMARY KEY,
-    `context` TEXT NOT NULL,
-    `data` TEXT NOT NULL DEFAULT '{}'
-);
-
--- Footers
-CREATE TABLE IF NOT EXISTS footers (
-    `id` INTEGER PRIMARY KEY,
-    `context` TEXT NOT NULL,
-    `data` TEXT NOT NULL DEFAULT '{}'
 );
 
 -- Admin user table

@@ -31,27 +31,14 @@ menu_records: list[Union[MenuItemModel, HeaderModel]] = [
         icon='bi-box-seam',
     ),
     MenuItemModel(
+        title='Components',
+        link='/objects/component',
+        icon='bi-boxes',
+    ),
+    MenuItemModel(
         title='Trash Bin',
         link='/trash_bin',
         icon='bi-trash',
-    ),
-
-    ###########################################################################
-    # Components
-    ###########################################################################
-
-    HeaderModel(
-        title='Components'
-    ),
-    MenuItemModel(
-        title='Navbar',
-        link='/navbar',
-        icon='bi-window',
-    ),
-    MenuItemModel(
-        title='Footer',
-        link='/footer',
-        icon='bi-window-desktop',
     ),
 
     ###########################################################################

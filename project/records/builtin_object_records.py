@@ -177,6 +177,23 @@ builtin_object_records: list[BuiltinObjectModel] = [
     ),
 
     ###########################################################################
+    # Components
+    ###########################################################################
+
+    BuiltinObjectModel(
+        name='navbar',
+        object_type=object_type_enum.COMPONENT,
+        object_subtype=object_subtype_enum.NAVBAR_COMPONENT,
+        properties={},
+    ),
+    BuiltinObjectModel(
+        name='footer',
+        object_type=object_type_enum.COMPONENT,
+        object_subtype=object_subtype_enum.FOOTER_COMPONENT,
+        properties={},
+    ),
+
+    ###########################################################################
     # Resources
     ###########################################################################
 

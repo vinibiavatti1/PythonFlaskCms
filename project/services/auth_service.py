@@ -13,7 +13,7 @@ from project.enums import string_types_enum
 import requests
 
 
-def validate_recaptcha(token: str) -> None:
+def validate_recaptcha(context: str, token: str) -> None:
     """
     Validate Google reCaptcha.
 
@@ -21,9 +21,11 @@ def validate_recaptcha(token: str) -> None:
     (1.0 is very likely a good interaction, 0.0 is very likely a bot).
     """
     recaptcha_secret_key = property_service.get_property_value(
+        context,
         'recaptcha_secret_key'
     )
     recaptcha_threshold = property_service.get_property_value(
+        context,
         'recaptcha_threshold'
     )
     response = requests.post(
@@ -75,14 +77,14 @@ def initialize_session(context: str, user: dict[str, Any]) -> None:
     session[session_enum.USER_PERMISSION] = user['permission']
 
 
-def process_login(login_data: dict[str, Any]) -> None:
+def process_login(context: str, login_data: dict[str, Any]) -> None:
     """
     Process login authentication.
     """
     recaptcha_enabled = \
-        property_service.get_property_value('recaptcha_enabled')
+        property_service.get_property_value(context, 'recaptcha_enabled')
     if recaptcha_enabled == string_types_enum.TRUE:
-        validate_recaptcha(str(login_data.get('recaptcha-token')))
+        validate_recaptcha(context, str(login_data.get('recaptcha-token')))
     user = do_login(escape(login_data['email']), login_data['password'])
     initialize_session(login_data['context'], user)
     user_repository.update_last_login(user['id'])

@@ -10,7 +10,7 @@ from project.services import auth_service
 
 # Controller data
 CONTROLLER_NAME = 'admin_auth_ctrl'
-INITIAL_PAGE = 'articles'
+INITIAL_PAGE = '/objects/content'
 
 
 # Blueprint
@@ -21,7 +21,7 @@ blueprint = Blueprint(
 
 
 ###############################################################################
-# Routes
+# View Routes
 ###############################################################################
 
 
@@ -33,6 +33,11 @@ def login() -> str:
     return render_template('/admin/login.html')
 
 
+###############################################################################
+# Action Routes
+###############################################################################
+
+
 @blueprint.route('/admin/login', methods=['POST'])
 def login_action() -> Any:
     """
@@ -41,18 +46,19 @@ def login_action() -> Any:
     try:
         login_data = request.form.to_dict()
         auth_validator.validate_login_data(login_data)
-        auth_service.process_login(login_data)
         context = login_data['context']
-        return redirect(f'/{context}/admin/{INITIAL_PAGE}')
+        auth_service.process_login(context, login_data)
+        context = login_data['context']
+        return redirect(f'/{context}/admin{INITIAL_PAGE}')
     except Exception as err:
         flash(str(err), category='danger')
         return redirect('/admin')
 
 
 @blueprint.route('/admin/logout')
-def logout() -> str:
+def logout() -> Any:
     """
     Logout action route.
     """
     auth_service.do_logout()
-    return render_template('/public/login.html')
+    return redirect('/admin')

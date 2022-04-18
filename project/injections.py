@@ -14,6 +14,7 @@ from project.services import object_service
 from project.utils import datetime_utils
 from project.utils import page_utils
 from project.utils import context_utils
+from project.utils import str_utils
 from project.enums import object_type_enum
 from project.enums import object_subtype_enum
 from project.enums import file_type_enum
@@ -83,9 +84,12 @@ def inject_utilities() -> dict[str, Any]:
     Inject utilities.
     """
     return dict(
-        generate_title=page_utils.generate_title,
-        format_date_to_str=datetime_utils.format_date_to_str,
-        format_datetime_to_str=datetime_utils.format_datetime_to_str,
+        utils=dict(
+            generate_title=page_utils.generate_title,
+            format_date_to_str=datetime_utils.format_date_to_str,
+            format_datetime_to_str=datetime_utils.format_datetime_to_str,
+            title=str_utils.title
+        )
     )
 
 

@@ -36,3 +36,10 @@ FAQ_RESOURCE = 'faq'
 REDIRECT_RESOURCE = 'redirect'
 TRANSLATION_RESOURCE = 'translation'
 ANNOUNCEMENT_RESOURCE = 'announcement'
+
+###############################################################################
+# Components
+###############################################################################
+
+NAVBAR_COMPONENT = 'navbar'
+FOOTER_COMPONENT = 'footer'
