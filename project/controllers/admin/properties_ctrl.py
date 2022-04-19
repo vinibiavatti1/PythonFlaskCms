@@ -35,13 +35,16 @@ def index(context: str) -> Any:
     """
     Render properties page.
     """
-    db_properties = property_service.select_all(context)
+    db_properties = property_service.select_all_as_dict(context)
     for prop in property_records:
         if isinstance(prop, PropertyModel):
             prop.value = db_properties[prop.name]
     return render_template(
         '/admin/properties.html',
-        data=dict(properties=property_records),
+        page_data=dict(
+            properties=property_records,
+            context=context,
+        ),
     )
 
 

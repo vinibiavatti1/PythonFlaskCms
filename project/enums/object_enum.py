@@ -9,7 +9,7 @@ Object type enumeration.
 PAGES_FOLDER = 'Pages Folder'
 COMPONENTS_FOLDER = 'Components Folder'
 RESOURCES_FOLDER = 'Resources Folder'
-TRANSLATIONS_FOLDER = 'Tranlations Folder'
+TRANSLATIONS_FOLDER = 'Translations Folder'
 ANNOUNCEMENTS_FOLDER = 'Announcements Folder'
 REDIRECTS_FOLDER = 'Redirects Folder'
 

@@ -21,6 +21,14 @@ def select_all(context: str) -> list[dict[str, str]]:
     return database_utils.execute_query(sql, (context,))
 
 
+def select_by_id(id_property: int) -> Optional[dict[str, Any]]:
+    """
+    Get property by id.
+    """
+    sql = 'SELECT * FROM properties WHERE id = ?'
+    return database_utils.execute_single_query(sql, (id_property,))
+
+
 def set_property(context: str, name: str, value: str) -> None:
     """
     Set property value.

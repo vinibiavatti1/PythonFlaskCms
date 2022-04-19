@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <form
                         id="example-form"
-                        action="/admin/properties/save"
+                        action="/{{page_data.context}}/admin/properties/save"
                         method="POST"
                         class="needs-validation"
                         novalidate
@@ -42,7 +42,7 @@
                                 </thead>
                                 <tbody>
                                     {% set vars = {'header': ''} %}
-                                    {% for prop in data.properties %}
+                                    {% for prop in page_data.properties %}
                                         {% if prop.header %}
                                             {% if vars.update({'header': prop.title}) %} {% endif %}
                                             <tr class="bg-prop collapse_btn" role="button" data-header-name="{{prop.title}}">
@@ -51,14 +51,12 @@
                                         {% else %}
                                             <tr class="d-none" data-header="{{vars.header}}">
                                                 <td style="width: 10%;">
-                                                    <b>
-                                                        {{prop.label}}
-                                                        {% if prop.required %}
-                                                        <span class="text-danger" title="Required">*</span>
-                                                        {% endif %}
-                                                        <br>
-                                                        <small>{{ prop.name }}</small>
-                                                    </b>
+                                                    <b>{{prop.label}}</b>
+                                                    {% if prop.required %}
+                                                    <span class="text-danger" title="Required">*</span>
+                                                    {% endif %}
+                                                    <br>
+                                                    <small>{{ prop.name }}</small>
                                                 </td>
                                                 <td style="width: 30%;">
                                                     {{prop.description}}

@@ -11,7 +11,7 @@ class BuiltinObjectModel:
     """
 
     def __init__(self, *, name: str, object_type: str,
-                 parent_name: Optional[str] = None,
+                 reference_name: Optional[str] = None,
                  properties: dict[str, str]) -> None:
         """
         Init builtin object model.
@@ -19,5 +19,4 @@ class BuiltinObjectModel:
         self.name = name
         self.object_type = object_type
         self.properties = properties
-        self.parent_name = parent_name
-
+        self.reference_name = reference_name

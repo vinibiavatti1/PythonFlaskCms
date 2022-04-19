@@ -9,7 +9,7 @@
 <div class="container my-3">
     <div class="row">
         <div class="col">
-            {{ breadcrumb(['Admin', 'Import/Export' ]) }}
+            {{ breadcrumb(['Admin', 'Import & Export' ]) }}
             <div class="fs-3 text-white">Import/Export</div>
             <div class="card">
                 <div class="card-body">
@@ -24,50 +24,86 @@
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="export-tab" role="tabpanel">
-                            <form action="{{page_data.export_action_url}}" method="POST">
+                            <form id="export_form" action="{{page_data.export_action_url}}" method="POST">
+                                <input id="id_list" name="id_list" type="hidden" value="[]">
                                 <div id="datatype_input_container" class="mb-2">
                                     <label>Data type</label>
                                     <select id="datatype_input" name="datatype" class="form-select">
                                         <option value="objects">Objects</option>
-                                        <option value="components">Components</option>
                                         <option value="properties">Properties</option>
                                         <option value="users">Users</option>
                                         <option value="files">Files</option>
                                     </select>
                                 </div>
-                                <div id="object_type_input_container" class="mb-2">
-                                    <label>Object Type</label>
-                                    <select id="object_type_input" name="object_type" class="form-select">
-                                        <option value="all">All</option>
-                                        <option value="content">Contents</option>
-                                        <option value="page">Pages</option>
-                                        <option value="resource">Resources</option>
-                                    </select>
-                                </div>
-                                <div id="object_subtype_input_container" class="mb-2 d-none">
-                                    <label>Object Subtype</label>
-                                    <select id="object_subtype_input" name="object_subtype" class="form-select">
-                                        <option value="all">All</option>
-                                        {% for element in page_data.content_types %}
-                                            <option value="{{element}}" class="content_option">{{element.title()}}</option>
-                                        {% endfor %}
-                                        {% for element in page_data.page_types %}
-                                            <option value="{{element}}" class="page_option">{{element.title()}}</option>
-                                        {% endfor %}
-                                        {% for element in page_data.resource_types %}
-                                            <option value="{{element}}" class="resource_option">{{element.title()}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div id="component_type_input_container" class="mb-2 d-none">
-                                    <label>Component Type</label>
-                                    <select id="component_type_input" name="component_type" class="form-select">
-                                        <option value="navbar">Navbar</option>
-                                        <option value="footer">Footer</option>
-                                    </select>
-                                </div>
                                 <div>
-                                    <button class="btn btn-primary">
+                                    <div>
+                                        <button id="select_all" type="button" class="btn btn-secondary">
+                                            <i class="bi bi-check-square"></i>
+                                            Select All
+                                        </button>
+                                        <button id="deselect_all" type="button" class="btn btn-secondary">
+                                            <i class="bi bi-square"></i>
+                                            Deselect All
+                                        </button>
+                                    </div>
+
+                                    <div class="table-responsive">
+
+                                        <!-- Objects -->
+                                        <table id="objects_table" class="table table-striped w-100">
+                                            <thead>
+                                                <tr>
+                                                    <th>Selected</th>
+                                                    <th>Name</th>
+                                                    <th>Type</th>
+                                                    <th>Reference</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in page_data.objects %}
+                                                <tr class="object-item {{ 'opacity-50' if item.reference_name is not none else '' }}" data-id="{{item.id}}" data-name="{{ item.name }}" data-reference-name="{{ item.reference_name }}">
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input checkbox-object checkbox" type="checkbox" value="" {{ 'disabled' if item.reference_name is not none else '' }}>
+                                                            <label class="form-check-label"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td><i class="bi {{item.icon}}"></i> {{ item.name }}</td>
+                                                    <td>{{ item.object_type }}</td>
+                                                    <td>{{ item.reference_name if item.reference_name else '-' }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+
+                                        <!-- Properties -->
+                                        <table id="properties_table" class="table table-striped w-100 d-none">
+                                            <thead>
+                                                <tr>
+                                                    <th>Selected</th>
+                                                    <th>Name</th>
+                                                    <th>Description</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in page_data.properties %}
+                                                <tr class="property-item" data-name="{{ item.name }}" data-id="{{ item.id }}">
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input checkbox-property checkbox" type="checkbox" value="" checked>
+                                                            <label class="form-check-label"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ item.name }}</td>
+                                                    <td>{{ item.description }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <button id="export_button" type="button" class="btn btn-primary">
                                         <i class="bi bi-download"></i>
                                         Export
                                     </button>
@@ -78,20 +114,18 @@
                             <form action="{{page_data.import_action_url}}" method="POST">
                                 <div id="object_input_import_container" class="mb-2">
                                     <label>Data type</label>
-                                    <select id="object_input_import" name="datatype" class="form-select">
+                                    <select id="datatype_input_import" name="datatype" class="form-select">
                                         <option value="objects">Objects</option>
-                                        <option value="navbar">Navbar</option>
-                                        <option value="footer">Footer</option>
                                         <option value="properties">Properties</option>
                                         <option value="users">Users</option>
                                     </select>
                                 </div>
                                 <div id="import_action_container" class="mb-2">
                                     <label>Import action</label>
-                                    <select id="import_action_import" name="import_action" class="form-select">
-                                        <option value="replace">Import and replace duplicates</option>
-                                        <option value="ignore">Import and ignore duplicates</option>
-                                        <option value="keep">Import and keep duplicates</option>
+                                    <select id="import_action" name="import_action" class="form-select">
+                                        <option value="replace">Import and REPLACE duplicates</option>
+                                        <option value="ignore">Import and INGORE duplicates</option>
+                                        <option value="keep" id="keep_option">Import and KEEP BOTH duplicates</option>
                                     </select>
                                 </div>
                                 <div class="mb-2">
@@ -116,43 +150,95 @@
 {% block script %}
 <script>
     jQuery(function() {
-        $('#datatype_input').on('change', function() {
-            let datatype = $(this).val();
+        init();
 
-            // Hide inputs
-            $('#object_type_input_container').addClass('d-none');
-            $('#object_subtype_input_container').addClass('d-none');
-            $('#component_type_input_container').addClass('d-none');
+        function init() {
+            refreshExportButton();
+        }
 
-            // Show inputs
+        function refreshExportButton() {
+            let datatype = $('#datatype_input').val();
+            let btn = $('#export_button');
+            let disableBtn = false;
             if (datatype == 'objects') {
-                $('#object_type_input_container').removeClass('d-none');
-            } else if (datatype == 'components') {
-                $('#component_type_input_container').removeClass('d-none');
+                disableBtn = $('.checkbox-object:checked').length == 0
+            } else if(datatype == 'properties') {
+                disableBtn = $('.checkbox-property:checked').length == 0
             }
+
+            if (disableBtn) {
+                btn.attr('disabled', '');
+            } else {
+                btn.removeAttr('disabled');
+            }
+        }
+
+        function generateExportJsonData() {
+            let datatype = $('#datatype_input').val();
+            let jsonData = []
+            if (datatype == 'objects') {
+                $('.checkbox-object:checked').each(function() {
+                    let item = $(this).closest('.object-item');
+                    jsonData.push(item.data('id'))
+                });
+            } else if (datatype == 'properties') {
+                $('.checkbox-property:checked').each(function() {
+                    let item = $(this).closest('.property-item');
+                    jsonData.push(item.data('id'))
+                });
+            }
+            $('#id_list').val(JSON.stringify(jsonData));
+        }
+
+        $('#export_button').on('click', function() {
+            generateExportJsonData();
+            $('#export_form').submit();
         });
-        $('#object_type_input').on('change', function() {
-            let datatype = $(this).val();
 
-            // Hide inputs
-            $('#object_subtype_input_container').addClass('d-none');
-            $('.content_option').addClass('d-none');
-            $('.page_option').addClass('d-none');
-            $('.resource_option').addClass('d-none');
-            if (datatype == 'all') {
-                return;
+        $('#datatype_input').on('change', function() {
+            let datatype = $('#datatype_input').val();
+            $('#objects_table').addClass('d-none');
+            $('#properties_table').addClass('d-none');
+            if (datatype == 'objects') {
+                $('#objects_table').removeClass('d-none');
+            } else if (datatype == 'properties') {
+                $('#properties_table').removeClass('d-none');
             }
+            refreshExportButton();
+        });
 
-            // Show inputs
-            $('#object_subtype_input_container').removeClass('d-none');
-            $('#object_subtype_input').val('all');
-            if (datatype == 'content') {
-                $('.content_option').removeClass('d-none');
-            } else if (datatype == 'page') {
-                $('.page_option').removeClass('d-none');
-            } else if (datatype == 'resource') {
-                $('.resource_option').removeClass('d-none');
+        $('.checkbox-property').on('click', function() {
+            refreshExportButton();
+        });
+        $('.checkbox-object').on('click', function() {
+            let checked = $(this).is(':checked');
+            let item = $(this).closest('.object-item');
+            let name = item.data('name');
+            let reference_name = item.data('reference-name');
+            let references = $(`.object-item[data-reference-name="${name}"]`);
+            if (checked) {
+                references
+                    .removeClass('opacity-50')
+                    .find('.checkbox-object')
+                    .removeAttr('disabled');
+            } else {
+                references
+                    .addClass('opacity-50')
+                    .find('.checkbox-object')
+                    .prop('checked', false)
+                    .attr('disabled', '');
             }
+            refreshExportButton();
+        });
+        $('#select_all').on('click', function() {
+            $('.checkbox')
+                .prop('checked', false)
+                .trigger('click');
+        });
+        $('#deselect_all').on('click', function() {
+            $('.checkbox')
+                .prop('checked', true)
+                .trigger('click');
         });
 
         $('#json_data').on('change keyup', function() {
@@ -160,6 +246,15 @@
             $('#import_btn').attr('disabled', '');
             if (json) {
                 $('#import_btn').removeAttr('disabled');
+            }
+        });
+
+        $('#datatype_input_import').on('change', function() {
+            let val = $(this).val();
+            $('#keep_option').show();
+            if (val == 'properties') {
+                $('#import_action').val('replace')
+                $('#keep_option').hide();
             }
         });
     });

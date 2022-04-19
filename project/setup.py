@@ -2,19 +2,16 @@
 Setup app functions.
 """
 from flask import Flask
-from project.entities.object_entity import ObjectEntity
 from project.models.property_model import PropertyModel
 from project.services import user_service
 from project.blueprints import blueprints
 from project.enums.security_enum import SECRET
-from project.records.user_records import user_records
+from project.records.builtin_user_records import builtin_user_records
 from project.records.property_records import property_records
 from project.records.builtin_object_records import builtin_object_records
 from project.records.context_records import context_records
-from project.records.page_type_records import page_type_records
 from project.services import property_service
 from project.services import object_service
-from project.enums import object_enum, object_subtype_enum
 import os
 
 
@@ -87,7 +84,7 @@ def register_users(app: Flask) -> None:
     Register builtin admin users.
     """
     app.logger.info('Registering users...')
-    for user in user_records:
+    for user in builtin_user_records:
         found = user_service.select_by_email(user.email)
         if found is None:
             user_service.insert(user.__dict__)

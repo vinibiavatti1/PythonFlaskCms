@@ -7,10 +7,9 @@ from flask import Blueprint, request, abort, render_template, flash, \
     redirect,  Response, current_app
 from project.decorators.security_decorators import login_required
 from project.decorators.context_decorators import process_context
-from project.records.content_type_records import content_type_records
-from project.records.page_type_records import page_type_records
-from project.records.resource_type_records import resource_type_records
 from project.services import import_export_service
+from project.services import object_service
+from project.services import property_service
 from project.utils import datetime_utils
 from project.utils import ctrl_utils
 import json
@@ -45,16 +44,40 @@ def import_export_view(context: str) -> Any:
     export_action_url = ctrl_utils.generate_admin_url(
         context, 'import_export', 'export'
     )
-    content_types = [e.name for e in content_type_records]
-    page_types = [e.name for e in page_type_records]
-    resource_types = [e.name for e in resource_type_records]
+
+    # Properties
+    properties = list()
+    props = property_service.select_all(context)
+    record: Any = None
+    for prop in props:
+        record = property_service.get_record_by_name(prop['name'])
+        if record is None:
+            continue
+        properties.append({
+            'id': prop['id'],
+            'name': prop['name'],
+            'description': record.description,
+        })
+
+    # Objects
+    objects = list()
+    for entity in object_service.select_all(context):
+        record = object_service.get_record_by_name(entity.object_type)
+        if record is None:
+            continue
+        objects.append({
+            'id': entity.id,
+            'name': entity.name,
+            'object_type': entity.object_type,
+            'reference_name': entity.reference_name,
+            'icon': record.icon,
+        })
     return render_template(
         '/admin/import_export.html',
         page_data=dict(
             context=context,
-            content_types=content_types,
-            page_types=page_types,
-            resource_types=resource_types,
+            objects=objects,
+            properties=properties,
             import_action_url=import_action_url,
             export_action_url=export_action_url,
         )
@@ -79,38 +102,29 @@ def export_action(context: str) -> Any:
     try:
         data = request.form.to_dict()
         datatype = data['datatype']
-        object_type = data['object_type']
-        object_subtype = data['object_subtype']
-        component_type = data['component_type']
+        id_list = json.loads(data['id_list'])
         if datatype == 'objects':
-            data_to_export = import_export_service.export_objects(
-                context,
-                None if object_type == 'all' else object_type,
-                None if object_subtype == 'all' else object_subtype,
-            )
-        elif datatype == 'components':
-            data_to_export = import_export_service.export_component(
-                context,
-                component_type,
+            exports = import_export_service.export_objects_by_id_list(
+                id_list
             )
         elif datatype == 'properties':
-            data_to_export = import_export_service.export_properties(
-                context
+            exports = import_export_service.export_properties_by_id_list(
+                id_list
             )
         elif datatype == 'users':
-            data_to_export = import_export_service.export_users()
+            exports = import_export_service.export_users()
         elif datatype == 'files':
-            data_to_export = import_export_service.export_files()
+            exports = import_export_service.export_files()
         else:
             flash(f'Invalid datatype: {datatype}', category='danger')
             return redirect(request.referrer)
-        data_to_export = datetime_utils.convert_list_datetime_to_timestamp(
-            data_to_export
+        exports = datetime_utils.convert_list_datetime_to_timestamp(
+            exports
         )
         current_datetime = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-        filename = f'export_{current_datetime}.json'
+        filename = f'export_{datatype}_{current_datetime}.json'
         return Response(
-            json.dumps(data_to_export),
+            json.dumps(exports, indent=4),
             mimetype="text/plain",
             headers={
                 "Content-Disposition": f"attachment;filename={filename}"
@@ -140,12 +154,10 @@ def import_action(context: str) -> Any:
             import_export_service.import_objects(
                 json_data, import_action
             )
-        elif datatype == 'navbar':
-            pass
-        elif datatype == 'footer':
-            pass
         elif datatype == 'properties':
-            pass
+            import_export_service.import_properties(
+                json_data, import_action
+            )
         elif datatype == 'users':
             pass
         flash(f'Data imported successfully', category='success')

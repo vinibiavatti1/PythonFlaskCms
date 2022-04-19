@@ -4,7 +4,7 @@ User model.
 from project.utils import security_utils
 
 
-class UserModel:
+class BuiltinUserModel:
     """
     User model.
     """

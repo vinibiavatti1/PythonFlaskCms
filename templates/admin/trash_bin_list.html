@@ -16,18 +16,18 @@
                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-funnel"></i> Filter
                             </button>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu" style="max-height: 300px; overflow: auto;">
                                 <li>
                                     <a class="dropdown-item {{'active' if page_data.object_type is none else ''}}" href="{{page_data.root_url}}">
                                         <i class="me-2 bi bi-funnel"></i>
                                         All
                                     </a>
                                 </li>
-                                {% for object_type in page_data.object_type_records %}
+                                {% for record in page_data.object_records %}
                                     <li>
-                                        <a class="dropdown-item {{'active' if page_data.object_type == object_type else ''}}" href="{{page_data.root_url}}/{{object_type}}">
+                                        <a class="dropdown-item {{'active' if page_data.object_type == record.name else ''}}" href="{{page_data.root_url}}/{{record.name}}">
                                             <i class="me-2 bi bi-funnel"></i>
-                                            {{object_type.title()}}
+                                            {{record.name}}
                                         </a>
                                     </li>
                                 {% endfor %}

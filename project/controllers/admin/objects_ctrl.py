@@ -7,14 +7,9 @@ from project.decorators.security_decorators import login_required
 from project.decorators.context_decorators import process_context
 from project.entities.object_entity import ObjectEntity
 from project.models.object_model import ObjectModel
-from project.records.content_type_records import content_type_records
-from project.records.page_type_records import page_type_records
-from project.records.resource_type_records import resource_type_records
-from project.records.component_type_records import component_type_records
 from project.utils import record_utils
 from project.utils.data_utils import set_properties_value
 from project.utils.ctrl_utils import generate_admin_url
-from project.utils import str_utils
 from project.services import history_service
 from project.services import object_service
 from project.enums import object_enum
@@ -65,6 +60,7 @@ def list_objects_view(context: str, object_name: Optional[str] = None
         'Name',
         'Type',
         'Published',
+        'URL',
         'Created On',
         'Edit',
         'Children',
@@ -80,11 +76,13 @@ def list_objects_view(context: str, object_name: Optional[str] = None
         entity = object_service.select_by_name(context, object_name)
         if not entity:
             return abort(400)
-        record = record_utils.get_record_by_name(entity.object_type)
+        record = object_service.get_record_by_name(entity.object_type)
         if not record:
             return abort(400)
-        if entity.reference_id:
-            parent = object_service.select_by_id(entity.reference_id)
+        if entity.reference_name:
+            parent = object_service.select_by_name(
+                context, entity.reference_name
+            )
             if not parent:
                 return abort(400)
             parent_name = parent.name
@@ -92,10 +90,10 @@ def list_objects_view(context: str, object_name: Optional[str] = None
                 context, 'objects', parent.name,
             )
         title = entity.name
-        children = record_utils.get_records_by_names(record.children)
-        objects = object_service.select_by_reference(entity.id)
+        children = object_service.get_records_by_names(record.children)
+        objects = object_service.select_by_reference(context, entity.name)
     else:
-        children = record_utils.get_root_records()
+        children = object_service.get_root_records()
         objects = object_service.select_root_objects(context)
 
     # Filter children
@@ -103,22 +101,26 @@ def list_objects_view(context: str, object_name: Optional[str] = None
 
     # Parse entities
     for entity in objects:
-        id_ = entity.id
-        published = entity.properties.get('published', '1') == str_type.TRUE
-        object_type = record_utils.get_record_by_name(
-            entity.object_type
-        )
-        if not object_type:
+        record = object_service.get_record_by_name(entity.object_type)
+        if record is None:
             continue
+
+        published = entity.properties.get('published', '1') == str_type.TRUE
+        if record.is_content and published:
+            url = f'<a href="{entity.url}" target="_blank">{entity.url}</a>'
+        else:
+            url = '-'
+
         data.append((
             entity.object_order,
-            f'<i class="bi {object_type.icon}"></i> '
+            f'<i class="bi {record.icon}"></i> '
             f'{entity.name}',
-            f'{object_type.name}',
-            f'<i class="bi bi-broadcast"></i> True' if published else 'False',
+            f'{record.name}',
+            f'<i class="bi bi-broadcast"></i> True ' if published else 'False',
+            url,
             entity.created_on,
             f'<i class="bi bi-pencil"></i> '
-            f'<a href="{root_url}/edit/{id_}">Edit</a>',
+            f'<a href="{root_url}/edit/{entity.id}">Edit</a>',
             f'<i class="bi bi-folder2-open"></i> '
             f'<a href="{root_url}/{entity.name}">Children</a>'
         ))
@@ -169,27 +171,17 @@ def change_order_view(context: str, object_name: Optional[str] = None
 
     # Get record and data
     if object_name is not None:
-        entity = object_service.select_by_name(context, object_name)
-        if not entity:
-            return abort(400)
-        record = record_utils.get_record_by_name(entity.object_type)
-        if not record:
-            return abort(400)
-        if entity.reference_id:
-            parent = object_service.select_by_id(entity.reference_id)
-            if not parent:
-                return abort(400)
-            back_url = generate_admin_url(
-                context, 'objects', parent.name,
-            )
-        title = entity.name
-        objects = object_service.select_by_reference(entity.id)
+        back_url = generate_admin_url(
+            context, 'objects', object_name,
+        )
+        title = object_name
+        objects = object_service.select_by_reference(context, object_name)
     else:
         objects = object_service.select_root_objects(context)
 
     # Parse entities
     for entity in objects:
-        object_type = record_utils.get_record_by_name(
+        object_type = object_service.get_record_by_name(
             entity.object_type
         )
         if not object_type:
@@ -218,20 +210,20 @@ def change_order_view(context: str, object_name: Optional[str] = None
 @blueprint.route(
     rule='/<object_type>/create',
     methods=['GET'],
-    defaults={'reference_id': None}
+    defaults={'reference_name': None}
 )
 @blueprint.route(
-    rule='/<object_type>/create/<reference_id>',
+    rule='/<object_type>/create/<reference_name>',
     methods=['GET']
 )
 @login_required()
 @process_context()
 def create_view(context: str, object_type: str,
-                reference_id: Optional[str] = None) -> Any:
+                reference_name: Optional[str] = None) -> Any:
     """
     Render create page.
     """
-    record = record_utils.get_record_by_name(object_type)
+    record = object_service.get_record_by_name(object_type)
     referrer_url = request.referrer
     if not record:
         return abort(400)
@@ -239,16 +231,19 @@ def create_view(context: str, object_type: str,
     back_url = generate_admin_url(
         context, 'objects'
     )
-    if reference_id:
-        parent = object_service.select_by_id(int(reference_id))
+    action_url = generate_admin_url(
+        context, 'objects', 'create'
+    )
+    if reference_name is not None:
+        parent = object_service.select_by_name(context, reference_name)
         if parent:
             back_url = generate_admin_url(
                 context, 'objects', parent.name
             )
+            action_url = generate_admin_url(
+                context, 'objects', 'create', reference_name
+            )
 
-    action_url = generate_admin_url(
-        context, 'objects', 'create', reference_id if reference_id else ''
-    )
     return render_template(
         '/admin/object_form.html',
         page_data=dict(
@@ -262,7 +257,7 @@ def create_view(context: str, object_type: str,
             properties=record.properties,
             allow_actions=record.allow_actions,
             referrer_url=referrer_url,
-            reference_id=reference_id,
+            reference_name=reference_name,
         )
     )
 
@@ -282,27 +277,33 @@ def edit_view(context: str, object_id: int) -> Any:
     if not entity:
         return abort(400)
 
-    record = record_utils.get_record_by_name(entity.object_type)
+    record = object_service.get_record_by_name(entity.object_type)
     if not record:
         return abort(400)
 
-    # Back URL
+    # URLs
     back_url = generate_admin_url(
         context, 'objects',
     )
-    if entity.reference_id:
-        parent = object_service.select_by_id(entity.reference_id)
+    action_url = generate_admin_url(
+        context, 'objects', 'edit', str(object_id)
+    )
+    if entity.reference_name:
+        parent = object_service.select_by_name(
+            context, entity.reference_name
+        )
         if parent:
             back_url = generate_admin_url(
                 context, 'objects', parent.name
             )
-    action_url = generate_admin_url(
-        context, 'objects', entity.object_type, 'edit', str(object_id)
-    )
+
+    # Set props
     props = set_properties_value(getattr(record, 'properties'), entity)
     history = history_service.select_by_target_id(
         context, table_enum.OBJECTS, object_id,
     )
+
+    # Render
     return render_template(
         '/admin/object_form.html',
         page_data=dict(
@@ -327,12 +328,12 @@ def edit_view(context: str, object_id: int) -> Any:
 
 
 @blueprint.route(
-    rule='/<object_type>/<object_subtype>/create',
+    rule='/<object_type>/create',
     methods=['POST']
 )
 @login_required()
 @process_context()
-def create_action(context: str, object_type: str, object_subtype: str) -> Any:
+def create_action(context: str, object_type: str) -> Any:
     """
     Insert content to database.
     """
@@ -345,7 +346,6 @@ def create_action(context: str, object_type: str, object_subtype: str) -> Any:
         name=data['name'],
         properties=data,
         object_type=object_type,
-        object_subtype=object_subtype,
     )
     try:
         entity_id = object_service.insert(new_object)
@@ -357,30 +357,21 @@ def create_action(context: str, object_type: str, object_subtype: str) -> Any:
 
 
 @blueprint.route(
-    rule='/<object_type>/<object_subtype>/edit/<object_id>',
+    rule='/edit/<object_id>',
     methods=['POST']
 )
 @login_required()
 @process_context()
-def edit_action(context: str, object_type: str, object_subtype: str,
-                object_id: int) -> Any:
+def edit_action(context: str, object_id: int) -> Any:
     """
     Update content in database.
     """
     data = request.form.to_dict()
     root_url = generate_admin_url(
-        context, 'objects', object_type,
-    )
-    edit_object = ObjectEntity(
-        context=context,
-        id=object_id,
-        name=data['name'],
-        properties=data,
-        object_type=object_type,
-        object_subtype=object_subtype,
+        context, 'objects',
     )
     try:
-        object_service.update(edit_object)
+        object_service.update(object_id, data)
         flash('Content updated successfully!', category='success')
         return redirect(f'{root_url}/edit/{object_id}')
     except Exception as err:
@@ -389,17 +380,17 @@ def edit_action(context: str, object_type: str, object_subtype: str,
 
 
 @blueprint.route(
-    rule='/<object_type>/delete/<object_id>',
+    rule='/delete/<object_id>',
     methods=['GET']
 )
 @login_required()
 @process_context()
-def delete_action(context: str, object_type: str, object_id: int) -> Any:
+def delete_action(context: str, object_id: int) -> Any:
     """
     Delete content from database.
     """
     root_url = generate_admin_url(
-        context, 'objects', object_type,
+        context, 'objects',
     )
     try:
         object_service.delete(object_id)
@@ -411,18 +402,18 @@ def delete_action(context: str, object_type: str, object_id: int) -> Any:
 
 
 @blueprint.route(
-    rule='/<object_type>/duplicate/<object_id>/<to_context>/<new_name>',
+    rule='/duplicate/<object_id>/<to_context>/<new_name>',
     methods=['GET']
 )
 @login_required()
 @process_context()
-def duplicate_action(context: str, object_type: str, object_id: int,
-                     to_context: str, new_name: str) -> Any:
+def duplicate_action(context: str, object_id: int, to_context: str,
+                     new_name: str) -> Any:
     """
     Duplicate content.
     """
     root_url = generate_admin_url(
-        context, 'objects', object_type,
+        context, 'objects',
     )
     try:
         object_service.duplicate(object_id, to_context, new_name)
@@ -463,16 +454,15 @@ def save_order_action(context: str) -> Any:
 
 
 @blueprint.route(
-    rule='/exists/<object_type>/<object_subtype>/<name>',
+    rule='/exists/<name>',
     methods=['GET']
 )
 @login_required()
-def object_exists(context: str, object_type: str, object_subtype: str,
-                  name: str) -> Any:
+def object_exists(context: str, name: str) -> Any:
     """
     Verify if object exists.
     """
     exists = object_service.object_exists(
-        context, object_type, object_subtype, name
+        context, name
     )
     return dict(exists=exists)

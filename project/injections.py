@@ -3,6 +3,7 @@ Injection resources module.
 """
 from typing import Any
 from project.models.menu_item_model import MenuItemModel
+from project.records import object_records
 from project.utils.security_utils import is_authenticated, has_permission
 from project.utils.cookie_utils import cookie_policy_consent
 from flask import Blueprint
@@ -14,10 +15,8 @@ from project.services import object_service
 from project.utils import datetime_utils
 from project.utils import page_utils
 from project.utils import context_utils
-from project.utils import str_utils
 from project.utils import record_utils
 from project.enums import object_enum
-from project.enums import object_subtype_enum
 from project.enums import file_type_enum
 from project.models.url_model import UrlModel
 
@@ -89,7 +88,6 @@ def inject_utilities() -> dict[str, Any]:
             generate_title=page_utils.generate_title,
             format_date_to_str=datetime_utils.format_date_to_str,
             format_datetime_to_str=datetime_utils.format_datetime_to_str,
-            title=str_utils.title
         )
     )
 
@@ -103,7 +101,7 @@ def inject_properties() -> dict[str, Any]:
     if not context:
         return dict()
     return dict(
-        properties=property_service.select_all(context)
+        properties=property_service.select_all_as_dict(context)
     )
 
 
@@ -120,7 +118,7 @@ def inject_urls() -> dict[str, Any]:
     )
     contents = []
     for entity in entities:
-        record = record_utils.get_record_by_name(entity.object_type)
+        record = object_service.get_record_by_name(entity.object_type)
         if not record:
             continue
         if record.is_content:

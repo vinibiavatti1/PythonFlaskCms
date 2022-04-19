@@ -9,17 +9,9 @@ from typing import Union
 
 
 # Properties
-publish_properties: list[Union[PropertyModel, HeaderModel]] = [
+security_properties: list[Union[PropertyModel, HeaderModel]] = [
     HeaderModel(
-        title='Publish'
-    ),
-    PropertyModel(
-        label='Published?',
-        name='published',
-        property_type=prop_type.BOOL,
-        description='Set to True to publish the content.',
-        default=str_type.FALSE,
-        required=True,
+        title='Security'
     ),
     PropertyModel(
         label='Private?',

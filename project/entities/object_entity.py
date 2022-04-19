@@ -33,7 +33,7 @@ class ObjectEntity:
             created_on=dct.get('created_on', None),
             deleted=str(dct.get('deleted')) == '1',
             deleted_on=dct.get('deleted_on'),
-            reference_id=dct.get('reference_id', None),
+            reference_name=dct.get('reference_name', None),
             object_order=dct.get('object_order', None),
         )
 
@@ -61,7 +61,7 @@ class ObjectEntity:
                  created_on: datetime = datetime.now(),
                  deleted: bool = False,
                  deleted_on: Optional[datetime] = None,
-                 reference_id: Optional[int] = None,
+                 reference_name: Optional[str] = None,
                  object_order: Optional[int] = None,
                  ) -> None:
         """
@@ -75,7 +75,7 @@ class ObjectEntity:
         self.created_on = created_on
         self.deleted = deleted
         self.deleted_on = deleted_on
-        self.reference_id = reference_id
+        self.reference_name = reference_name
         self.object_order = object_order
 
     ###########################################################################
@@ -95,7 +95,7 @@ class ObjectEntity:
             created_on=self.created_on,
             deleted=self.deleted,
             deleted_on=self.deleted_on,
-            reference_id=self.reference_id,
+            reference_name=self.reference_name,
             object_order=self.object_order,
         )
 

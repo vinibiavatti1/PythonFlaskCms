@@ -6,12 +6,10 @@ from werkzeug.utils import redirect
 from flask import Blueprint, request, render_template, flash, abort
 from project.decorators.security_decorators import login_required
 from project.decorators.context_decorators import process_context
-from project.records.content_type_records import content_type_records
-from project.records.resource_type_records import resource_type_records
 from project.services import object_service
 from project.utils.ctrl_utils import generate_admin_url
-from project.utils import record_utils
 from project.enums import object_enum
+from project.records.object_records import object_records
 
 
 # Controller properties
@@ -54,7 +52,6 @@ def list_view(context: str, object_type: Optional[str] = None) -> str:
         '#',
         'Name',
         'Object Type',
-        'Object Subtype',
         'Deleted On',
         'Actions',
     ]
@@ -64,27 +61,18 @@ def list_view(context: str, object_type: Optional[str] = None) -> str:
     else:
         entities = object_service.select_all_deleted(context)
     for entity in entities:
-        object_type = entity.object_type
-        record_list: list[Any] = []
-        if object_type == object_enum.CONTENT:
-            record_list = content_type_records
-        elif object_type == object_enum.RESOURCE:
-            record_list = resource_type_records
-        else:
-            return abort(400)
         id_ = entity.id
-        record = record_utils.get_record_by_name(
-            entity.object_subtype, record_list
-        )
-        icon = getattr(record, "icon")
-        label = getattr(record, "label")
+        object_type = entity.object_type
+        record = object_service.get_record_by_name(object_type)
+        if record is None:
+            return abort(400)
+
         data.append((
             id_,
-            entity.name,
-            entity.object_type_as_title,
-            f'<i class="bi {icon}"></i> {label}',
+            f'<i class="bi {record.icon}"></i> {entity.name}',
+            record.name,
             entity.deleted_on,
-            f'<a href="{root_url}/restore/{id_}">Restore</a>'
+            f'<a href="{root_url}/restore/{id_}">Restore</a>',
         ))
     return render_template(
         '/admin/trash_bin_list.html',
@@ -95,10 +83,7 @@ def list_view(context: str, object_type: Optional[str] = None) -> str:
             title='Trash Bin',
             root_url=root_url,
             object_type=object_type,
-            object_type_records=[
-                object_enum.CONTENT,
-                object_enum.RESOURCE,
-            ],
+            object_records=object_records,
         )
     )
 
