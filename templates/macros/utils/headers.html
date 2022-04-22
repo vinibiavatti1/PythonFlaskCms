@@ -1,11 +1,11 @@
 {# Metatags #}
 {% macro metas() %}
-    <meta charset="{{properties.charset}}">
+    <meta charset="{{ get_property('charset') }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="{{properties.description}}">
-    <meta name="keywords" content="{{properties.keywords}}">
-    <meta name="author" content="{{properties.author}}">
-    {% if properties.responsive == '1' %}
+    <meta name="description" content="{{ get_property('description') }}">
+    <meta name="keywords" content="{{ get_property('keywords') }}">
+    <meta name="author" content="{{get_property('author') }}">
+    {% if get_property('responsive') %}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% endif %}
 {% endmacro %}
@@ -34,7 +34,7 @@
     <script src="/static/plugins/fullcalendar-5.10.1/lib/main.min.js"></script>
     <script src="/static/plugins/trumbowyg-2.25.1/dist/trumbowyg.min.js"></script>
     <script src="/static/scripts/general.js"></script>
-    {% if config.recaptcha_enabled %}
+    {% if get_property('recaptcha_enabled') %}
         <script src="https://www.google.com/recaptcha/api.js?render={{config.recaptcha_site_key}}"></script>
     {% endif %}
 {% endmacro %}

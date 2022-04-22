@@ -12,6 +12,7 @@ from project.records.builtin_object_records import builtin_object_records
 from project.records.context_records import context_records
 from project.services import property_service
 from project.services import object_service
+from project.utils import plugin_utils
 import os
 
 
@@ -90,6 +91,15 @@ def register_users(app: Flask) -> None:
             user_service.insert(user.__dict__)
 
 
+def register_plugins(app: Flask) -> None:
+    """
+    Register and install plugins.
+    """
+    plugins = plugin_utils.get_plugins()
+    for plugin in plugins:
+        plugin_utils.load_plugin(app, plugin)
+
+
 ###############################################################################
 # Setup
 ###############################################################################
@@ -99,10 +109,13 @@ def setup(app: Flask) -> None:
     """
     Setup function.
     """
+    # Setup natives
     register_secret_key(app)
     register_upload_folder(app)
     register_blueprints(app)
     register_properties(app)
     register_users(app)
     register_builtin_objects(app)
-    # Add more actions...
+
+    # Setup plugins
+    register_plugins(app)

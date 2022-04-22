@@ -101,7 +101,9 @@ def inject_properties() -> dict[str, Any]:
     if not context:
         return dict()
     return dict(
-        properties=property_service.select_all_as_dict(context)
+        get_property=lambda name: property_service.get_property_value(
+            context, name
+        ),
     )
 
 
