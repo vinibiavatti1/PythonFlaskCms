@@ -33,14 +33,14 @@ def property_exists(context: str, name: str) -> bool:
     return prop is not None
 
 
-def get_property_value(context: str, name: str) -> str:
+def get_property_value(context: str, name: str, cast: type = str) -> Any:
     """
     Get property value from database.
     """
     prop = property_repository.get_property(context, name)
     if prop is None:
         return ''
-    return str(prop['value'])
+    return cast(prop['value'])
 
 
 def select_all_as_dict(context: str) -> dict[str, str]:

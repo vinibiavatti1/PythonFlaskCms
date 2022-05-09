@@ -8,7 +8,8 @@ from project.blueprints import blueprints
 from project.enums.security_enum import SECRET
 from project.records.builtin_user_records import builtin_user_records
 from project.records.property_records import property_records
-from project.records.builtin_object_records import builtin_object_records
+from project.records.builtin_object_records import \
+    builtin_object_records
 from project.records.context_records import context_records
 from project.services import property_service
 from project.services import object_service

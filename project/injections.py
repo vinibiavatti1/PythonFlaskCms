@@ -7,8 +7,6 @@ from project.records import object_records
 from project.utils.security_utils import is_authenticated, has_permission
 from project.utils.cookie_utils import cookie_policy_consent
 from flask import Blueprint
-from project.records.menu_records import menu_records
-from project.records.context_records import context_records
 from project.services import property_service
 from project.services import file_service
 from project.services import object_service
@@ -41,13 +39,10 @@ def inject_records() -> dict[str, Any]:
     context = context_utils.get_current_context()
     if not context:
         return dict()
-    for menu in menu_records:
-        if isinstance(menu, MenuItemModel):
-            menu.context = context
     return dict(
         records=dict(
-            menu_records=menu_records,
-            context_records=context_records,
+            get_menu_records=record_utils.get_menu_records,
+            get_context_records=record_utils.get_context_records,
         )
     )
 
@@ -62,7 +57,10 @@ def inject_python_resources() -> dict[str, Any]:
         zip=zip,
         enumerate=enumerate,
         len=len,
-        str=str
+        str=str,
+        bool=bool,
+        int=int,
+        float=float,
     )
 
 
@@ -100,10 +98,14 @@ def inject_properties() -> dict[str, Any]:
     context = context_utils.get_current_context()
     if not context:
         return dict()
-    return dict(
-        get_property=lambda name: property_service.get_property_value(
-            context, name
+
+    def get_property(name: str, cast: type = str) -> Any:
+        return property_service.get_property_value(
+            context, name, cast
         ),
+
+    return dict(
+        get_property=get_property
     )
 
 
@@ -111,6 +113,7 @@ def inject_properties() -> dict[str, Any]:
 def inject_urls() -> dict[str, Any]:
     """
     Inject the URLs.
+    TODO: Implement lazy loading
     """
     context = context_utils.get_current_context()
     if not context:
@@ -136,6 +139,7 @@ def inject_urls() -> dict[str, Any]:
 def inject_files() -> dict[str, Any]:
     """
     Inject the files.
+    TODO: Implement lazy loading
     """
     images = file_service.select_all_by_type(file_type_enum.IMAGE)
     videos = file_service.select_all_by_type(file_type_enum.VIDEO)
@@ -153,6 +157,7 @@ def inject_files() -> dict[str, Any]:
 def inject_translations() -> dict[str, Any]:
     """
     Inject translations.
+    TODO: Implement lazy loading
     """
     context = context_utils.get_current_context()
     if not context:

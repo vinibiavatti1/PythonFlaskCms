@@ -34,7 +34,7 @@
     <script src="/static/plugins/fullcalendar-5.10.1/lib/main.min.js"></script>
     <script src="/static/plugins/trumbowyg-2.25.1/dist/trumbowyg.min.js"></script>
     <script src="/static/scripts/general.js"></script>
-    {% if get_property('recaptcha_enabled') %}
+    {% if get_property('recaptcha_enabled', bool) %}
         <script src="https://www.google.com/recaptcha/api.js?render={{ get_property('recaptcha_site_key') }}"></script>
     {% endif %}
 {% endmacro %}

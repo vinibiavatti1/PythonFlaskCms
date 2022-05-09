@@ -43,6 +43,9 @@
         {% block script %}{% endblock %}
         {{ get_property('body_script') }}
     </div>
+    <script type="application/ld+json">
+        {{ page_data.schema }}
+    </script>
 </body>
 
 <!-- Plugins Configurations -->
