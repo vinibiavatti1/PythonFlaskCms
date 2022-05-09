@@ -22,7 +22,9 @@ class PropertyModel:
             required: bool = False,
             enum_values: dict[str, str] = dict(),
             rows: str = '4',
-            default: str = '') -> None:
+            default: str = '',
+            links: list[str] = [],
+            ) -> None:
         """
         Create property model.
         """
@@ -39,5 +41,6 @@ class PropertyModel:
         self.value = ''
         self.css_class = css_class
         self.rows = rows
+        self.links = links
         if len(description) and self.description[-1] != '.':
             self.description += '.'

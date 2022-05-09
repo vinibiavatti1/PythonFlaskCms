@@ -132,6 +132,7 @@ def list_objects_view(context: str, object_name: Optional[str] = None
             object_name=object_name,
             headers=headers,
             data=data,
+            root_url=root_url,
             referrer_url=referrer_url,
             title=title,
             children=children,

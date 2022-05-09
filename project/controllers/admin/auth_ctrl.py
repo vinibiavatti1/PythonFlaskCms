@@ -10,7 +10,7 @@ from project.services import auth_service
 
 # Controller data
 CONTROLLER_NAME = 'admin_auth_ctrl'
-INITIAL_PAGE = '/objects/content'
+INITIAL_PAGE = '/objects'
 
 
 # Blueprint

@@ -12,7 +12,7 @@
 
 {# Links #}
 {% macro links() %}
-    <link rel="icon" type="image/png" sizes="32x32" href="{{properties.favicon_url}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ get_property('favicon_url') }}">
     <link rel="stylesheet" href="/static/plugins/datatables-1.11.3/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="/static/plugins/bootstrap-5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
@@ -35,6 +35,6 @@
     <script src="/static/plugins/trumbowyg-2.25.1/dist/trumbowyg.min.js"></script>
     <script src="/static/scripts/general.js"></script>
     {% if get_property('recaptcha_enabled') %}
-        <script src="https://www.google.com/recaptcha/api.js?render={{config.recaptcha_site_key}}"></script>
+        <script src="https://www.google.com/recaptcha/api.js?render={{ get_property('recaptcha_site_key') }}"></script>
     {% endif %}
 {% endmacro %}

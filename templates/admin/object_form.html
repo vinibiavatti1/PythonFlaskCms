@@ -95,6 +95,10 @@
                                                         </td>
                                                         <td>
                                                             {{prop.description}}
+                                                            {% for link in prop.links %}
+                                                                <br>
+                                                                <a href="{{link}}" target="_blank">{{ link }}</a>
+                                                            {% endfor %}
                                                         </td>
                                                         <td>
                                                             {{property(

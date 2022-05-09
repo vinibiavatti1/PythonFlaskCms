@@ -2,12 +2,12 @@
 {% macro noscript() %}
 <div class="alert alert-danger rounded-0">
     <div class="container">
-        {{ properties.noscript_message }} <br>
+        {{ get_property('noscript_message') }} <br>
         <a
             class="alert-link"
             target="_blank"
             href="https://support.google.com/adsense/answer/12654">
-            {{ properties.noscript_link_label }}
+            {{ get_property('noscript_link_label') }}
         </a>
     </div>
 </div>
